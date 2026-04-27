@@ -1,0 +1,34 @@
+\subsection*{(۱)}
+برای اختصار بگذارید
+$g_t = \nabla L(\theta_t)$
+و
+$H_t = \nabla^2 L(\theta_t)$.
+بسط تیلور مرتبه دوم حول $\theta_t$ برای جابه‌جایی $\Delta$:
+\begin{flalign*}
+L(\theta_t + \Delta) \approx L(\theta_t) + \nabla L(\theta_t)^{\top}\Delta + \frac{1}{2}\Delta^{\top} \nabla^2 L(\theta_t)\Delta. &&
+\end{flalign*}
+در نزول گرادیان داریم $\Delta = \theta_{t+1}-\theta_t = -\eta g_t$، پس:
+\begin{flalign*}
+L(\theta_{t+1})
+&\approx L(\theta_t) + g_t^{\top}(-\eta g_t) + \frac{1}{2}(-\eta g_t)^{\top} H_t (-\eta g_t) \\
+&= L(\theta_t) - \eta \|g_t\|^2 + \frac{\eta^2}{2}\, g_t^{\top} H_t g_t. &&
+\end{flalign*}
+
+\subsection*{(۲)}
+اگر بیشینه مقدار ویژه هسین در گام $t$ برابر $\lambda_{\max}$ باشد، آنگاه به کمک کران طیفی داریم:
+\begin{flalign*}
+g_t^{\top} H_t g_t \le \lambda_{\max}\|g_t\|^2. &&
+\end{flalign*}
+جایگذاری در رابطه قسمت (۱):
+\begin{flalign*}
+L(\theta_{t+1})
+&\le L(\theta_t) - \eta \|g_t\|^2 + \frac{\eta^2}{2}\lambda_{\max}\|g_t\|^2 \\
+&= L(\theta_t) - \eta\Big(1-\frac{\eta\lambda_{\max}}{2}\Big)\|g_t\|^2. &&
+\end{flalign*}
+بنابراین برای تضمین کاهش تابع هزینه (برای $g_t\neq 0$) کافی است:
+\begin{flalign*}
+\eta\Big(1-\frac{\eta\lambda_{\max}}{2}\Big) > 0
+\quad \Longrightarrow \quad
+0 < \eta < \frac{2}{\lambda_{\max}}. &&
+\end{flalign*}
+(اگر $g_t=0$ باشد، در همان نقطه بحرانی هستیم و کاهش لزوماً رخ نمی‌دهد.)

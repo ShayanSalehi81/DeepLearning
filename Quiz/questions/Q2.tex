@@ -1,0 +1,86 @@
+\subsection*{الف}
+برای یک نمونه ورودی $x \in \mathbb{R}^{d}$ و برچسب $y \in \mathbb{R}^{K}$ (مثلاً \lr{one-hot})، پیش‌رو را به صورت زیر می‌نویسیم:
+\begin{flalign*}
+z^{(1)} &= W^{(1)}x + b^{(1)}, \qquad a^{(1)} = \phi(z^{(1)})=\text{ReLU}(z^{(1)})\\
+z^{(2)} &= W^{(2)}a^{(1)} + b^{(2)}, \qquad a^{(2)} = \sigma(z^{(2)})\\
+z^{(3)} &= W^{(3)}a^{(2)} + b^{(3)}, \qquad \hat{y} = \text{softmax}(z^{(3)})\\
+L &= -\sum_{k=1}^{K} y_k \log(\hat{y}_k) &&
+\end{flalign*}
+
+گرادیان لایه خروجی (خاصیت \lr{softmax} + \lr{cross-entropy}) برابر است با:
+\begin{flalign*}
+\delta^{(3)} \;=\; \frac{\partial L}{\partial z^{(3)}} \;=\; \hat{y} - y &&
+\end{flalign*}
+
+حال با قاعده زنجیره‌ای به عقب می‌آییم:
+\begin{flalign*}
+\frac{\partial L}{\partial a^{(2)}} &= (W^{(3)})^\top \delta^{(3)}\\
+\delta^{(2)} \;=\; \frac{\partial L}{\partial z^{(2)}} &= \frac{\partial L}{\partial a^{(2)}} \odot \sigma'(z^{(2)})
+= \big((W^{(3)})^\top \delta^{(3)}\big)\odot \big(\sigma(z^{(2)})(1-\sigma(z^{(2)}))\big)\\
+\frac{\partial L}{\partial a^{(1)}} &= (W^{(2)})^\top \delta^{(2)}\\
+\delta^{(1)} \;=\; \frac{\partial L}{\partial z^{(1)}} &= \frac{\partial L}{\partial a^{(1)}} \odot \phi'(z^{(1)})
+= \big((W^{(2)})^\top \delta^{(2)}\big)\odot \phi'(z^{(1)}) &&
+\end{flalign*}
+
+در اینجا مشتق \lr{ReLU} برای هر مؤلفه:
+\[
+\phi'(u)=
+\begin{cases}
+1 & u>0\\
+0 & u<0\\
+\text{در } u=0 \text{ مشتق تعریف نشده و معمولاً یک \lr{subgradient} مانند } 0 \text{ یا } 1 \text{ انتخاب می‌شود}
+\end{cases}
+\]
+
+اکنون مشتق نسبت به وزن‌های لایه اول:
+\begin{flalign*}
+\frac{\partial L}{\partial W^{(1)}} &= \frac{\partial L}{\partial z^{(1)}} \frac{\partial z^{(1)}}{\partial W^{(1)}}
+= \delta^{(1)} x^\top &&
+\end{flalign*}
+و به صورت مؤلفه‌ای:
+\[
+\frac{\partial L}{\partial W^{(1)}_{ij}} = \delta^{(1)}_{i}\, x_j.
+\]
+
+\subsection*{ب}
+فرض کنید برای همه نورون‌های لایه دوم:
+\[
+a^{(2)}_i \in \{0.01,\,0.99\}.
+\]
+پس برای هر مؤلفه داریم:
+\[
+\sigma'(z^{(2)}_i)=a^{(2)}_i(1-a^{(2)}_i)=0.01\times 0.99 = 0.0099 \approx 10^{-2}.
+\]
+بنابراین (با در نظر گرفتن $\|\cdot\|$ به عنوان \lr{operator norm} و استفاده از نامساوی زیرضربی) داریم:
+\begin{flalign*}
+\|\delta^{(2)}\|
+&= \left\| \big((W^{(3)})^\top \delta^{(3)}\big)\odot \sigma'(z^{(2)}) \right\|
+\;\le\; \|\sigma'(z^{(2)})\|_\infty \,\| (W^{(3)})^\top \delta^{(3)} \| \\
+&\le 0.0099 \, \|W^{(3)}\|\, \|\delta^{(3)}\|. &&
+\end{flalign*}
+همچنین چون $\phi'(z^{(1)}) \in \{0,1\}$ (و در $0$ یک \lr{subgradient} انتخاب می‌کنیم) داریم $\|\phi'(z^{(1)})\|_\infty \le 1$ و لذا:
+\begin{flalign*}
+\|\delta^{(1)}\|
+&= \left\|\big((W^{(2)})^\top \delta^{(2)}\big)\odot \phi'(z^{(1)})\right\|
+\le \|(W^{(2)})^\top \delta^{(2)}\|
+\le \|W^{(2)}\|\,\|\delta^{(2)}\| \\
+&\le 0.0099 \, \|W^{(2)}\|\,\|W^{(3)}\|\,\|\delta^{(3)}\|. &&
+\end{flalign*}
+
+از طرفی
+\[
+\frac{\partial L}{\partial W^{(1)}_{ij}} = \delta^{(1)}_i x_j
+\quad\Longrightarrow\quad
+\max_{i,j}\left|\frac{\partial L}{\partial W^{(1)}_{ij}}\right|
+\le \|x\|_\infty \,\|\delta^{(1)}\|_\infty
+\le \|x\|_\infty \,\|\delta^{(1)}\|.
+\]
+پس (در صورت نرمال‌بودن ورودی‌ها مثلاً $\|x\|_\infty \le 1$):
+\[
+\max_{i,j}\left|\frac{\partial L}{\partial W^{(1)}_{ij}}\right|
+\;\le\;
+0.0099 \,\|W^{(2)}\|\,\|W^{(3)}\|\,\|\delta^{(3)}\|
+\;\approx\;
+10^{-2}\,\|W^{(2)}\|\,\|W^{(3)}\|\,\|\delta^{(3)}\|.
+\]
+یعنی به خاطر $\sigma'(z)=\sigma(z)(1-\sigma(z))$ در ناحیه اشباع، یک ضریب حدود $10^{-2}$ وارد زنجیره گرادیان می‌شود و گرادیان تقریباً دو مرتبه بزرگی کوچک‌تر می‌گردد.
