@@ -1,0 +1,97 @@
+\subsection*{الف}
+با توجه به مشتق‌پذیر بودن $f$ و $g$ و تعریف
+$h(x)=g(f(x))$،
+قاعده زنجیره‌ای برای ژاکوبین‌ها می‌گوید:
+\begin{flalign*}
+J_h(x) = J_g(f(x))\,J_f(x) \qquad
+\Big(J_f(x)\in \mathbb{R}^{m\times n},\; J_g(\cdot)\in \mathbb{R}^{k\times m},\; J_h(x)\in \mathbb{R}^{k\times n}\Big)&&
+\end{flalign*}
+
+\subsection*{ب}
+فرض کنید
+$f(x)=\mathrm{ReLU}(Ax+b)$
+و
+$g(z)=Cz$.
+
+\begin{enumerate}
+\item ترکیب:
+\begin{flalign*}
+h(x)=g(f(x))=C\,\mathrm{ReLU}(Ax+b)&&
+\end{flalign*}
+
+\item محاسبه ژاکوبین $J_h(x)$:
+ابتدا $u(x)=Ax+b$ و $r(x)=\mathrm{ReLU}(u(x))$.
+چون $g(z)=Cz$ خطی است، داریم:
+\begin{flalign*}
+J_g(z)=C \quad (\text{مستقل از } z)&&
+\end{flalign*}
+و همچنین:
+\begin{flalign*}
+J_{u}(x)=A&&
+\end{flalign*}
+برای $\mathrm{ReLU}$ نیز مشتق به صورت مؤلفه‌ای است؛ پس ژاکوبین آن یک ماتریس قطری می‌شود. در نتیجه:
+\begin{flalign*}
+J_h(x)=J_g(f(x))\,J_f(x)=C\;J_{\mathrm{ReLU}}(u(x))\;A&&
+\end{flalign*}
+
+\item مشتق $\mathrm{ReLU}$ به صورت ماتریس قطری:
+اگر $u=Ax+b$، آنگاه
+\begin{flalign*}
+J_{\mathrm{ReLU}}(u)=D(u), \qquad
+D(u)=\mathrm{diag}(d_1,\dots,d_m), \qquad
+d_i=
+\begin{cases}
+1 & u_i>0\\
+0 & u_i<0
+\end{cases}&&
+\end{flalign*}
+و در نقطه $u_i=0$ تابع مشتق‌پذیر نیست (در عمل معمولاً یکی از زیرگرادیان‌ها مثل $0$ یا $1$ انتخاب می‌شود).
+\end{enumerate}
+
+\subsection*{ج}
+اکنون
+$f(x)=\mathrm{Softmax}(Ax+b)$
+و
+$g(z)=Cz$.
+بگذارید $z=Ax+b$ و $s=\mathrm{Softmax}(z)$.
+
+\begin{enumerate}
+\item ترکیب:
+\begin{flalign*}
+h(x)=g(f(x))=C\,\mathrm{Softmax}(Ax+b)&&
+\end{flalign*}
+
+\item ژاکوبین $\mathrm{Softmax}$:
+تعریف می‌کنیم
+\begin{flalign*}
+s_i=\frac{e^{z_i}}{\sum_{\ell=1}^{m} e^{z_\ell}} \;=\;\frac{e^{z_i}}{S}, \qquad S=\sum_{\ell=1}^{m} e^{z_\ell}&&
+\end{flalign*}
+پس برای مشتق جزئی:
+\begin{flalign*}
+\frac{\partial s_i}{\partial z_j}
+&= \frac{\partial}{\partial z_j}\Big(\frac{e^{z_i}}{S}\Big)
+= \frac{\delta_{ij}e^{z_i}S - e^{z_i}\frac{\partial S}{\partial z_j}}{S^2}
+= \frac{\delta_{ij}e^{z_i}S - e^{z_i}e^{z_j}}{S^2}\\
+&= \Big(\frac{e^{z_i}}{S}\Big)\Big(\delta_{ij}-\frac{e^{z_j}}{S}\Big)
+= s_i(\delta_{ij}-s_j)&&
+\end{flalign*}
+بنابراین:
+\begin{flalign*}
+\big(J_{\mathrm{Softmax}}(z)\big)_{ij}=\frac{\partial s_i}{\partial z_j}=s_i(\delta_{ij}-s_j)&&
+\end{flalign*}
+و به صورت ماتریسی نیز می‌توان نوشت:
+\begin{flalign*}
+J_{\mathrm{Softmax}}(z)=\mathrm{diag}(s)-ss^{\top}&&
+\end{flalign*}
+
+\item ژاکوبین $J_h(x)$ با قاعده زنجیره‌ای:
+از آنجا که $J_g(\cdot)=C$ و $z=Ax+b$ داریم:
+\begin{flalign*}
+J_h(x)
+&= J_g(f(x))\,J_f(x)
+= C \; J_{\mathrm{Softmax}}(z)\; J_{z}(x)
+= C \; J_{\mathrm{Softmax}}(Ax+b)\; A\\
+&= C\big(\mathrm{diag}(s)-ss^{\top}\big)A,
+\qquad s=\mathrm{Softmax}(Ax+b)&&
+\end{flalign*}
+\end{enumerate}
