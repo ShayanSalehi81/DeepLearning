@@ -1,0 +1,78 @@
+در ادامه بگذارید
+$g_k := \nabla E(w^{(k)})$
+و
+$H_k := \nabla^2 E(w^{(k)})$
+و
+$p^{(k)} = -H_k^{-1} g_k$
+باشد؛ لذا
+$w^{(k+1)} = w^{(k)} + p^{(k)}$.
+
+\subsection*{الف}
+از تعریف گام نیوتون داریم:
+\begin{flalign*}
+g_k + H_k p^{(k)} = \nabla E(w^{(k)}) - \nabla^2 E(w^{(k)}) \nabla^2 E(w^{(k)})^{-1}\nabla E(w^{(k)}) = 0. &&
+\end{flalign*}
+پس:
+\begin{flalign*}
+\|\nabla E(w^{(k+1)})\|
+&= \|\nabla E(w^{(k+1)}) - 0\| \\
+&= \|\nabla E(w^{(k+1)}) - (g_k + H_k p^{(k)})\| \\
+&= \|\nabla E(w^{(k+1)}) - \nabla E(w^{(k)}) - \nabla^2 E(w^{(k)})p^{(k)}\|. &&
+\end{flalign*}
+
+\subsection*{ب}
+طبق بسط تیلورِ انتگرالی برای گرادیان (با $x=w^{(k)}$ و $p=p^{(k)}$):
+\begin{flalign*}
+\nabla E(w^{(k+1)})
+&= \nabla E(w^{(k)}+p^{(k)})
+= g_k + \int_0^1 \nabla^2 E(w^{(k)}+t p^{(k)})\,p^{(k)}\,dt. &&
+\end{flalign*}
+بنابراین:
+\begin{flalign*}
+\nabla E(w^{(k+1)}) - g_k - H_k p^{(k)}
+&= \int_0^1 \Big(\nabla^2 E(w^{(k)}+t p^{(k)}) - H_k\Big)p^{(k)}\,dt. &&
+\end{flalign*}
+اکنون با استفاده از خواص نُرم و انتگرال:
+\begin{flalign*}
+\|\nabla E(w^{(k+1)})\|
+&= \|\nabla E(w^{(k+1)}) - g_k - H_k p^{(k)}\| \\
+&\le \int_0^1 \Big\|\big(\nabla^2 E(w^{(k)}+t p^{(k)}) - H_k\big)p^{(k)}\Big\|\,dt \\
+&\le \int_0^1 \|\nabla^2 E(w^{(k)}+t p^{(k)}) - H_k\| \cdot \|p^{(k)}\|\,dt. &&
+\end{flalign*}
+
+\subsection*{ج}
+با فرض $L$-لیپشیتز بودن هسیان:
+\begin{flalign*}
+\|\nabla^2 E(w^{(k)}+t p^{(k)}) - H_k\|
+&\le L\|t p^{(k)}\| = Lt\|p^{(k)}\|. &&
+\end{flalign*}
+جایگذاری در نامساوی بخش قبل:
+\begin{flalign*}
+\|\nabla E(w^{(k+1)})\|
+&\le \int_0^1 (Lt\|p^{(k)}\|)\|p^{(k)}\|\,dt
+= L\|p^{(k)}\|^2\int_0^1 t\,dt
+= \frac{L}{2}\|p^{(k)}\|^2. &&
+\end{flalign*}
+از طرفی
+$\|p^{(k)}\|=\|H_k^{-1}g_k\|\le \|H_k^{-1}\|\cdot \|g_k\|$،
+پس:
+\begin{flalign*}
+\|\nabla E(w^{(k+1)})\|
+\le \frac{1}{2}L\|H_k^{-1}\|^2\cdot \|\nabla E(w^{(k)})\|^2. &&
+\end{flalign*}
+
+\subsection*{د}
+اگر $\|H_k^{-1}\|\le 2\|(\nabla^2 E(w^*))^{-1}\|$ در توپِ شعاع $r$ برقرار باشد، آنگاه از نتیجه بخش (ج):
+\begin{flalign*}
+\|\nabla E(w^{(k+1)})\|
+&\le \frac{1}{2}L\big(2\|(\nabla^2 E(w^*))^{-1}\|\big)^2 \|\nabla E(w^{(k)})\|^2 \\
+&= 2L\|(\nabla^2 E(w^*))^{-1}\|^2\cdot \|\nabla E(w^{(k)})\|^2. &&
+\end{flalign*}
+این رابطه نشان می‌دهد اگر به اندازه کافی نزدیک $w^*$ شروع کنیم، نُرم گرادیان‌ها به صفر میل می‌کند (همگرایی به نقطه مانا $w^*$)، و همچنین نرخ همگرایی برای نُرم گرادیان‌ها درجه دو است؛ یعنی در همسایگی $w^*$ داریم:
+\begin{flalign*}
+\|\nabla E(w^{(k+1)})\| \le C\,\|\nabla E(w^{(k)})\|^2,
+\qquad
+C=2L\|(\nabla^2 E(w^*))^{-1}\|^2,
+&&
+\end{flalign*}
+پس خطا (به معنای $\|\nabla E(\cdot)\|$) در هر گام تقریباً به توان دو گام قبل کاهش می‌یابد.

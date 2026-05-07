@@ -499,9 +499,12 @@ INPUT ..\questions\Q3.tex
 INPUT ..\questions\Q4.tex
 INPUT ..\questions\Q4.tex
 INPUT ..\questions\Q4.tex
-INPUT ..\questions\Q14.tex
-INPUT ..\questions\Q14.tex
-INPUT ..\questions\Q14.tex
+INPUT ..\questions\Q5.tex
+INPUT ..\questions\Q5.tex
+INPUT ..\questions\Q5.tex
+INPUT ..\questions\Q6.tex
+INPUT ..\questions\Q6.tex
+INPUT ..\questions\Q6.tex
 INPUT HW.aux
 INPUT .\HW.out
 INPUT .\HW.out

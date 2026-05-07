@@ -1,18 +1,19 @@
 # Fdb version 4
-["xdvipdfmx"] 1777270008.65456 "HW.xdv" "HW.pdf" "HW" 1777270009.02168 0
-  "HW.xdv" 1777270008 25884 8d7b5edb106c809aead29735346f397c "xelatex"
+["xdvipdfmx"] 1778140598.06071 "HW.xdv" "HW.pdf" "HW" 1778140598.44724 0
+  "HW.xdv" 1778140597 95800 e1f1a6a00a4643ff1a23582ed2f696f7 "xelatex"
   (generated)
   "HW.pdf"
   (rewritten before read)
-["xelatex"] 1777270006.94564 "d:/Term 02/DeepLearning/HW1/Theoretical/HW/HW.tex" "HW.xdv" "HW" 1777270009.01435 0
+["xelatex"] 1778140596.2899 "d:/Term 02/DeepLearning/HW1/Theoretical/HW/HW.tex" "HW.xdv" "HW" 1778140598.44065 0
   "../commons/alg-fa.tex" 1707886330 1438 630aaa81895929eddba0efb6ab754a8c ""
   "../commons/sharif.png" 1707886330 34782 91c831e22cd5b8b30cdd0d7fa2b74a71 ""
   "../commons/style.tex" 1777269551 5409 558bd7859b6be7812abf9037f7726c90 ""
-  "../questions/Q1.tex" 1777270006 3137 696e4c74e36d6aaa5cfd72de7abe3c1e ""
-  "../questions/Q14.tex" 1777269664 2021 593e8948da87c36da9deaa0cf6fa29f5 ""
-  "../questions/Q2.tex" 1777269652 0 d41d8cd98f00b204e9800998ecf8427e ""
-  "../questions/Q3.tex" 1777269654 0 d41d8cd98f00b204e9800998ecf8427e ""
-  "../questions/Q4.tex" 1777269656 0 d41d8cd98f00b204e9800998ecf8427e ""
+  "../questions/Q1.tex" 1778139875 3436 ed396cbc05b75dbbbbeebf2ee5a66f83 ""
+  "../questions/Q2.tex" 1778140072 3790 635f14dbe148f6c3df3436992870be4c ""
+  "../questions/Q3.tex" 1778140198 6164 e7dd6d4f0596b0aa1f47af1fe622ccf0 ""
+  "../questions/Q4.tex" 1778140328 3076 a585f8d9af38821afdc9070f7fa684ae ""
+  "../questions/Q5.tex" 1778140421 3030 ceb93b5c7b5dadb31123b204f096b386 ""
+  "../questions/Q6.tex" 1778140593 2781 6bfd9fa9616c2bde5532d29ed665598e ""
   "C:/Program Files/MiKTeX/fonts/tfm/adobe/zapfding/pzdr.tfm" 1136759654 1528 7e12f4c0fcf5a072cebdcfbfc610f54c ""
   "C:/Program Files/MiKTeX/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1233951848 1004 54797486969f23fa377b128694d548df ""
   "C:/Program Files/MiKTeX/fonts/tfm/public/amsfonts/cmextra/cmex8.tfm" 1233951848 988 bdf658c3bfc2d96d3c8b02cfc1c94c20 ""
@@ -230,10 +231,10 @@
   "C:/Program Files/MiKTeX/tex/latex/zref/zref-base.sty" 1750428951 20785 198a9cb2e04238d92c320d0d9edbd76a ""
   "C:/Program Files/MiKTeX/tex/xelatex/xetex-pstricks/pstricks.con" 1266284760 204 366747485ba2670f55166e66d1f21249 ""
   "C:/Users/ROG/AppData/Local/MiKTeX/miktex/data/le/xetex/xelatex.fmt" 1762519379 27033816 3409389256dddeec52c4569a0d18311e ""
-  "HW.aux" 1777270008 163 acb8f28b1134398234412a7793ce0361 "xelatex"
-  "HW.out" 1777270008 0 d41d8cd98f00b204e9800998ecf8427e "xelatex"
-  "HW.tex" 1777269690 510 93e99604cbec4b87ec7bc329bce58ff9 ""
-  "d:/Term 02/DeepLearning/HW1/Theoretical/HW/HW.tex" 1777269690 510 93e99604cbec4b87ec7bc329bce58ff9 ""
+  "HW.aux" 1778140597 164 d1edd7bdfc957d19087e663342a99632 "xelatex"
+  "HW.out" 1778140597 0 d41d8cd98f00b204e9800998ecf8427e "xelatex"
+  "HW.tex" 1778140492 625 2874589b13b2da57ab43eb4578b4b6b7 ""
+  "d:/Term 02/DeepLearning/HW1/Theoretical/HW/HW.tex" 1778140492 625 2874589b13b2da57ab43eb4578b4b6b7 ""
   (generated)
   "HW.aux"
   "HW.log"

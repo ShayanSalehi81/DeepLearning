@@ -141,11 +141,6 @@ class Solver(object):
         self._reset()
 
     def _reset(self):
-        """
-        Set up some bookkeeping variables for optimization. Don't call this
-        manually.
-        """
-        # Set up some variables for bookkeeping
         self.epoch = 0
         self.best_val_acc = 0
         self.best_params = {}
@@ -153,7 +148,10 @@ class Solver(object):
         self.train_acc_history = []
         self.val_acc_history = []
 
-        # Make a deep copy of the optim_config for each parameter
+        if self.model.category == "regression":
+            self.best_val_acc = np.inf
+            self.best_params = {k: v.copy() for k, v in self.model.params.items()}
+
         self.optim_configs = {}
         for p in self.model.params:
             d = {k: v for k, v in self.optim_config.items()}

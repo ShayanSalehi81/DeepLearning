@@ -1,0 +1,105 @@
+\begin{enumerate}
+\item
+برای یک نمونه منفرد $x^{(i)}\in\mathbb{R}^{D_x\times 1}$ و با توجه به اینکه $\hat y^{(i)}$ اسکالر است:
+\begin{flalign*}
+W_1 &\in \mathbb{R}^{D_{a1}\times D_x}, \qquad
+b_1 \in \mathbb{R}^{D_{a1}\times 1}, \\
+W_2 &\in \mathbb{R}^{1\times D_{a1}}, \qquad
+b_2 \in \mathbb{R}^{1\times 1}.
+&&
+\end{flalign*}
+در حالت \lr{vectorized}، ابعاد وزن‌ها و بایاس‌ها تغییری نمی‌کند و فقط داده‌ها به‌صورت ماتریسی وارد می‌شوند:
+\begin{flalign*}
+X \in \mathbb{R}^{D_x\times m}, \qquad Y \in \mathbb{R}^{1\times m},
+&&
+\end{flalign*}
+و در این حالت:
+\begin{flalign*}
+Z_1=W_1X+b_1 \in \mathbb{R}^{D_{a1}\times m}, \quad
+A_1=\tanh(Z_1)\in \mathbb{R}^{D_{a1}\times m}, \quad
+Z_2=W_2A_1+b_2 \in \mathbb{R}^{1\times m}.
+&&
+\end{flalign*}
+(در جمع با $b_1,b_2$، عمل \lr{broadcast} روی $m$ ستون انجام می‌شود.)
+
+\item
+با توجه به
+$J=\frac{1}{m}\sum_{i=1}^m \frac{1}{2}(\hat y^{(i)}-y^{(i)})^2$،
+داریم:
+\begin{flalign*}
+\delta_1^{(i)} \;=\; \frac{\partial J}{\partial \hat y^{(i)}}
+= \frac{1}{m}\left(\hat y^{(i)}-y^{(i)}\right).
+&&
+\end{flalign*}
+
+\item
+چون $\hat y^{(i)}=z_2$:
+\begin{flalign*}
+\delta_2^{(i)} \;=\; \frac{\partial \hat y^{(i)}}{\partial z_2} = 1.
+&&
+\end{flalign*}
+
+\item
+چون $z_2=W_2a_1+b_2$:
+\begin{flalign*}
+\delta_3^{(i)} \;=\; \frac{\partial z_2}{\partial a_1} = W_2
+\;\;\in\mathbb{R}^{1\times D_{a1}}.
+&&
+\end{flalign*}
+
+\item
+چون $a_1=\tanh(z_1)$ به‌صورت مؤلفه‌ای است:
+\begin{flalign*}
+\delta_4^{(i)} \;=\; \frac{\partial a_1}{\partial z_1}
+= \mathrm{diag}\!\Big(1-\tanh^2(z_1)\Big)
+= \mathrm{diag}\!\Big(1-a_1\odot a_1\Big)
+\;\;\in\mathbb{R}^{D_{a1}\times D_{a1}}.
+&&
+\end{flalign*}
+
+\item
+چون $z_1=W_1x^{(i)}+b_1$، مشتق نسبت به $W_1$ به‌صورت مؤلفه‌ای:
+\begin{flalign*}
+\delta_5^{(i)}:\qquad
+\frac{\partial (z_1)_p}{\partial (W_1)_{pq}} = x^{(i)}_q,
+\qquad 1\le p\le D_{a1},\;1\le q\le D_x.
+&&
+\end{flalign*}
+(یعنی برای هر سطرِ $W_1$، حساسیت همان سطر از $z_1$ نسبت به آن سطر از $W_1$ برابر $(x^{(i)})^\top$ است.)
+
+\item
+ابتدا گرادیان‌های میانی را می‌نویسیم (با دقت به ابعاد):
+\begin{flalign*}
+\frac{\partial J}{\partial z_2}
+&= \frac{\partial J}{\partial \hat y^{(i)}}\frac{\partial \hat y^{(i)}}{\partial z_2}
+= \delta_1^{(i)}\delta_2^{(i)}
+= \frac{1}{m}\left(\hat y^{(i)}-y^{(i)}\right)\;\;\in\mathbb{R}, \\
+\frac{\partial J}{\partial a_1}
+&= \left(\frac{\partial z_2}{\partial a_1}\right)^\top \frac{\partial J}{\partial z_2}
+= W_2^\top \frac{\partial J}{\partial z_2}
+\;\;\in\mathbb{R}^{D_{a1}\times 1}, \\
+\frac{\partial J}{\partial z_1}
+&= \left(\frac{\partial a_1}{\partial z_1}\right)\frac{\partial J}{\partial a_1}
+= \left(1-a_1\odot a_1\right)\odot \left(W_2^\top \frac{\partial J}{\partial z_2}\right)
+\;\;\in\mathbb{R}^{D_{a1}\times 1}.
+&&
+\end{flalign*}
+حال با استفاده از $z_1=W_1x^{(i)}+b_1$ نتیجه می‌گیریم:
+\begin{flalign*}
+\frac{\partial J}{\partial W_1}
+&=\frac{\partial J}{\partial z_1}\,(x^{(i)})^\top
+= \left[\left(1-a_1^{(i)}\odot a_1^{(i)}\right)\odot
+\left(W_2^\top \frac{1}{m}(\hat y^{(i)}-y^{(i)})\right)\right](x^{(i)})^\top
+\;\;\in\mathbb{R}^{D_{a1}\times D_x}.
+&&
+\end{flalign*}
+و برای کل داده‌ها:
+\begin{flalign*}
+\nabla_{W_1} J
+= \sum_{i=1}^m \frac{\partial J}{\partial W_1}\Big|_{(i)}
+= \frac{1}{m}\sum_{i=1}^m
+\left[\left(1-a_1^{(i)}\odot a_1^{(i)}\right)\odot
+\left(W_2^\top (\hat y^{(i)}-y^{(i)})\right)\right](x^{(i)})^\top.
+&&
+\end{flalign*}
+\end{enumerate}

@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999997 (MiKTeX 25.4) (preloaded format=xelatex 2025.11.7)  27 APR 2026 09:36
+This is XeTeX, Version 3.141592653-2.6-0.999997 (MiKTeX 25.4) (preloaded format=xelatex 2025.11.7)  7 MAY 2026 11:26
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1432,59 +1432,69 @@ LaTeX Font Info:    Font shape `TU/XBNiloofar(2)/m/it' will be
 (Font)              scaled to size 5.39996pt on input line 14.
  (../questions/Q1.tex
 LaTeX Font Info:    Font shape `TU/XBNiloofar(2)/m/n' will be
-(Font)              scaled to size 8.99994pt on input line 2.
+(Font)              scaled to size 8.99994pt on input line 5.
 LaTeX Font Info:    Font shape `TU/XBNiloofar(2)/m/n' will be
-(Font)              scaled to size 6.29996pt on input line 2.
+(Font)              scaled to size 6.29996pt on input line 5.
 LaTeX Font Info:    Font shape `TU/XBNiloofar(2)/m/n' will be
-(Font)              scaled to size 4.49997pt on input line 2.
+(Font)              scaled to size 4.49997pt on input line 5.
 LaTeX Font Info:    Font shape `TU/XBNiloofar(2)/bx/n' in size <10> not available
-(Font)              Font shape `TU/XBNiloofar(2)/b/n' tried instead on input line 2.
+(Font)              Font shape `TU/XBNiloofar(2)/b/n' tried instead on input line 5.
 LaTeX Font Info:    Font shape `TU/XBNiloofar(2)/b/n' will be
-(Font)              scaled to size 8.99994pt on input line 2.
+(Font)              scaled to size 8.99994pt on input line 5.
 LaTeX Font Info:    Font shape `TU/XBNiloofar(2)/bx/n' in size <7> not available
-(Font)              Font shape `TU/XBNiloofar(2)/b/n' tried instead on input line 2.
+(Font)              Font shape `TU/XBNiloofar(2)/b/n' tried instead on input line 5.
 LaTeX Font Info:    Font shape `TU/XBNiloofar(2)/b/n' will be
-(Font)              scaled to size 6.29996pt on input line 2.
+(Font)              scaled to size 6.29996pt on input line 5.
 LaTeX Font Info:    Font shape `TU/XBNiloofar(2)/bx/n' in size <5> not available
-(Font)              Font shape `TU/XBNiloofar(2)/b/n' tried instead on input line 2.
+(Font)              Font shape `TU/XBNiloofar(2)/b/n' tried instead on input line 5.
 LaTeX Font Info:    Font shape `TU/XBNiloofar(2)/b/n' will be
-(Font)              scaled to size 4.49997pt on input line 2.
+(Font)              scaled to size 4.49997pt on input line 5.
 LaTeX Font Info:    Font shape `TU/XBNiloofar(2)/m/it' will be
-(Font)              scaled to size 8.99994pt on input line 2.
+(Font)              scaled to size 8.99994pt on input line 5.
 LaTeX Font Info:    Font shape `TU/XBNiloofar(2)/m/it' will be
-(Font)              scaled to size 6.29996pt on input line 2.
+(Font)              scaled to size 6.29996pt on input line 5.
 LaTeX Font Info:    Font shape `TU/XBNiloofar(2)/m/it' will be
-(Font)              scaled to size 4.49997pt on input line 2.
-LaTeX Font Info:    Font shape `TU/XBNiloofar(0)/m/n' will be
-(Font)              scaled to size 7.0pt on input line 27.
-LaTeX Font Info:    Font shape `TU/XBNiloofar(0)/m/n' will be
-(Font)              scaled to size 5.0pt on input line 27.
+(Font)              scaled to size 4.49997pt on input line 5.
+LaTeX Font Info:    Font shape `TU/TimesNewRoman(0)/m/n' will be
+(Font)              scaled to size 11.00006pt on input line 45.
 
 
 LaTeX Font Info:    Font shape `TU/XBNiloofar(1)/m/n' will be
-(Font)              scaled to size 9.85492pt on input line 49.
+(Font)              scaled to size 9.85492pt on input line 72.
 [1
 
-])
+]
 
-[2] (../questions/Q2.tex)
+[2])
 
-[3] (../questions/Q3.tex)
+[3] (../questions/Q2.tex
 
-[4] (../questions/Q4.tex)
+[4])
 
-[5] (../questions/Q14.tex
-LaTeX Font Info:    Font shape `TU/XBNiloofar(0)/b/n' will be
-(Font)              scaled to size 10.0pt on input line 1.
-LaTeX Font Info:    Font shape `TU/XBNiloofar(1)/b/n' will be
-(Font)              scaled to size 8.99994pt on input line 1.
-LaTeX Font Info:    Font shape `TU/XBNiloofar(0)/b/n' will be
-(Font)              scaled to size 17.28pt on input line 3.
+[5] (../questions/Q3.tex
 
+[6]
+LaTeX Font Info:    Font shape `TU/XBNiloofar(0)/m/n' will be
+(Font)              scaled to size 7.0pt on input line 107.
+LaTeX Font Info:    Font shape `TU/XBNiloofar(0)/m/n' will be
+(Font)              scaled to size 5.0pt on input line 107.
+LaTeX Font Info:    Font shape `TU/XBNiloofar(0)/m/n' will be
+(Font)              scaled to size 13.00003pt on input line 116.
+)
 
-[6])
+[7] (../questions/Q4.tex
 
-[7] (HW.aux)
+[8])
+
+[9] (../questions/Q5.tex
+
+[10])
+
+[11] (../questions/Q6.tex
+
+[12])
+
+[13] (HW.aux)
  ***********
 LaTeX2e <2025-06-01> patch level 1
 L3 programming layer <2025-09-02>
@@ -1493,12 +1503,12 @@ Package rerunfilecheck Info: File `HW.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 30001 strings out of 403246
- 606848 string characters out of 5465128
- 1067868 words of memory out of 5000000
- 57803 multiletter control sequences out of 15000+600000
- 634073 words of font info for 135 fonts, out of 8000000 for 9000
+ 30012 strings out of 403246
+ 607121 string characters out of 5465128
+ 1071868 words of memory out of 5000000
+ 57809 multiletter control sequences out of 15000+600000
+ 634081 words of font info for 136 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
- 86i,13n,97p,2302b,429s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 86i,14n,97p,2302b,475s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on HW.xdv (7 pages, 25884 bytes).
+Output written on HW.xdv (13 pages, 95800 bytes).

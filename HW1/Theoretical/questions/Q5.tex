@@ -1,0 +1,84 @@
+\subsection*{۱. جمع توابع لیپشیتز}
+فرض کنید $f,g:\mathbb{R}^n\to\mathbb{R}^m$ به‌ترتیب $L_f$-لیپشیتز و $L_g$-لیپشیتز باشند و
+$h(x)=f(x)+g(x)$.
+برای هر $x_1,x_2$ داریم:
+\begin{flalign*}
+\|h(x_1)-h(x_2)\|
+&=\|f(x_1)+g(x_1)-f(x_2)-g(x_2)\| \\
+&\le \|f(x_1)-f(x_2)\|+\|g(x_1)-g(x_2)\| \\
+&\le L_f\|x_1-x_2\|+L_g\|x_1-x_2\|
+= (L_f+L_g)\|x_1-x_2\|. &&
+\end{flalign*}
+پس $h$ لیپشیتز است و یک کران بالا برای ثابت لیپشیتز آن:
+\begin{flalign*}
+L_h \le L_f+L_g. &&
+\end{flalign*}
+
+\subsection*{۲. ترکیب توابع لیپشیتز}
+
+\subsubsection*{(الف) اثبات خاصیت ترکیب}
+فرض کنید $g:\mathbb{R}^n\to\mathbb{R}^m$، $L_g$-لیپشیتز و
+$f:\mathbb{R}^m\to\mathbb{R}^k$، $L_f$-لیپشیتز باشد و
+$h(x)=f(g(x))$.
+برای هر $x_1,x_2$:
+\begin{flalign*}
+\|h(x_1)-h(x_2)\|
+&=\|f(g(x_1))-f(g(x_2))\|
+\le L_f \|g(x_1)-g(x_2)\| \\
+&\le L_f\,L_g\,\|x_1-x_2\|. &&
+\end{flalign*}
+پس $h$ لیپشیتز است و:
+\begin{flalign*}
+L_h \le L_f L_g. &&
+\end{flalign*}
+
+\subsubsection*{(ب) کران ثابت لیپشیتز یک لایه}
+لایه را به صورت $f_k(x)=\sigma(W_k x)$ در نظر بگیرید که $\sigma$، $L_\sigma$-لیپشیتز است.
+می‌دانیم نگاشت خطی $T(x)=W_k x$ نسبت به نُرم اقلیدسی $L_T=\|W_k\|_2$-لیپشیتز است، یعنی:
+\begin{flalign*}
+\|W_k x_1 - W_k x_2\|\le \|W_k\|_2 \|x_1-x_2\|. &&
+\end{flalign*}
+اکنون با استفاده از خاصیت ترکیب:
+\begin{flalign*}
+\|f_k(x_1)-f_k(x_2)\|
+&=\|\sigma(W_k x_1)-\sigma(W_k x_2)\|
+\le L_\sigma \|W_k x_1 - W_k x_2\| \\
+&\le L_\sigma \|W_k\|_2 \|x_1-x_2\|. &&
+\end{flalign*}
+پس ثابت لیپشیتز لایه با رابطه زیر کران‌دار است:
+\begin{flalign*}
+L_k \le L_\sigma \cdot \|W_k\|_2. &&
+\end{flalign*}
+
+\subsection*{۳. ارتباط با مشتق (یک‌بعدی)}
+فرض کنید $f:\mathbb{R}\to\mathbb{R}$ مشتق‌پذیر باشد.
+
+\begin{itemize}
+\item
+اگر $f$، $L$-لیپشیتز باشد، برای هر $x$ و هر $h\neq 0$ داریم:
+\begin{flalign*}
+\left|\frac{f(x+h)-f(x)}{h}\right|
+\le L. &&
+\end{flalign*}
+با گرفتن حد وقتی $h\to 0$ نتیجه می‌شود:
+\begin{flalign*}
+|f'(x)|\le L \qquad \forall x. &&
+\end{flalign*}
+
+\item
+برعکس، اگر برای همه $x$ داشته باشیم $|f'(x)|\le L$، آنگاه برای هر $x_1\neq x_2$ طبق قضیه مقدار میانگین، عددی $c$ بین $x_1$ و $x_2$ وجود دارد به‌طوری که:
+\begin{flalign*}
+f(x_1)-f(x_2)=f'(c)(x_1-x_2)
+\;\;\Rightarrow\;\;
+|f(x_1)-f(x_2)| = |f'(c)|\,|x_1-x_2|
+\le L|x_1-x_2|. &&
+\end{flalign*}
+پس $f$، $L$-لیپشیتز است.
+\end{itemize}
+
+در نتیجه:
+\begin{flalign*}
+f \text{ لیپشیتز با ثابت } L
+\quad \Longleftrightarrow \quad
+|f'(x)|\le L \;\;\; \forall x. &&
+\end{flalign*}

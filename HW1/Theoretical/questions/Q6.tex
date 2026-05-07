@@ -1,0 +1,85 @@
+فرض کنید $X\in\mathbb{R}^{n\times d}$ و $X^T X = nI$ و ستون $i$ام برابر $x_{*i}\in\mathbb{R}^{n}$ است.
+
+\subsection*{۱}
+\begin{flalign*}
+J_1(w)
+&= \|Xw-y\|^2 + \lambda\|w\|_1 \\
+&= (Xw-y)^T(Xw-y)+\lambda\sum_{i=1}^d |w_i| \\
+&= w^T X^T X w -2y^T Xw + \|y\|^2 + \lambda\sum_{i=1}^d |w_i| \\
+&= n\|w\|^2 -2\sum_{i=1}^d w_i\, x_{*i}^T y + \|y\|^2 + \lambda\sum_{i=1}^d |w_i| \\
+&= \|y\|^2 + \sum_{i=1}^d \Big( n w_i^2 -2 w_i (x_{*i}^T y) + \lambda |w_i| \Big). &&
+\end{flalign*}
+پس می‌توان نوشت:
+\begin{flalign*}
+J_1(w)=\|y\|^2+\sum_{i=1}^d f(x_{*i},w_i),
+\qquad
+f(x_{*i},w_i)\triangleq n w_i^2 -2 w_i (x_{*i}^T y) + \lambda |w_i|. &&
+\end{flalign*}
+
+\subsection*{۲}
+به‌علت جدایی‌پذیری، برای هر $i$ کافی است
+\begin{flalign*}
+\phi_i(w_i)=n w_i^2 -2c_i w_i + \lambda|w_i|,
+\qquad c_i\triangleq x_{*i}^T y
+&&
+\end{flalign*}
+را کمینه کنیم. شرط لازم و کافی بهینگی (شرط زیرگرادیان):
+\begin{flalign*}
+0 \in \partial \phi_i(w_i)
+= 2n w_i -2c_i + \lambda\,\partial |w_i|. &&
+\end{flalign*}
+سه حالت:
+
+\begin{itemize}
+\item اگر $w_i^*>0$، آنگاه $\partial|w_i^*|=\{1\}$ و:
+\begin{flalign*}
+2n w_i^* -2c_i + \lambda = 0
+\;\;\Rightarrow\;\;
+w_i^*=\frac{c_i-\lambda/2}{n},
+\qquad
+w_i^*>0 \Longleftrightarrow c_i>\lambda/2. &&
+\end{flalign*}
+
+\item اگر $w_i^*<0$، آنگاه $\partial|w_i^*|=\{-1\}$ و:
+\begin{flalign*}
+2n w_i^* -2c_i - \lambda = 0
+\;\;\Rightarrow\;\;
+w_i^*=\frac{c_i+\lambda/2}{n},
+\qquad
+w_i^*<0 \Longleftrightarrow c_i<-\lambda/2. &&
+\end{flalign*}
+
+\item اگر $w_i^*=0$، آنگاه $\partial|0|=[-1,1]$ و:
+\begin{flalign*}
+0 \in -2c_i + \lambda[-1,1]
+\;\;\Longleftrightarrow\;\;
+|2c_i|\le \lambda
+\;\;\Longleftrightarrow\;\;
+|c_i|\le \lambda/2. &&
+\end{flalign*}
+\end{itemize}
+
+\subsection*{۳}
+\begin{flalign*}
+J_2(w)
+&=\|Xw-y\|^2+\lambda\|w\|_2^2
+= w^T X^T X w -2y^T Xw + \|y\|^2 + \lambda w^T w \\
+&= (n+\lambda)\|w\|^2 -2\sum_{i=1}^d c_i w_i + \|y\|^2. &&
+\end{flalign*}
+شرط بهینگی:
+\begin{flalign*}
+\nabla J_2(w)=2(n+\lambda)w -2X^T y = 0
+\;\;\Rightarrow\;\;
+w^\#=\frac{1}{n+\lambda}X^T y. &&
+\end{flalign*}
+پس:
+\begin{flalign*}
+w_i^\#=0
+\;\;\Longleftrightarrow\;\;
+(x_{*i}^T y)=0. &&
+\end{flalign*}
+
+\subsection*{۴}
+طبق بخش (۲)، در \lr{Lasso} اگر $|x_{*i}^T y|\le \lambda/2$ باشد، دقیقاً $w_i^*=0$ می‌شود (آستانه‌گذاری و ایجاد صفر).
+اما طبق بخش (۳)، در \lr{Ridge} داریم $w_i^\#= \frac{x_{*i}^T y}{n+\lambda}$ و فقط وقتی صفر می‌شود که دقیقاً $x_{*i}^T y=0$ باشد.
+بنابراین معمولاً $w^*$ تُنُک‌تر از $w^\#$ است.
