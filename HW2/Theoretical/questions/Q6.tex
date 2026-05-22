@@ -1,0 +1,33 @@
+\subsection*{بخش اول}
+\subsection*{الف}
+با فرض $o_t=1$ و $f_t=1-i_t$ داریم:
+\begin{flalign*}
+h_t &= \tanh(c_t), \qquad
+c_t=(1-i_t)\odot c_{t-1}+i_t\odot \tilde{c}_t,\\
+\tilde{c}_t &= \tanh(W_c x_t+U_c h_{t-1}+b_c), \qquad
+c_{t-1}=\tanh^{-1}(h_{t-1}) &&
+\end{flalign*}
+پس:
+\begin{flalign*}
+h_t=\tanh\!\Big((1-i_t)\odot \tanh^{-1}(h_{t-1})+i_t\odot \tanh(W_c x_t+U_c h_{t-1}+b_c)\Big). &&
+\end{flalign*}
+
+\subsection*{ب}
+در \lr{GRU} داریم:
+\begin{flalign*}
+h_t=(1-z_t)\odot h_{t-1}+z_t\odot \tilde{h}_t. &&
+\end{flalign*}
+شباهت: $i_t$ نقش گیت به‌روزرسانی مانند $z_t$ دارد و بین حالت قبلی و کاندیدا وزن‌دهی می‌کند.  
+تفاوت: در \lr{LSTM} ترکیب روی $c_{t-1}$ انجام شده و سپس $\tanh$ بیرونی اعمال می‌شود، و گیت بازنشانی $r_t$ وجود ندارد.
+
+\subsection*{بخش دوم}
+\subsection*{الف}
+نقش $r_t$ در \lr{GRU} کنترل میزان استفاده از $h_{t-1}$ در ساخت کاندیدا است؛ $r_t\!\approx\!0$ یعنی قطع اثر گذشته. برای مشابه‌سازی در \lr{LSTM} می‌توان:
+\begin{flalign*}
+r_t&=\sigma(W_r x_t+U_r h_{t-1}+b_r),\\
+\tilde{c}_t&=\tanh\!\big(W_c x_t+U_c(r_t\odot h_{t-1})+b_c\big). &&
+\end{flalign*}
+
+\subsection*{ب}
+فرض $o_t=1$ یعنی خروجی مستقیماً برابر $\tanh(c_t)$ است و حذف کنترل خروجی؛
+فرض $f_t=1-i_t$ یعنی یک گیت واحد نقش نگه‌داری/به‌روزرسانی را بازی می‌کند. با افزودن $r_t$، هر دو مدل دو گیت اصلی دارند: گیت به‌روزرسانی و گیت بازنشانی؛ تفاوت اصلی در وجود حالت سلولی $c_t$ و $\tanh$ بیرونی در \lr{LSTM} است.

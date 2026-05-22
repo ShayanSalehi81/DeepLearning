@@ -1,0 +1,42 @@
+\subsection*{الف}
+رابطه بازگشتی را به صورت
+$u_m=\theta h_{m-1}+x_m$ و $h_m=\sigma(u_m)$
+می‌نویسیم. آنگاه
+\begin{flalign*}
+\frac{\partial h_m}{\partial h_{m-1}}=\sigma'(u_m)\,\theta &&
+\end{flalign*}
+پس برای $k\ge 1$:
+\begin{flalign*}
+\frac{\partial h_{m+k}}{\partial h_m}
+= \prod_{t=1}^{k}\Big(\theta\,\sigma'(u_{m+t})\Big) &&
+\end{flalign*}
+با توجه به ویژگی سیگموید داریم
+$0<\sigma'(u)\le \tfrac{1}{4}$،
+بنابراین
+\begin{flalign*}
+\left|\frac{\partial h_{m+k}}{\partial h_m}\right|
+\le \left(\frac{|\theta|}{4}\right)^k \xrightarrow[k\to\infty]{} 0 &&
+\end{flalign*}
+و برای $|\theta|<1$ گرادیان به صفر میل می‌کند.
+
+\subsection*{ب}
+برای سادگی
+\begin{flalign*}
+u_i &= B_i x[n]+A_i c[n-1], \quad i=\sigma(u_i) \\
+u_f &= B_f x[n]+A_f c[n-1], \quad f=\sigma(u_f) \\
+u_c &= B_c x[n]+A_c c[n-1], \quad \tilde{c}=g(u_c) &&
+\end{flalign*}
+و مؤلفه $j$ام:
+\begin{flalign*}
+c_j[n]=f_j[n]\;c_j[n-1]+i_j[n]\;\tilde{c}_j[n] &&
+\end{flalign*}
+اکنون مشتق نسبت به $c_k[n-1]$:
+\begin{flalign*}
+\frac{\partial c_j[n]}{\partial c_k[n-1]}
+&= f_j[n]\delta_{jk}
++ c_j[n-1]\;\sigma'(u_{f,j})\,(A_f)_{jk}
++ \tilde{c}_j[n]\;\sigma'(u_{i,j})\,(A_i)_{jk}
++ i_j[n]\;g'(u_{c,j})\,(A_c)_{jk} &&
+\end{flalign*}
+که در آن $\delta_{jk}$ دلتای کرونکر است و می‌توان
+$\sigma'(u)=\sigma(u)(1-\sigma(u))$ را جایگذاری کرد.

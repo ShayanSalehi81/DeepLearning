@@ -1,0 +1,86 @@
+\subsection*{بخش اول}
+\subsection*{الف}
+با ادغام \lr{Conv} و \lr{BN} داریم:
+\begin{flalign*}
+y_c &= \gamma_c \frac{(W_c * X + b_c) - \mu_c}{\sqrt{\sigma_c^2 + \epsilon}} + \beta_c \\
+&= (W'_c * X) + b'_c &&
+\end{flalign*}
+که
+\begin{flalign*}
+W'_c &= \frac{\gamma_c}{\sqrt{\sigma_c^2+\epsilon}}\, W_c, \\
+b'_c &= \frac{\gamma_c}{\sqrt{\sigma_c^2+\epsilon}}(b_c-\mu_c) + \beta_c. &&
+\end{flalign*}
+
+\subsection*{ب}
+تبدیل \(1\times 1\) به \(3\times 3\) با صفرکردن همهٔ درایه‌ها به‌جز مرکز:
+\begin{flalign*}
+\tilde W_{c_{\text{out}},c_{\text{in}},p,q}=
+\begin{cases}
+W^{1\times 1}_{c_{\text{out}},c_{\text{in}}} & (p,q)=(2,2)\\
+0 & \text{سایر حالات}
+\end{cases} &&
+\end{flalign*}
+
+\subsection*{ج}
+برای دو کانولوشن موازی:
+\begin{flalign*}
+W^{(\text{fused})} &= W^{(1)} + W^{(2)}, \\
+b^{(\text{fused})} &= b^{(1)} + b^{(2)}. &&
+\end{flalign*}
+
+\subsection*{بخش دوم}
+\subsection*{الف}
+اگر \(C_{\text{in}}=C_{\text{out}}=C\) و \lr{stride}\(=1\)، کرنل شناسه:
+\begin{flalign*}
+W^{\text{id}}_{c,c,2,2}=1,\quad
+W^{\text{id}}_{c,c',p,q}=0 \ \text{در غیر این صورت} &&
+\end{flalign*}
+و بنابراین \(W^{\text{id}} * X = X\).
+
+\subsection*{ب}
+اگر \(C_{\text{in}} \neq C_{\text{out}}\)، تعداد کانال‌های خروجی تغییر می‌کند و نگاشت شناسه ممکن نیست. اگر \lr{stride}\(>1\)، ابعاد مکانی خروجی \(\frac{H}{s}\times\frac{W}{s}\) است و برابر با \(X\) نمی‌شود. بنابراین کرنلی برای \(W*X=X\) وجود ندارد. در این حالت از \lr{Projection Shortcut} با کانولوشن \(1\times 1\) استفاده می‌شود که هم‌ارز شناسه نیست و اطلاعات را خطی ترکیب می‌کند.
+
+\subsection*{ج}
+پس از ادغام \lr{Conv+BN} در هر لایه، کرنل‌های \(\hat W_1,\hat W_2\) را داریم. کرنل شاخه اصلی:
+\begin{flalign*}
+W_{\text{main}} &= \hat W_2 * \hat W_1, \\
+b_{\text{main},c} &= \hat b_{2,c} + \sum_{c'} \hat b_{1,c'} \sum_{p,q} \hat W_{2,c,c',p,q}. &&
+\end{flalign*}
+(اندازهٔ \(W_{\text{main}}\) برابر \(5\times 5\) است.)
+اگر شاخهٔ میانبر کرنل \(W_{\text{skip}}\) داشته باشد:
+\begin{flalign*}
+W_{\text{fused}} &= W_{\text{main}} + \text{pad}(W_{\text{skip}}), \\
+b_{\text{fused}} &= b_{\text{main}} + b_{\text{skip}}. &&
+\end{flalign*}
+
+\subsection*{بخش سوم}
+\subsection*{الف}
+برای شاخه‌های موازی خطی:
+\begin{flalign*}
+F_{\text{multi}}(X) &= \sum_i (W_i * X + b_i), \\
+F_{\text{fused}}(X) &= \Big(\sum_i W_i\Big) * X + \sum_i b_i. &&
+\end{flalign*}
+هم‌ارزی زمانی برقرار است که همهٔ شاخه‌ها خطی باشند، \lr{stride/padding} یکسان باشد، \lr{BN} در حالت استنتاج با آمار ثابت استفاده شود و بین شاخه‌ها غیرخطی‌سازی نباشد.
+
+\subsection*{ب}
+برای \(H=W=56\) و \(C=256\):
+\begin{flalign*}
+\text{MAC}_{\text{before}} &= (9+1) C^2 H W, \\
+\text{FLOPs}_{\text{before}} &= 2(9+1) C^2 H W, \\
+\text{MAC}_{\text{after}} &= 9 C^2 H W, \\
+\text{FLOPs}_{\text{after}} &= 2\cdot 9 C^2 H W. &&
+\end{flalign*}
+\begin{flalign*}
+C^2 H W &= 205{,}520{,}896, \\
+\text{FLOPs}_{\text{before}} &= 4{,}110{,}417{,}920, \\
+\text{FLOPs}_{\text{after}} &= 3{,}699{,}376{,}128. &&
+\end{flalign*}
+اختلاف فقط یک ثابت (حدود \(10\%\)) است و مرتبهٔ محاسباتی تغییر نمی‌کند.
+
+\subsection*{ج}
+شدت محاسباتی:
+\begin{flalign*}
+\text{AI}_{\text{multi}} &\approx \frac{2(9+1) C^2 H W}{2 C^2 H W + 2 C H W}, \\
+\text{AI}_{\text{fused}} &\approx \frac{2\cdot 9 C^2 H W}{C^2 H W + 2 C H W}. &&
+\end{flalign*}
+برای \(C\) بزرگ، \(\text{AI}_{\text{fused}}>\text{AI}_{\text{multi}}\) و مدل ادغام‌شده به‌علت دسترسی کمتر به حافظهٔ وزن‌ها و فعال‌سازی‌های میانی، از نظر سخت‌افزاری کارآمدتر است.

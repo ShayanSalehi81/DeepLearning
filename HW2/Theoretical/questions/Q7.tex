@@ -1,0 +1,52 @@
+\subsection*{بخش اول ـ الف}
+با فرض
+$\frac{\partial f_t}{\partial c_{t-1}}=\frac{\partial i_t}{\partial c_{t-1}}=\frac{\partial \tilde{c}_t}{\partial c_{t-1}}=0$
+داریم:
+\begin{flalign*}
+c_t &= f_t \odot c_{t-1} + i_t \odot \tilde{c}_t \\
+\implies \frac{\partial c_t}{\partial c_{t-1}} &= f_t
+\end{flalign*}
+(به‌صورت مولفه‌ای.)
+
+\subsection*{بخش اول ـ ب}
+با زنجیره‌ای کردن گرادیان‌ها روی دنباله:
+\begin{flalign*}
+\frac{\partial c_T}{\partial c_t} &= \prod_{k=t+1}^{T} f_k
+\end{flalign*}
+(حاصل‌ضرب مولفه‌ای.)
+اگر بایاس فراموشی $b_f$ را بزرگ و مثبت بگیریم، در ابتدا
+$f_k \approx 1$
+و بنابراین
+$\frac{\partial c_T}{\partial c_t} \approx 1$
+می‌شود؛ پس مشکل محوشدن گرادیان کاهش می‌یابد. در \lr{RNN} استاندارد، گرادیان‌ها حاصل‌ضرب وزن‌های بازگشتی و مشتق \lr{tanh} هستند و به‌سادگی محو یا منفجر می‌شوند، اما در \lr{LSTM} مسیر خطیِ
+\lr{Constant Error Carousel}
+با $f_k \approx 1$ گرادیان را حفظ می‌کند.
+
+\subsection*{بخش دوم ـ الف}
+در \lr{GRU} داریم:
+\begin{flalign*}
+z_t &= \sigma(W_z x_t + U_z h_{t-1} + b_z) \\
+r_t &= \sigma(W_r x_t + U_r h_{t-1} + b_r) \\
+\tilde{h}_t &= \tanh(W_h x_t + U_h (r_t \odot h_{t-1}) + b_h) \\
+h_t &= (1-z_t)\odot h_{t-1} + z_t \odot \tilde{h}_t
+\end{flalign*}
+در \lr{MGU} اگر
+$r_t = z_t = f_t$
+و پارامترها را مشترک کنیم
+$(W_z,U_z,b_z)=(W_r,U_r,b_r)=(W_f,U_f,b_f)$،
+معادلات \lr{MGU} به‌دست می‌آید؛ پس \lr{MGU} یک حالت خاص از \lr{GRU} است.
+
+\subsection*{بخش دوم ـ ب}
+حالت ۱: اگر $f_t \to 1$:
+\begin{flalign*}
+h_t &= \tilde{h}_t \\
+\tilde{h}_t &= \tanh(W_h x_t + U_h h_{t-1} + b_h)
+\end{flalign*}
+که همان رفتار \lr{RNN} کلاسیک است.
+
+حالت ۲: اگر $f_t \to 0$:
+\begin{flalign*}
+h_t &= h_{t-1} \\
+\tilde{h}_t &= \tanh(W_h x_t + b_h)
+\end{flalign*}
+بنابراین حالت پنهان کپی می‌شود (حافظه کامل) و برای مدل‌سازی وابستگی‌های بلندمدت مفید است، هرچند ورودی جدید عملا وارد حالت نمی‌شود.

@@ -1,0 +1,23 @@
+برای خروجی کانولوشن داریم:
+$$H_{\text{out}} = \left\lfloor \frac{H_{\text{in}} + 2P - K}{S} \right\rfloor + 1,\quad
+W_{\text{out}} = \left\lfloor \frac{W_{\text{in}} + 2P - K}{S} \right\rfloor + 1$$
+در \lr{upsampling} طول و عرض دو برابر می‌شود و در \lr{concatenation} تعداد کانال‌ها جمع می‌شود. با ورودی $[10,1,32,32]$ خواهیم داشت:
+\begin{flalign*}
+\text{a:}\ & 32 \to 32 \Rightarrow P=0,\ S=1,\ [10,16,32,32] &&\\
+\text{b:}\ & \left\lfloor \frac{32+2(1)-3}{2}\right\rfloor +1=16 \Rightarrow [10,32,16,16] &&\\
+\text{c:}\ & \left\lfloor \frac{16+2(1)-3}{2}\right\rfloor +1=8 \Rightarrow [10,128,8,8] &&\\
+\text{d:}\ & \left\lfloor \frac{8+2(1)-3}{1}\right\rfloor +1=8 \Rightarrow [10,16,8,8] &&\\
+\text{e:}\ & \left\lfloor \frac{16+2(1)-3}{1}\right\rfloor +1=16 \Rightarrow [10,8,16,16] &&
+\end{flalign*}
+پس جدول کامل به صورت زیر است:
+\begin{center}
+\begin{tabular}{c|c|c|c|c}
+لایه & شکل خروجی & padding & stride & اندازه فیلتر \\ \hline
+a & $[10,16,32,32]$ & $0$ & $1$ & $1\times 1$ \\
+b & $[10,32,16,16]$ & $1$ & $2$ & $3\times 3$ \\
+c & $[10,128,8,8]$ & $1$ & $2$ & $3\times 3$ \\
+d & $[10,16,8,8]$ & $1$ & $1$ & $3\times 3$ \\
+e & $[10,8,16,16]$ & $1$ & $1$ & $3\times 3$ \\
+f & $[10,1,32,32]$ & $0$ & $1$ & $1\times 1$
+\end{tabular}
+\end{center}

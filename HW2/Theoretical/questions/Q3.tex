@@ -1,0 +1,73 @@
+\subsection*{۱) کانولوشن عمقی قابل تفکیک}
+\subsubsection*{الف}
+اندازه خروجی به علت \lr{padding} برابر $H \times W \times C_{out}$ است. برای هر پیکسل خروجی، $K^2 C_{in}$ ضرب‌و‌جمع داریم، پس:
+\begin{flalign*}
+\text{MACs} &= H W \, C_{out}\, C_{in}\, K^2 \\
+\text{FLOPs} &\approx 2 H W \, C_{out}\, C_{in}\, K^2 &&
+\end{flalign*}
+
+\subsubsection*{ب}
+در \lr{Depthwise Separable Convolution} ابتدا یک \lr{depthwise} انجام می‌شود؛ یعنی برای هر کانال ورودی یک فیلتر $K \times K$ مستقل اعمال می‌گردد و تعداد کانال‌ها ثابت می‌ماند. سپس یک \lr{pointwise} یا کانولوشن $1 \times 1$ انجام می‌شود تا کانال‌ها با هم ترکیب شده و به $C_{out}$ برسیم. هدف کاهش هزینه و پارامترهاست.
+
+\subsubsection*{ج}
+هزینه:
+\begin{flalign*}
+\text{Depthwise} &: H W \, C_{in}\, K^2 \\
+\text{Pointwise} &: H W \, C_{in}\, C_{out} \\
+\Rightarrow \text{Total} &: H W \, C_{in}\, (K^2 + C_{out}) &&
+\end{flalign*}
+نسبت به کانولوشن استاندارد:
+\[
+\frac{K^2 + C_{out}}{C_{out} K^2} = \frac{1}{C_{out}} + \frac{1}{K^2}.
+\]
+
+\subsubsection*{د}
+بردار پچ را $x \in \mathbb{R}^{k^2 C_{in}}$ بگیرید. در حالت استاندارد:
+\[
+y = W x, \quad W \in \mathbb{R}^{C_{out} \times k^2 C_{in}}.
+\]
+در حالت تفکیک‌پذیر:
+\[
+x \xrightarrow{D} z \xrightarrow{P} y,
+\]
+که در آن
+\[
+D \in \mathbb{R}^{C_{in} \times k^2 C_{in}} \text{ بلوکی-قطری (هر کانال یک فیلتر) },\quad
+P \in \mathbb{R}^{C_{out} \times C_{in}}.
+\]
+پس:
+\[
+W \approx P D.
+\]
+این ضرب دقیقاً همه‌ی ماتریس‌های $W$ را پوشش نمی‌دهد، چون $D$ ساختار بلوکی دارد و $\mathrm{rank}(P D) \le C_{in}$ است.  
+اگر $\mathrm{rank}(P)=\mathrm{rank}(D)=3$ آنگاه $\mathrm{rank}(P D)\le 3$. طبق قضیه \lr{Eckart--Young}، بهترین تقریب رتبه ۳ در نرم $2$ از تجزیه \lr{SVD} بدست می‌آید:
+\[
+W \approx W_3 = U_3 \Sigma_3 V_3^{\mathsf{T}}.
+\]
+
+\subsection*{۲) کانولوشن گروهی}
+\subsubsection*{الف}
+کانولوشن $1\times 1$ برای ترکیب کانال‌ها و کاهش بُعد استفاده می‌شود.  
+در \lr{GoogLeNet} به‌عنوان \lr{bottleneck} قبل از کانولوشن‌های سنگین، و در \lr{ResNet} برای هم‌ابعادسازی شاخه‌ها و افزودن غیرخطی‌بودن به کار می‌رود.
+
+\subsubsection*{ب}
+\lr{ShuffleNet} به جای \lr{pointwise} کامل، از \lr{group convolution} در کانولوشن $1\times 1$ استفاده می‌کند: کانال‌ها به $g$ گروه تقسیم می‌شوند و هر گروه مستقل کانولوشن می‌شود، پس هزینه تقریبا $g$ برابر کمتر می‌شود. سپس با \lr{channel shuffle} تبادل اطلاعات بین گروه‌ها برقرار می‌گردد.
+
+\subsubsection*{ج}
+در کانولوشن گروهی هر خروجی فقط به $C_{in}/g$ ورودی متصل است:
+\begin{flalign*}
+\text{MACs} &= H W \, C_{out}\, \frac{C_{in}}{g}\, K^2 \\
+\text{FLOPs} &\approx 2 H W \, C_{out}\, \frac{C_{in}}{g}\, K^2 &&
+\end{flalign*}
+برای $1\times 1$ داریم:
+\[
+H W \, \frac{C_{in} C_{out}}{g},
+\]
+پس هزینه نسبت به حالت کامل به اندازه‌ی $g$ کاهش می‌یابد.
+
+\subsection*{۳) شافل کردن کانال‌ها}
+\subsubsection*{الف}
+قرار دادن چند لایه \lr{group convolution} پشت سر هم با همان گروه‌بندی باعث می‌شود کانال‌های گروه‌ها با هم مخلوط نشوند؛ در نتیجه شبکه به $g$ زیرشبکه مستقل تبدیل می‌شود و جریان اطلاعات بین گروه‌ها کاهش می‌یابد.
+
+\subsubsection*{ب}
+\lr{Channel Shuffle} خروجی را به‌صورت یک جایگشت کانالی بازآرایی می‌کند تا هر گروه در لایه بعدی از کانال‌های گروه‌های متفاوت تغذیه شود. این عمل مشکل جداسازی گروه‌ها را رفع می‌کند. چون شافل یک تبدیل خطی و معکوس‌پذیر بدون پارامتر است، در پس‌انتشار گرادیان تنها جایگشت معکوس اعمال می‌شود و مانعی برای جریان گرادیان ایجاد نمی‌کند.

@@ -1,0 +1,63 @@
+\subsection*{الف}
+با \lr{padding}$=1$ و \lr{stride}$=2$ داریم:
+\[
+H_{out} = \left\lfloor \frac{5+2\cdot 1-3}{2} \right\rfloor + 1 = 3
+\]
+پس $Y \in \mathbb{R}^{3\times 3}$ و (با کانولوشنِ رایج در \lr{CNN} یعنی بدون برگرداندن کرنل):
+\[
+Y =
+\begin{bmatrix}
+6 & 5 & 4 \\
+3 & 7 & 0 \\
+4 & 0 & 8
+\end{bmatrix}
+\]
+
+\subsection*{ب}
+\[
+\frac{\partial L}{\partial Y} = Y - T =
+\begin{bmatrix}
+6-T_{11} & 5-T_{12} & 4-T_{13} \\
+3-T_{21} & 7-T_{22} & -T_{23} \\
+4-T_{31} & -T_{32} & 8-T_{33}
+\end{bmatrix}
+\]
+بگذارید $g_{ij} = \frac{\partial L}{\partial Y_{ij}}$.
+
+\[
+\frac{\partial L}{\partial W} =
+\begin{bmatrix}
+g_{22}+2g_{33} &
+2g_{21}+3g_{22}+2g_{23}+3g_{31}+g_{32} &
+g_{21}+2g_{32} \\
+2g_{12}+3g_{13}+g_{22}+g_{23}+2g_{32} &
+g_{11}+g_{13}+2g_{22}+g_{23}+g_{31}+g_{32}+3g_{33} &
+2g_{11}+3g_{12}+g_{21}+g_{22}+2g_{31} \\
+g_{12}+2g_{23} &
+2g_{11}+3g_{12}+2g_{13}+3g_{21}+g_{22} &
+g_{11}+2g_{22}
+\end{bmatrix}
+\]
+
+در محاسبه $\frac{\partial L}{\partial X}$، به علت \lr{stride}$=2$ ابتدا $G$ با یک صفر بین سطرها و ستون‌ها رقیق می‌شود و سپس با کرنل چرخیده
+\[
+W^{rot} =
+\begin{bmatrix}
+0 & 1 & -1 \\
+1 & 2 & 0 \\
+-1 & 0 & 1
+\end{bmatrix}
+\]
+کانولوشن \lr{full} گرفته می‌شود و به علت \lr{padding}$=1$ حاشیه حذف می‌گردد. نتیجه:
+\[
+\frac{\partial L}{\partial X} =
+\begin{bmatrix}
+2g_{11} & g_{12} & 2g_{12} & g_{13} & 2g_{13} \\
+g_{21} & g_{11}-g_{12}-g_{21} & g_{22} & g_{12}-g_{13}-g_{22} & g_{23} \\
+2g_{21} & g_{22} & 2g_{22} & g_{23} & 2g_{23} \\
+g_{31} & g_{21}-g_{22}-g_{31} & g_{32} & g_{22}-g_{23}-g_{32} & g_{33} \\
+2g_{31} & g_{32} & 2g_{32} & g_{33} & 2g_{33}
+\end{bmatrix}
+\]
+
+ابعاد گرادیان‌ها به ترتیب $\frac{\partial L}{\partial Y}\in\mathbb{R}^{3\times 3}$، $\frac{\partial L}{\partial W}\in\mathbb{R}^{3\times 3}$ و $\frac{\partial L}{\partial X}\in\mathbb{R}^{5\times 5}$ است؛ \lr{stride} باعث رقیق شدن گرادیان خروجی و \lr{padding} باعث حذف حاشیه در گرادیان ورودی می‌شود.

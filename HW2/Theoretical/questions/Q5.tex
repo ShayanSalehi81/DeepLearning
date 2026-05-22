@@ -1,0 +1,53 @@
+\subsection*{الف}
+با توجه به
+$h_i=\tanh(w h_{i-1})$
+داریم
+$-1<h_i<1$
+پس
+$0<1-h_i^2\le 1$.
+بنابراین
+\begin{flalign*}
+    \gamma_i = w(1-h_i^2)
+    \;\;\Rightarrow\;\;
+    |\gamma_i| = |w|\,(1-h_i^2),
+\end{flalign*}
+و در نتیجه
+\begin{flalign*}
+    0 \le |\gamma_i| \le |w|. &&
+\end{flalign*}
+
+\subsection*{ب}
+از رابطه‌ی گرادیان، ترم اصلی به صورت
+\begin{flalign*}
+    w^{T-t}\prod_{j=t+1}^{T}(1-h_j^2)
+    = \prod_{j=t+1}^{T} |w|\,(1-h_j^2)
+    = \prod_{j=t+1}^{T} |\gamma_j|
+\end{flalign*}
+ظاهر می‌شود. بنابراین شرط محو شدن گرادیان این است که
+\begin{flalign*}
+    \prod_{j=t+1}^{T} |\gamma_j| \longrightarrow 0 \quad (T\to\infty).
+\end{flalign*}
+یک شرط کافی:
+\begin{flalign*}
+    \exists\,\rho<1:\; |\gamma_j|\le \rho \;\;\text{برای همه‌ی}\; j\ge j_0. &&
+\end{flalign*}
+به طور خاص اگر
+$|w|<1$
+باشد، همواره گرادیان محو می‌شود.
+
+\subsection*{ج}
+انفجار گرادیان زمانی رخ می‌دهد که
+\begin{flalign*}
+    \prod_{j=t+1}^{T} |\gamma_j| \longrightarrow \infty \quad (T\to\infty).
+\end{flalign*}
+یک شرط کافی:
+\begin{flalign*}
+    \exists\,\rho>1:\; |\gamma_j|\ge \rho \;\;\text{برای همه‌ی}\; j\ge j_0. &&
+\end{flalign*}
+از آنجا که
+$|\gamma_j|=|w|(1-h_j^2)\le |w|$،
+برای انفجار لازم است
+$|w|>1$
+و حالت‌های پنهان اشباع نشده باشند، یعنی
+$(1-h_j^2)$
+به اندازه‌ی کافی بزرگ بماند.
