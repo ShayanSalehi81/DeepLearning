@@ -1,3 +1,50 @@
+\subsection*{بخش اول}
+ابتدا داریم
+\begin{flalign*}
+    L=\frac{1}{2}(h_T-y^*)^2
+    \;\;\Rightarrow\;\;
+    \frac{\partial L}{\partial w}=(h_T-y^*)\frac{\partial h_T}{\partial w}. &&
+\end{flalign*}
+برای
+$\frac{\partial h_T}{\partial w}$
+با باز کردن وابستگی زمانی:
+\begin{flalign*}
+    \frac{\partial h_T}{\partial w}
+    =\sum_{t=1}^{T}
+    \frac{\partial h_T}{\partial h_t}\,
+    \frac{\partial h_t}{\partial w}. &&
+\end{flalign*}
+از رابطه‌ی بازگشتی
+$h_t=\tanh(wh_{t-1})$
+و
+$\frac{d}{dx}\tanh(x)=1-\tanh^2(x)$
+داریم
+\begin{flalign*}
+    \frac{\partial h_t}{\partial h_{t-1}}
+    =w(1-h_t^2), \qquad
+    \frac{\partial h_t}{\partial w}
+    =(1-h_t^2)h_{t-1}. &&
+\end{flalign*}
+پس
+\begin{flalign*}
+    \frac{\partial h_T}{\partial h_t}
+    =\prod_{j=t+1}^{T} w(1-h_j^2)
+    =w^{T-t}\prod_{j=t+1}^{T}(1-h_j^2), &&
+\end{flalign*}
+و در نتیجه
+\begin{flalign*}
+    \frac{\partial h_T}{\partial w}
+    =\sum_{t=1}^{T}
+    w^{T-t}(1-h_t^2)h_{t-1}\prod_{j=t+1}^{T}(1-h_j^2). &&
+\end{flalign*}
+در نهایت:
+\begin{flalign*}
+    \frac{\partial L}{\partial w}
+    =(h_T-y^*)
+    \sum_{t=1}^{T}
+    w^{T-t}(1-h_t^2)h_{t-1}\prod_{j=t+1}^{T}(1-h_j^2). &&
+\end{flalign*}
+
 \subsection*{الف}
 با توجه به
 $h_i=\tanh(w h_{i-1})$

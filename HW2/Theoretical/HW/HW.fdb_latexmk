@@ -1,10 +1,10 @@
 # Fdb version 4
-["xdvipdfmx"] 1779433695.1843 "HW.xdv" "HW.pdf" "HW" 1779433695.59842 0
-  "HW.xdv" 1779433694 95856 14f082edd223c69bbd0247fdef7b6ff1 "xelatex"
+["xdvipdfmx"] 1779790535.97701 "HW.xdv" "HW.pdf" "HW" 1779790536.35062 0
+  "HW.xdv" 1779790535 99572 d6dbd14dd5ae08b0d22b3c3db9a1bfa4 "xelatex"
   (generated)
   "HW.pdf"
   (rewritten before read)
-["xelatex"] 1779433693.37557 "d:/Term 02/DeepLearning/HW2/Theoretical/HW/HW.tex" "HW.xdv" "HW" 1779433695.59103 0
+["xelatex"] 1779790534.07879 "d:/Term 02/DeepLearning/HW2/Theoretical/HW/HW.tex" "HW.xdv" "HW" 1779790536.3445 0
   "../commons/alg-fa.tex" 1707886330 1438 630aaa81895929eddba0efb6ab754a8c ""
   "../commons/sharif.png" 1707886330 34782 91c831e22cd5b8b30cdd0d7fa2b74a71 ""
   "../commons/style.tex" 1777269551 5409 558bd7859b6be7812abf9037f7726c90 ""
@@ -12,7 +12,7 @@
   "../questions/Q2.tex" 1779433291 2197 be41d6d269afafa621ce6b7ac22ddf8c ""
   "../questions/Q3.tex" 1779433324 4681 583b57dafcd3cd90c01709a9e7532d62 ""
   "../questions/Q4.tex" 1779433435 4183 bf20b76af8144a8694d5290428d7f5db ""
-  "../questions/Q5.tex" 1779433589 1613 9f778434c110740e5351eb2fd9eed8f7 ""
+  "../questions/Q5.tex" 1779790533 2894 c5aa98f775563fb58e1cfd7a6ad355af ""
   "../questions/Q6.tex" 1779433606 1855 f8d830362449b3850df0722ffee06110 ""
   "../questions/Q7.tex" 1779433628 2388 81e4fb039c614f9fdcd80232c001efe0 ""
   "C:/Program Files/MiKTeX/fonts/tfm/adobe/zapfding/pzdr.tfm" 1136759654 1528 7e12f4c0fcf5a072cebdcfbfc610f54c ""
@@ -235,8 +235,8 @@
   "C:/Program Files/MiKTeX/tex/latex/zref/zref-base.sty" 1750428951 20785 198a9cb2e04238d92c320d0d9edbd76a ""
   "C:/Program Files/MiKTeX/tex/xelatex/xetex-pstricks/pstricks.con" 1266284760 204 366747485ba2670f55166e66d1f21249 ""
   "C:/Users/ROG/AppData/Local/MiKTeX/miktex/data/le/xetex/xelatex.fmt" 1762519379 27033816 3409389256dddeec52c4569a0d18311e ""
-  "HW.aux" 1779433694 164 e872a9c503b8de48d63552c69579f12d "xelatex"
-  "HW.out" 1779433694 0 d41d8cd98f00b204e9800998ecf8427e "xelatex"
+  "HW.aux" 1779790535 164 e872a9c503b8de48d63552c69579f12d "xelatex"
+  "HW.out" 1779790535 0 d41d8cd98f00b204e9800998ecf8427e "xelatex"
   "HW.tex" 1779433693 749 9d185cd3863807d965767373b123d1b4 ""
   "d:/Term 02/DeepLearning/HW2/Theoretical/HW/HW.tex" 1779433693 749 9d185cd3863807d965767373b123d1b4 ""
   (generated)

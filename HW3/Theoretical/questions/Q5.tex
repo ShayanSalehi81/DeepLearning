@@ -1,0 +1,104 @@
+مشخصات مدل:
+$L = 24$ لایه،
+$d = 1024$،
+تعداد سرها $= 16$،
+و در مجموع
+$350 \times 10^6$
+پارامتر. تعداد وظایف
+$T = 20$
+است.
+
+\subsection*{الف) روش \lr{full fine-tuning}}
+در این روش برای هر وظیفه یک نسخه‌ی کامل از مدل ذخیره می‌شود، پس پارامترهای اختصاصی هر وظیفه برابر کل پارامترهای مدل است.
+\begin{flalign*}
+    \text{کل پارامترهای ذخیره‌شده} &= T \times 350\text{M} = 20 \times 350 \times 10^6 \\
+    &= 7000 \times 10^6 = 7 \times 10^9 = 7\text{B} &&
+\end{flalign*}
+یعنی در مجموع باید
+$7$
+میلیارد پارامتر ذخیره شود.
+
+\subsection*{ب) روش \lr{Prompt Tuning}}
+در این روش مدل پایه ثابت می‌ماند و تنها یک
+\lr{soft prompt}
+با طول
+$m = 50$
+که هر بردار آن بعد
+$d = 1024$
+دارد، برای هر وظیفه آموزش می‌بیند.
+
+(۱) تعداد پارامترهای آموزش‌پذیر برای هر وظیفه:
+\begin{flalign*}
+    P_{\text{task}} &= m \times d = 50 \times 1024 = 51200 \approx 51.2\text{K} &&
+\end{flalign*}
+
+(۲) کل پارامترهای اختصاصی برای ۲۰ وظیفه:
+\begin{flalign*}
+    P_{\text{total}} &= T \times m \times d = 20 \times 51200 = 1024000 \approx 1.02\text{M} &&
+\end{flalign*}
+
+\subsection*{ج) روش \lr{Prefix Tuning}}
+در این روش مدل ثابت می‌ماند و در هر لایه‌ی \lr{Transformer} برای هر وظیفه، یک \lr{prefix} برای بخش \lr{Key} با طول
+$p = 10$
+و یک \lr{prefix} برای بخش \lr{Value} با طول
+$p = 10$
+اضافه می‌شود؛ هر بردار بعد
+$d = 1024$
+دارد.
+
+(۱) تعداد پارامترهای آموزش‌پذیر برای هر وظیفه:
+در هر لایه دو \lr{prefix} (یکی \lr{Key} و یکی \lr{Value}) داریم، پس:
+\begin{flalign*}
+    P_{\text{task}} &= L \times (2 \times p \times d) = 24 \times (2 \times 10 \times 1024) \\
+    &= 24 \times 20480 = 491520 \approx 491.5\text{K} &&
+\end{flalign*}
+
+(۲) کل پارامترهای اختصاصی برای ۲۰ وظیفه:
+\begin{flalign*}
+    P_{\text{total}} &= T \times L \times 2 \times p \times d = 20 \times 491520 \\
+    &= 9830400 \approx 9.83\text{M} &&
+\end{flalign*}
+
+\subsection*{د) نسبت کاهش ذخیره‌سازی نسبت به \lr{full fine-tuning}}
+مبنای مقایسه، پارامترهای اختصاصی هر وظیفه است؛ در \lr{full fine-tuning} این مقدار
+$350\text{M}$
+به ازای هر وظیفه است.
+
+(۱) \lr{Prompt Tuning}:
+\begin{flalign*}
+    \text{نسبت} &= \frac{350 \times 10^6}{51200} \approx 6836 &&
+\end{flalign*}
+یعنی حدود
+$6836$
+برابر کمتر فضا (کاهش تقریباً
+$0.0146\%$
+از حالت کامل).
+
+(۲) \lr{Prefix Tuning}:
+\begin{flalign*}
+    \text{نسبت} &= \frac{350 \times 10^6}{491520} \approx 712 &&
+\end{flalign*}
+یعنی حدود
+$712$
+برابر کمتر فضا (کاهش تقریباً
+$0.14\%$
+از حالت کامل).
+
+\subsection*{ه) تفاوت اصلی \lr{Prompt Tuning} و \lr{Prefix Tuning}}
+تفاوت اصلی در محل تزریق پارامترهای آموزش‌پذیر است. در
+\lr{Prompt Tuning}
+تنها چند بردار به ورودی (لایه‌ی \lr{embedding}) افزوده می‌شود و مدل از طریق همان لایه‌ی اول این بردارها را در سراسر شبکه منتشر می‌کند. اما در
+\lr{Prefix Tuning}
+در هر لایه‌ی \lr{Transformer} و به‌طور مستقیم در بخش‌های \lr{Key} و \lr{Value} مکانیزم \lr{attention}، بردارهای پیشوند اضافه می‌شود.
+
+\lr{Prompt Tuning}:
+\begin{flalign*}
+    &\bullet \text{ مزیت: تعداد پارامتر بسیار کم و ذخیره‌سازی فوق‌العاده سبک.} \\
+    &\bullet \text{ محدودیت: ظرفیت بیان کمتر و معمولاً عملکرد ضعیف‌تر روی مدل‌های کوچک یا وظایف پیچیده.} &&
+\end{flalign*}
+
+\lr{Prefix Tuning}:
+\begin{flalign*}
+    &\bullet \text{ مزیت: نفوذ مستقیم در همه‌ی لایه‌ها، ظرفیت بیان بالاتر و عملکرد بهتر.} \\
+    &\bullet \text{ محدودیت: پارامترهای بیشتر (به نسبت \lr{layer}ها) و پیچیدگی پیاده‌سازی بالاتر.} &&
+\end{flalign*}
