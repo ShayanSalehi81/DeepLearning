@@ -481,6 +481,14 @@ INPUT C:\Program Files\MiKTeX\fonts\tfm\public\amsfonts\symbols\msbm7.tfm
 INPUT ..\questions\Q1.tex
 INPUT ..\questions\Q1.tex
 INPUT ..\questions\Q1.tex
+INPUT C:\Program Files\MiKTeX\fonts\tfm\public\amsfonts\cmextra\cmex7.tfm
+INPUT C:\Program Files\MiKTeX\fonts\tfm\public\amsfonts\cmextra\cmex7.tfm
+INPUT C:\Program Files\MiKTeX\fonts\tfm\public\amsfonts\symbols\msam10.tfm
+INPUT C:\Program Files\MiKTeX\fonts\tfm\public\amsfonts\symbols\msam7.tfm
+INPUT C:\Program Files\MiKTeX\fonts\tfm\public\amsfonts\symbols\msam5.tfm
+INPUT C:\Program Files\MiKTeX\fonts\tfm\public\amsfonts\symbols\msbm10.tfm
+INPUT C:\Program Files\MiKTeX\fonts\tfm\public\amsfonts\symbols\msbm7.tfm
+INPUT C:\Program Files\MiKTeX\fonts\tfm\public\amsfonts\symbols\msbm5.tfm
 OUTPUT HW.xdv
 INPUT ..\questions\Q2.tex
 INPUT ..\questions\Q2.tex
@@ -488,18 +496,6 @@ INPUT ..\questions\Q2.tex
 INPUT ..\questions\Q3.tex
 INPUT ..\questions\Q3.tex
 INPUT ..\questions\Q3.tex
-INPUT ..\questions\Q4.tex
-INPUT ..\questions\Q4.tex
-INPUT ..\questions\Q4.tex
-INPUT ..\questions\Q5.tex
-INPUT ..\questions\Q5.tex
-INPUT ..\questions\Q5.tex
-INPUT ..\questions\Q6.tex
-INPUT ..\questions\Q6.tex
-INPUT ..\questions\Q6.tex
-INPUT ..\questions\Q7.tex
-INPUT ..\questions\Q7.tex
-INPUT ..\questions\Q7.tex
 INPUT HW.aux
 INPUT .\HW.out
 INPUT .\HW.out

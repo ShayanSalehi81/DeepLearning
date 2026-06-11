@@ -1,78 +1,58 @@
 \subsection*{الف}
-در این قسمت فرض می‌کنیم برای همه‌ی هدها ماتریس‌های \lr{projection} یکسان‌اند:
+چون همهٔ هدها projectionهای یکسان دارند، تمام هدها خروجی یکسانی تولید می‌کنند:
 \begin{flalign*}
-W_i^{Q}=W^{Q},\quad W_i^{K}=W^{K},\quad W_i^{V}=W^{V}\qquad \forall i. &&
+    W_i^Q = W^Q,\; W_i^K = W^K,\; W_i^V = W^V \;\;\forall i &&\\
+    \implies \text{head}_i = \text{Attention}(QW^Q, KW^K, VW^V) =: H \quad \forall i &&
 \end{flalign*}
-پس خروجی همه‌ی هدها برابر است. اگر
+پس هر $h$ هد دقیقاً همان attention را $h$ بار محاسبه می‌کنند. خروجی لایه:
 \begin{flalign*}
-H \;:=\; \mathrm{Attention}(QW^{Q},KW^{K},VW^{V})
-= \mathrm{softmax}\!\Big(\frac{(QW^{Q})(KW^{K})^{\top}}{\sqrt{d_k}}\Big)\,(VW^{V}), &&
+    \text{MHA}(Q,K,V) &= \text{Concat}(H, H, \dots, H)\, W^O &&\\
+    &= \underbrace{[\,H\,|\,H\,|\,\cdots\,|\,H\,]}_{h \text{ copies}}\, W^O &&
 \end{flalign*}
-آنگاه برای هر $i$ داریم $H_i=H$ و خروجی \lr{Multi-Head} می‌شود:
+با افراز سطری $W^O \in \mathbb{R}^{(h\,d_k)\times d_{\text{model}}}$ به $h$ بلوک $W^O = \begin{bmatrix} W^O_{(1)} \\ \vdots \\ W^O_{(h)} \end{bmatrix}$، خاصیت Concat–ضرب بلوکی می‌دهد:
 \begin{flalign*}
-\mathrm{MHA}(Q,K,V)
-&= \mathrm{Concat}(H_1,\dots,H_h)\,W^{O}
-= [H,\dots,H]\,W^{O}. &&
+    \text{MHA}(Q,K,V) &= \sum_{i=1}^{h} H\, W^O_{(i)} = H\Big(\sum_{i=1}^{h} W^O_{(i)}\Big) = H\, \widetilde{W}^O &&
 \end{flalign*}
-حال $W^{O}$ را به بلوک‌های سطری $d_k\times d_{\text{model}}$ تقسیم می‌کنیم:
-\begin{flalign*}
-W^{O}=\begin{bmatrix}
-W^{O}_{1}\\ \vdots \\ W^{O}_{h}
-\end{bmatrix},\qquad W^{O}_{i}\in\mathbb{R}^{d_k\times d_{\text{model}}}. &&
-\end{flalign*}
-در نتیجه:
-\begin{flalign*}
-[H,\dots,H]\,W^{O}
-&=\sum_{i=1}^{h} H\,W^{O}_{i}
-=H\Big(\sum_{i=1}^{h}W^{O}_{i}\Big)
-=: H\,W^{O}_{\mathrm{eff}}. &&
-\end{flalign*}
-پس \lr{Multi-Head Attention} در این حالت عملاً همان یک \lr{single-head attention} (تولیدِ $H$) است که سپس با یک \lr{projection} خروجیِ مؤثر $W^{O}_{\mathrm{eff}}$ ضرب می‌شود؛ یعنی تکرار $h$باره‌ی همان عملیات اتنشن هیچ «تنوع» جدیدی تولید نمی‌کند.
+که در آن $\widetilde{W}^O := \sum_{i=1}^h W^O_{(i)} \in \mathbb{R}^{d_k \times d_{\text{model}}}$. پس خروجی همان یک single-head attention است که با یک projection مؤثر $\widetilde{W}^O$ ترکیب شده.
 
-همچنین چون وزن‌های اتنشن به $V$ وابسته نیستند، می‌توان $W^{O}_{\mathrm{eff}}$ را داخل \lr{projection} مقدارها برد:
-\begin{flalign*}
-H\,W^{O}_{\mathrm{eff}}
-&=\mathrm{softmax}\!\Big(\frac{(QW^{Q})(KW^{K})^{\top}}{\sqrt{d_k}}\Big)\,V\,(W^{V}W^{O}_{\mathrm{eff}}), &&
-\end{flalign*}
-که معادل یک اتنشن تک‌هد با $V$-پروجکشن جدید $W^{V}_{\!*}=W^{V}W^{O}_{\mathrm{eff}}$ است.
-توجه کنید این حالت لزوماً «فقط» یک ضریب مقیاس ساده نیست؛ فقط اگر بلوک‌های $W^{O}$ ساختار ویژه‌ای داشته باشند (مثلاً $W^{O}_{1}=\dots=W^{O}_{h}$) آن‌وقت $W^{O}_{\mathrm{eff}}=hW^{O}_{1}$ و خروجی صرفاً $h$ برابر می‌شود. نتیجه‌ی کلیدی این است که مزیت اصلی \lr{multi-head} از تنوعِ \lr{projection}‌های یادگرفته‌شده بین هدها می‌آید؛ نه از تکرار یک هد مشابه.
+توجه کنید این لزوماً مضرب اسکالر $H$ نیست؛ $\widetilde{W}^O$ یک ماتریس دلخواه است و می‌تواند ساختار غیربدیهی داشته باشد. تنها در حالت خاصِ $\widetilde{W}^O = c\,I$ به مقیاس ساده تقلیل می‌یابد.
+
+نتیجه: قدرت بیانی Multi-Head نه از تعدد هدها، بلکه از \lr{diversity} بین آن‌ها می‌آید. هدهای یکسان \lr{rank} ترکیب را افزایش نمی‌دهند و کل لایه تا یک projection خطی به یک هد فرومی‌پاشد؛ پس تنوع subspaceها شرط لازمِ بهره‌بردن از چندهد بودن است.
 
 \subsection*{ب}
-یک روش اصولی برای حذفِ $k<h$ هد، تعریف یک معیار «اهمیت» و یک معیار «افزونگی/شباهت» و سپس انتخاب بر اساس هر دو است.
-
-برای اهمیت هر هد $i$ می‌توان یک امتیاز تعریف کرد، مثلاً:
+معیار اهمیت تک‌هدی را از طریق حساسیت task loss به حذف هد تعریف می‌کنیم (به سبک \lr{Michel et al. 2019})، با gate $\xi_i \in \{0,1\}$ روی هد $i$:
 \begin{flalign*}
-s_i \;=\; \mathcal{L}_{\text{dev}}(\text{مدل بدون هد }i)\;-\;\mathcal{L}_{\text{dev}}(\text{مدل کامل}), &&
+    I_i &= \mathbb{E}_{x}\left| \mathcal{L}(x \mid \xi_i = 1) - \mathcal{L}(x \mid \xi_i = 0) \right| &&\\
+    &\approx \mathbb{E}_{x}\left| \frac{\partial \mathcal{L}}{\partial \xi_i} \right|
+    = \mathbb{E}_{x}\left| H_i^{\top} \frac{\partial \mathcal{L}}{\partial H_i} \right| &&
 \end{flalign*}
-(یا به‌صورت تقریبی، معیارهای گرادیانی مانند $\mathbb{E}\,|\partial \mathcal{L}/\partial H_i|$). هرچه $s_i$ بزرگ‌تر باشد هد مهم‌تر است.
+که از بسط مرتبهٔ اول $\mathcal{L}$ حول $\xi_i = 1$ به دست می‌آید و در یک پاس \lr{backward} برای همهٔ هدها قابل محاسبه است.
 
-برای شباهت/افزونگی، مطابق صورت سؤال می‌توان
-$R(i,j)=\cos(\mathrm{vec}(A_i),\mathrm{vec}(A_j))$
-را گرفت.
-
-سپس به‌جای «انتخاب هدهای حذف‌شدنی»، می‌توان مجموعه‌ی هدهای نگه‌داشته‌شده $S$ با اندازه $|S|=h-k$ را طوری انتخاب کرد که مهم و غیرتکراری باشند:
+برای جنبهٔ افزونگی، شباهت زوجی هدها را با $R(i,j) = \cos(\text{vec}(A_i), \text{vec}(A_j))$ می‌سنجیم. هدی که هم اهمیت پایین دارد و هم با هدی دیگر به‌شدت همبسته است، نامزد حذف است. معیار ترکیبی اولویتِ حذف:
 \begin{flalign*}
-S^{*}=\arg\max_{|S|=h-k}\;\Big(\sum_{i\in S} s_i \;-\;\lambda \sum_{\substack{i<j\\ i,j\in S}} R(i,j)\Big). &&
+    \text{score}(i) = \underbrace{I_i}_{\text{اهمیت}} - \lambda \underbrace{\max_{j \neq i,\, j \notin \text{pruned}} R(i,j)}_{\text{افزونگی}} &&
 \end{flalign*}
-این مسئله را می‌توان با یک الگوریتم \lr{greedy/MMR}-مانند تقریب زد: در هر گام هدی را اضافه کنیم که $s_i$ بالاست و در عین حال بیشترین شباهت به هدهای انتخاب‌شده را کمینه می‌کند (مثلاً بیشینه‌سازی $s_i-\lambda\max_{j\in S}R(i,j)$). در پایان، $k$ هدِ باقیمانده حذف می‌شوند.
+هدها را بر حسب $\text{score}$ صعودی مرتب کرده و $h-k$ هد با کمترین مقدار را حذف می‌کنیم. عبارت دوم تضمین می‌کند از هر خوشهٔ هدهای مشابه فقط یک نماینده باقی بماند (نه آنکه چند نسخهٔ مهمِ مشابه همگی نگه‌داشته شوند).
 
 \subsection*{ج}
-برای دروازه‌ها $z_i\in[0,1]$ (مثلاً با پارامتردهی $z_i=\sigma(u_i)$) یک تابع هزینه‌ی سه‌بخشی می‌تواند چنین باشد:
+متغیر دروازه‌ای $z_i \in [0,1]$ را با تابع هزینه‌ای سه‌بخشی آموزش می‌دهیم:
 \begin{flalign*}
-\mathcal{L}
-\;=\;
-\mathcal{L}_{\text{task}}
-\;+\;
-\lambda_{\text{sparse}}\sum_{i=1}^{h} z_i
-\;+\;
-\lambda_{\text{red}}\sum_{1\le i<j\le h} z_i z_j\,R(i,j). &&
+    \mathcal{J} = \underbrace{\mathcal{L}_{\text{task}}(z)}_{\text{(۱) عملکرد}}
+    \;+\; \alpha \underbrace{\sum_{i=1}^{h} z_i}_{\text{(۲) تنکی}}
+    \;+\; \beta \underbrace{\sum_{i<j} z_i\, z_j\, R(i,j)}_{\text{(۳) افزونگی}} &&
 \end{flalign*}
-نقش جمله‌ها:
+نقش هر جمله:
 \begin{flalign*}
-\mathcal{L}_{\text{task}} &: \text{حفظ عملکرد اصلی مدل روی تسک (مثلاً \lr{cross-entropy}).}\\
-\sum_i z_i &: \text{تنکی؛ مدل را به کوچک‌کردن بسیاری از دروازه‌ها (خاموش‌کردن هدها) هل می‌دهد.}\\
-\sum_{i<j} z_i z_j R(i,j) &: \text{افزونگی؛ اگر دو هد شبیه باشند و هر دو روشن بمانند، جریمه بزرگ می‌شود.}
+    &\bullet\;\; \mathcal{L}_{\text{task}}(z): \text{ افتِ عملکرد را جریمه می‌کند} \Rightarrow z_i \text{ روی هدهای مفید را بالا نگه می‌دارد.} &&\\
+    &\bullet\;\; \alpha \textstyle\sum_i z_i \;(\ell_1): \text{ فشارِ تنکی} \Rightarrow z_i \text{ها را به سمت صفر می‌راند (حذف هدهای کم‌اهمیت).} &&\\
+    &\bullet\;\; \beta \textstyle\sum_{i<j} z_i z_j R(i,j): \text{ جریمهٔ زوجی} \Rightarrow \text{نگه‌داشتن همزمان دو هدِ مشابه را گران می‌کند.} &&
 \end{flalign*}
-پس از آموزش، برای انتخاب دقیقاً $k$ هد نهایی می‌توان $k$ مقدار بزرگ‌ترِ $z_i$ را نگه داشت (یا یک آستانه $\tau$ گذاشت و سپس برای رسیدن به $k$، \lr{top-k} انجام داد)، و برای بقیه هدها $z_i=0$ قرار داد (در صورت نیاز یک \lr{fine-tune} کوتاه).
+از آنجا که هدف بردارِ تنک می‌خواهد، $\ell_1$ مناسب‌تر از $\ell_2$ است؛ و برای آنکه gate واقعاً به صفر/یک نزدیک شود می‌توان $z_i$ را با \lr{Hard-Concrete} پارامتری کرد تا $\sum_i z_i$ تخمینی از $\|z\|_0$ شود.
 
-اگر دو هد کاملاً یکسان باشند، آنگاه $A_i=A_j$ و لذا $R(i,j)=1$ و جمله‌ی افزونگی شامل $\lambda_{\text{red}} z_i z_j$ می‌شود؛ چون داشتن هر دو هدِ یکسان سودی برای $\mathcal{L}_{\text{task}}$ ندارد، کمینه‌سازیِ $\mathcal{L}$ ترجیح می‌دهد یکی از $z_i,z_j$ را به سمت صفر ببرد تا جریمه حذف شود؛ بنابراین نگه داشتن هر دو همزمان مطلوب نیست.
+انتخاب $k$ پس از آموزش: هدها را بر حسب $z_i$ نزولی مرتب می‌کنیم. مقادیر $z_i$ معمولاً قطبیده می‌شوند (نزدیک ۰ یا ۱)؛ شکافِ طبیعی در طیف مرتب‌شدهٔ $z_i$ مرز را مشخص می‌کند و $k$ را برابر تعداد هدهای بالای آستانه (مثلاً $z_i > 0.5$) می‌گیریم — یعنی $k$ به‌جای آنکه از پیش ثابت شود، از خودِ داده استخراج می‌گردد.
+
+تحلیل دو هدِ کاملاً یکسان ($R(i,j) = 1$، رفتار همسان): جملهٔ افزونگی روی این زوج برابر $\beta\, z_i z_j$ است که با نگه‌داشتن همزمانِ هر دو ($z_i = z_j = 1$) بیشینه و برابر $\beta$ می‌شود. اما چون رفتارشان یکسان است، خروجی $z_i H_i + z_j H_j = (z_i + z_j) H$ تنها به مجموع $z_i + z_j$ وابسته است؛ پس همان عملکرد با $(z_i, z_j) = (1, 0)$ نیز حاصل می‌شود بی‌آنکه $\mathcal{L}_{\text{task}}$ تغییر کند، حال‌آنکه هم جریمهٔ تنکی ($-\alpha$) و هم جریمهٔ افزونگی ($-\beta$) کاهش می‌یابند:
+\begin{flalign*}
+    \mathcal{J}(1,1) - \mathcal{J}(1,0) = \alpha + \beta > 0 &&
+\end{flalign*}
+بنابراین جریمهٔ افزونگی $\mathcal{J}$ را در حالتِ «نگه‌داشتن هر دو» اکیداً بزرگ‌تر می‌کند بی‌آنکه نفعی در task بدهد؛ پس راه‌حل بهینه یکی از این دو هدِ تکراری را خاموش می‌کند و نگه‌داشتن همزمان هر دو نامطلوب است.

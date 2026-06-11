@@ -1,26 +1,24 @@
 # Fdb version 4
-["xdvipdfmx"] 1780722162.38175 "HW.xdv" "HW.pdf" "HW" 1780722162.75315 0
-  "HW.xdv" 1780722162 6256 6178d88031dd61af51745d0213302f28 "xelatex"
+["xdvipdfmx"] 1780733095.89008 "HW.xdv" "HW.pdf" "HW" 1780733096.30827 0
+  "HW.xdv" 1780733095 126444 68a717a68458461849bee4901f2ed4c2 "xelatex"
   (generated)
   "HW.pdf"
   (rewritten before read)
-["xelatex"] 1780722160.45835 "d:/Term 02/DeepLearning/Midterm/HW/HW.tex" "HW.xdv" "HW" 1780722162.74571 0
+["xelatex"] 1780733093.91305 "d:/Term 02/DeepLearning/Midterm/HW/HW.tex" "HW.xdv" "HW" 1780733096.30218 0
   "../commons/alg-fa.tex" 1707886330 1438 630aaa81895929eddba0efb6ab754a8c ""
   "../commons/sharif.png" 1707886330 34782 91c831e22cd5b8b30cdd0d7fa2b74a71 ""
   "../commons/style.tex" 1777269551 5409 558bd7859b6be7812abf9037f7726c90 ""
-  "../questions/Q1.tex" 1780722122 0 d41d8cd98f00b204e9800998ecf8427e ""
-  "../questions/Q2.tex" 1780722124 0 d41d8cd98f00b204e9800998ecf8427e ""
-  "../questions/Q3.tex" 1780722127 0 d41d8cd98f00b204e9800998ecf8427e ""
-  "../questions/Q4.tex" 1780648221 0 d41d8cd98f00b204e9800998ecf8427e ""
-  "../questions/Q5.tex" 1780722133 0 d41d8cd98f00b204e9800998ecf8427e ""
-  "../questions/Q6.tex" 1780648195 0 d41d8cd98f00b204e9800998ecf8427e ""
-  "../questions/Q7.tex" 1780646840 0 d41d8cd98f00b204e9800998ecf8427e ""
+  "../questions/Q1.tex" 1780729721 9670 dc1275c22ab443426279ae6657a99134 ""
+  "../questions/Q2.tex" 1780729604 5411 68c0da2682da9c441850fc2a531a6f47 ""
+  "../questions/Q3.tex" 1780733076 8566 c502779dd0431883a43bda788bf83ff6 ""
   "C:/Program Files/MiKTeX/fonts/tfm/adobe/zapfding/pzdr.tfm" 1136759654 1528 7e12f4c0fcf5a072cebdcfbfc610f54c ""
   "C:/Program Files/MiKTeX/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1233951848 1004 54797486969f23fa377b128694d548df ""
   "C:/Program Files/MiKTeX/fonts/tfm/public/amsfonts/cmextra/cmex8.tfm" 1233951848 988 bdf658c3bfc2d96d3c8b02cfc1c94c20 ""
   "C:/Program Files/MiKTeX/fonts/tfm/public/amsfonts/symbols/msam10.tfm" 1233951854 916 f87d7c45f9c908e672703b83b72241a3 ""
+  "C:/Program Files/MiKTeX/fonts/tfm/public/amsfonts/symbols/msam5.tfm" 1233951854 924 9904cf1d39e9767e7a3622f2a125a565 ""
   "C:/Program Files/MiKTeX/fonts/tfm/public/amsfonts/symbols/msam7.tfm" 1233951854 928 2dc8d444221b7a635bb58038579b861a ""
   "C:/Program Files/MiKTeX/fonts/tfm/public/amsfonts/symbols/msbm10.tfm" 1233951854 908 2921f8a10601f252058503cc6570e581 ""
+  "C:/Program Files/MiKTeX/fonts/tfm/public/amsfonts/symbols/msbm5.tfm" 1233951854 940 75ac932a52f80982a9f8ea75d03a34cf ""
   "C:/Program Files/MiKTeX/fonts/tfm/public/amsfonts/symbols/msbm7.tfm" 1233951854 940 228d6584342e91276bf566bcf9716b83 ""
   "C:/Program Files/MiKTeX/fonts/tfm/public/cm/cmex10.tfm" 1136765053 992 662f679a0b3d2d53c1b94050fdaa3f50 ""
   "C:/Program Files/MiKTeX/fonts/tfm/public/cm/cmmi12.tfm" 1136765053 1524 4414a8315f39513458b80dfc63bff03a ""
@@ -230,10 +228,10 @@
   "C:/Program Files/MiKTeX/tex/latex/zref/zref-base.sty" 1750428951 20785 198a9cb2e04238d92c320d0d9edbd76a ""
   "C:/Program Files/MiKTeX/tex/xelatex/xetex-pstricks/pstricks.con" 1266284760 204 366747485ba2670f55166e66d1f21249 ""
   "C:/Users/ROG/AppData/Local/MiKTeX/miktex/data/le/xetex/xelatex.fmt" 1762519379 27033816 3409389256dddeec52c4569a0d18311e ""
-  "HW.aux" 1780722162 163 08c71539bdcd8152b394a665a5773a95 "xelatex"
-  "HW.out" 1780722162 0 d41d8cd98f00b204e9800998ecf8427e "xelatex"
-  "HW.tex" 1780722159 750 bd528f5f1b36540edab7261891ffc168 ""
-  "d:/Term 02/DeepLearning/Midterm/HW/HW.tex" 1780722159 750 bd528f5f1b36540edab7261891ffc168 ""
+  "HW.aux" 1780733095 163 cc265712fd5ef441b39d141e8aa2ffbf "xelatex"
+  "HW.out" 1780733095 0 d41d8cd98f00b204e9800998ecf8427e "xelatex"
+  "HW.tex" 1780733091 771 a5083c5a2e00d173f998743f52efd69c ""
+  "d:/Term 02/DeepLearning/Midterm/HW/HW.tex" 1780733091 771 a5083c5a2e00d173f998743f52efd69c ""
   (generated)
   "HW.aux"
   "HW.log"

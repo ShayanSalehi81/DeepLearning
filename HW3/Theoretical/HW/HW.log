@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999997 (MiKTeX 25.4) (preloaded format=xelatex 2025.11.7)  5 JUN 2026 18:04
+This is XeTeX, Version 3.141592653-2.6-0.999997 (MiKTeX 25.4) (preloaded format=xelatex 2025.11.7)  7 JUN 2026 12:10
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1431,8 +1431,6 @@ LaTeX Font Info:    Font shape `TU/XBNiloofar(2)/m/it' will be
 LaTeX Font Info:    Font shape `TU/XBNiloofar(2)/m/it' will be
 (Font)              scaled to size 5.39996pt on input line 14.
  (../questions/Q1.tex
-LaTeX Font Info:    Font shape `TU/TimesNewRoman(0)/m/n' will be
-(Font)              scaled to size 11.00006pt on input line 2.
 LaTeX Font Info:    Font shape `TU/XBNiloofar(2)/m/n' will be
 (Font)              scaled to size 8.99994pt on input line 3.
 LaTeX Font Info:    Font shape `TU/XBNiloofar(2)/m/n' will be
@@ -1458,18 +1456,20 @@ LaTeX Font Info:    Font shape `TU/XBNiloofar(2)/m/it' will be
 LaTeX Font Info:    Font shape `TU/XBNiloofar(2)/m/it' will be
 (Font)              scaled to size 4.49997pt on input line 3.
 LaTeX Font Info:    Font shape `TU/XBNiloofar(0)/m/n' will be
-(Font)              scaled to size 7.0pt on input line 17.
+(Font)              scaled to size 7.0pt on input line 6.
 LaTeX Font Info:    Font shape `TU/XBNiloofar(0)/m/n' will be
-(Font)              scaled to size 5.0pt on input line 17.
+(Font)              scaled to size 5.0pt on input line 6.
+LaTeX Font Info:    Font shape `TU/TimesNewRoman(0)/m/n' will be
+(Font)              scaled to size 11.00006pt on input line 20.
 
 
 LaTeX Font Info:    Font shape `TU/XBNiloofar(1)/m/n' will be
-(Font)              scaled to size 9.85492pt on input line 40.
+(Font)              scaled to size 9.85492pt on input line 28.
 [1
 
-])
+]
 
-[2]
+[2])
 
 [3] (../questions/Q2.tex
 
@@ -1501,10 +1501,10 @@ Package rerunfilecheck Info: File `HW.out' has not changed.
 Here is how much of TeX's memory you used:
  30030 strings out of 403246
  607413 string characters out of 5465128
- 1072868 words of memory out of 5000000
+ 1071868 words of memory out of 5000000
  57816 multiletter control sequences out of 15000+600000
  635952 words of font info for 144 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
- 86i,15n,97p,2302b,349s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 86i,22n,97p,2302b,366s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on HW.xdv (11 pages, 115924 bytes).
+Output written on HW.xdv (11 pages, 119656 bytes).
