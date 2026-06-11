@@ -1,0 +1,63 @@
+\subsection*{الف}
+گزینهٔ (۱) — \lr{Convolutional Stem} — را انتخاب می‌کنیم.
+
+\noindent(۱) تبدیل ورودی: چند لایهٔ $3\times3$ کانولوشن تصویر را به توکن تبدیل می‌کنند:
+\begin{flalign*}
+    x \in \mathbb{R}^{H\times W\times 3}
+    \xrightarrow{\ conv stem}\ 
+    \{z_i\}_{i=1}^{n},\quad z_i\in\mathbb{R}^{d} &&
+\end{flalign*}
+\noindent(۲) اطلاعات مکانی: میدان دریافت هم‌پوشان هر کانولوشن، همسایگی پیکسلی را در هر توکن رمزگذاری می‌کند؛ برخلاف \lr{patchify} خطی که مرز \lr{patch}ها را می‌گسلد.
+
+\noindent(۳) \lr{Inductive bias} افزوده: \lr{locality} و \lr{translation equivariance} از وزن‌های مشترک کانولوشن.
+
+\noindent(۴) اثر بر داده: سوگیری محلی فضای فرضیه را محدود می‌کند و نیاز به پیش‌آموزش گسترده (مشکل اصلی \lr{ViT} ساده) را کاهش می‌دهد.
+
+\noindent(۵) محدودیت: هزینهٔ محاسباتی اندک افزوده و انعطاف یادگیری الگوهای سراسری در لایه‌های ابتدایی کمی کاهش می‌یابد.
+
+\subsection*{ب}
+در لایهٔ اول \lr{attention} فقط درون پنجره است، پس $x_4\in W_1$ و $x_5\in W_2$ با هم ارتباط ندارند. پس از \lr{shift} به اندازهٔ ۲:
+\begin{flalign*}
+    W' = [x_3,x_4,x_5,x_6]
+    \;\Longrightarrow\; \mathrm{Attn}(x_4,x_5)\neq 0 &&
+\end{flalign*}
+با تکرار این دو لایه، میدان دریافت خطی گسترش می‌یابد:
+\begin{flalign*}
+    R_L \approx 1 + L(w-1),\qquad
+    \text{هزینه:}\ \mathcal{O}(n^2)\to\mathcal{O}(nw) &&
+\end{flalign*}
+شباهت با \lr{CNN}: توجه موضعی محدود؛ تفاوت: وزن‌های \lr{attention} پویا و وابسته به محتوا هستند، نه ثابت.
+
+\subsection*{ج}
+هر \lr{object query} یک بردار آموختنی است که از طریق \lr{cross-attention} با ویژگی‌های تصویر، حداکثر یک شیء پیش‌بینی می‌کند:
+\begin{flalign*}
+    q_i \xrightarrow{\ decoder\ } \hat{y}_i=(\hat{p}_i,\hat{b}_i) &&
+\end{flalign*}
+خروجی مجموعه‌ای (نه دنباله‌ای) است، زیرا \lr{query}ها فاقد ترتیب ذاتی‌اند و آموزش با تطابق یک‌به‌یک متقارن نسبت به جایگشت انجام می‌شود.
+
+\subsection*{د}
+\lr{Hungarian Matching} جایگشت بهینه را می‌یابد تا هزینهٔ کل کمینه شود:
+\begin{flalign*}
+    \hat{\sigma} = \arg\min_{\sigma\in\mathfrak{S}_N}\sum_{j=1}^{m}\mathcal{C}_{\sigma(j),j},\qquad
+    \mathcal{C}_{ij} = -\log\hat{p}_i(c_j) + \lambda_1\|\hat{b}_i-b_j\|_1 + \lambda_{\mathrm{giou}}\bigl(1-\mathrm{GIoU}(\hat{b}_i,b_j)\bigr) &&
+\end{flalign*}
+سه جمله: \lr{classification cost} کلاس را تطبیق می‌دهد؛ \lr{L1} خطای مطلق جعبه را می‌سنجد؛ \lr{GIoU} هم‌پوشانی هندسی را، مستقل از مقیاس، اندازه می‌گیرد. \lr{query}های بدون تطابق ($N-m$ مورد) به کلاس $\varnothing$ اختصاص می‌یابند.
+
+\subsection*{ه}
+پس از یافتن $\hat{\sigma}$، تابع زیان نهایی:
+\begin{flalign*}
+    \mathcal{L} = \sum_{i=1}^{N}\Bigl[-\log\hat{p}_i\bigl(c_{\hat{\sigma}^{-1}(i)}\bigr)
+    + \mathbf{1}_{\{c_i\neq\varnothing\}}\bigl(\lambda_1\|\hat{b}_i-b_{\hat{\sigma}^{-1}(i)}\|_1
+    + \lambda_{\mathrm{giou}}(1-\mathrm{GIoU})\bigr)\Bigr] &&
+\end{flalign*}
+(۱) \lr{Cross-entropy} برای همهٔ $N$ \lr{query}؛
+(۲) زیان جعبه فقط برای \lr{query}های تطابق‌یافته ($\mathbf{1}_{\{c_i\neq\varnothing\}}$)؛
+(۳) کلاس $\varnothing$ تشخیص‌های کاذب را سرکوب می‌کند؛ چون $N\gg m$، وزنش کاهش می‌یابد؛
+(۴) $\lambda_1$ و $\lambda_{\mathrm{giou}}$ تعادل میان دقت طبقه‌بندی و دقت مکانی را کنترل می‌کنند.
+
+\medskip
+ضعف \lr{DETR}: همگرایی کند و کارایی پایین در اشیای کوچک، زیرا \lr{encoder} روی نقشهٔ تک‌مقیاس با $\mathcal{O}(n^2)$ کار می‌کند. بهبود پیشنهادی — \lr{Deformable Attention}: هر \lr{query} فقط به $K$ نقطهٔ آموختنی روی چند مقیاس از \lr{feature pyramid} توجه می‌کند:
+\begin{flalign*}
+    \mathcal{O}(n^2)\longrightarrow\mathcal{O}(nK),\quad K\ll n &&
+\end{flalign*}
+این تغییر ویژگی‌های با تفکیک بالا را برای اشیای کوچک حفظ و سرعت همگرایی را به‌شدت افزایش می‌دهد.

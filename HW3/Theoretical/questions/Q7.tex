@@ -1,0 +1,47 @@
+\subsection*{الف}
+با اتحاد جمع زاویه:
+\begin{flalign*}
+    p_i(t+k) &= \begin{bmatrix} \sin(\omega_i t)\cos(\omega_i k) + \cos(\omega_i t)\sin(\omega_i k) \\ \cos(\omega_i t)\cos(\omega_i k) - \sin(\omega_i t)\sin(\omega_i k) \end{bmatrix}
+    = \underbrace{\begin{bmatrix} \cos\omega_i k & \sin\omega_i k \\ -\sin\omega_i k & \cos\omega_i k \end{bmatrix}}_{A_i(k)} p_i(t) &&
+\end{flalign*}
+خاصیت جمعی مستقیم از ضرب دو ماتریس دوران نتیجه می‌شود:
+\begin{flalign*}
+    A_i(k_1)A_i(k_2) = R(\omega_i k_1)R(\omega_i k_2) = R(\omega_i(k_1{+}k_2)) = A_i(k_1{+}k_2) &&
+\end{flalign*}
+این رابطه نشان می‌دهد جابه‌جایی موقعیت یک دوران خطی است که فقط به اندازهٔ جابه‌جایی $k$ وابسته است، نه به موقعیت مطلق $t$.
+
+\subsection*{ب}
+\begin{flalign*}
+    p_i(m)^\top p_i(n) &= \sin\omega_i m\sin\omega_i n + \cos\omega_i m\cos\omega_i n = \cos(\omega_i(m-n)) &&
+\end{flalign*}
+\begin{flalign*}
+    PE(m)^\top PE(n) &= \sum_i p_i(m)^\top p_i(n) = \sum_i \cos(\omega_i(m-n)) &&
+\end{flalign*}
+شباهت تنها به $m-n$ وابسته است، نه به موقعیت‌های مطلق.
+
+\subsection*{ج}
+\begin{flalign*}
+    p_i(m)^\top B_i p_i(n) &= a_i\cos(\omega_i(m-n)) + b_i\sin(\omega_i(n-m)) &&
+\end{flalign*}
+هر دو جمله تنها به $m-n$ وابسته‌اند، پس $g_B$ فقط تابع فاصلهٔ نسبی است. برای $B$ دلخواه این الزامی نیست؛ هر بلوکی خارج از $\mathrm{span}\{I,J\}$ جملاتی نظیر $\cos(\omega_i(m+n))$ پدید می‌آورد.
+
+\subsection*{د}
+چون $R(\phi)^\top = R(-\phi)$ و $R(\alpha)R(\beta)=R(\alpha+\beta)$:
+\begin{flalign*}
+    \tilde q_m^\top \tilde k_n = q^\top R(m\theta)^\top R(n\theta)\,k = q^\top R((n-m)\theta)\,k &&
+\end{flalign*}
+\lr{attention score}
+دقیقاً فقط تابع فاصلهٔ نسبی $n-m$ است.
+
+\subsection*{ه}
+چون ماتریس دوران کل بلوک‌قطری است:
+\begin{flalign*}
+    \tilde q_m^\top \tilde k_n = \sum_{i=0}^{d/2-1} (q^{(i)})^\top R((n-m)\theta_i)\,k^{(i)} &&
+\end{flalign*}
+
+نقطهٔ ورود اطلاعات مکانی در هر روش:
+\begin{flalign*}
+    & absolute / sinusoidal \;\longrightarrow\; input embedding \\
+    & RoPE \;\longrightarrow\; query/key \;\Rightarrow\; attention score &&
+\end{flalign*}
+در دو روش نخست اطلاعات مطلق پیش از $W^Q,W^K$ وارد می‌شود و وابستگی نسبی ضمنی است. در \lr{RoPE} وابستگی به $n-m$ ساختاری و دقیق است، پارامتر وابسته به طول ثابتی وجود ندارد و مدل به \lr{context} بلندتر تعمیم می‌یابد.

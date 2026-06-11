@@ -1,79 +1,36 @@
 \subsection*{الف}
-ابتدا ماتریس $A_i(k)$ را می‌یابیم. می‌دانیم که:
+
 \begin{flalign*}
-    p_i(t+k) = 
-    \begin{bmatrix}
-        \sin(\omega_i (t+k)) \\
-        \cos(\omega_i (t+k))
-    \end{bmatrix} &&
+    (1)\quad & dk = 4096^2 = 16{,}777{,}216 &&\\
+    (2)\quad & r(d+k) = 8 \times 8192 = 65{,}536 &&\\
+    (3)\quad & 1 - \frac{65{,}536}{16{,}777{,}216} \approx 99.61\% &&
 \end{flalign*}
-با بسط توابع مثلثاتی جمع زوایا:
-\begin{flalign*}
-    \sin(\omega_i t + \omega_i k) &= \sin(\omega_i t)\cos(\omega_i k) + \cos(\omega_i t)\sin(\omega_i k) \\
-    \cos(\omega_i t + \omega_i k) &= \cos(\omega_i t)\cos(\omega_i k) - \sin(\omega_i t)\sin(\omega_i k) &&
-\end{flalign*}
-این دو را به‌صورت ماتریسی بازنویسی می‌کنیم:
-\begin{flalign*}
-    p_i(t+k) = 
-    \begin{bmatrix}
-        \cos(\omega_i k) & \sin(\omega_i k) \\
-        -\sin(\omega_i k) & \cos(\omega_i k)
-    \end{bmatrix}
-    \begin{bmatrix}
-        \sin(\omega_i t) \\
-        \cos(\omega_i t)
-    \end{bmatrix} &&
-\end{flalign*}
-از این رو ماتریس خطی مستقل از $t$ به‌دست می‌آید:
-\begin{flalign*}
-    A_i(k) = 
-    \begin{bmatrix}
-        \cos(\omega_i k) & \sin(\omega_i k) \\
-        -\sin(\omega_i k) & \cos(\omega_i k)
-    \end{bmatrix} &&
-\end{flalign*}
-این یک ماتریس دوران به اندازه زاویه $-\omega_i k$ است. حال خاصیت جمع‌پذیری را نشان می‌دهیم. با ضرب دو ماتریس دوران:
-\begin{flalign*}
-    A_i(k_1)A_i(k_2) &= 
-    \begin{bmatrix}
-        \cos(\omega_i k_1) & \sin(\omega_i k_1) \\
-        -\sin(\omega_i k_1) & \cos(\omega_i k_1)
-    \end{bmatrix}
-    \begin{bmatrix}
-        \cos(\omega_i k_2) & \sin(\omega_i k_2) \\
-        -\sin(\omega_i k_2) & \cos(\omega_i k_2)
-    \end{bmatrix} &&
-\end{flalign*}
-درایه بالا-چپ حاصل‌ضرب برابر است با:
-\begin{flalign*}
-    \cos(\omega_i k_1)\cos(\omega_i k_2) - \sin(\omega_i k_1)\sin(\omega_i k_2) = \cos(\omega_i (k_1+k_2)) &&
-\end{flalign*}
-و درایه بالا-راست:
-\begin{flalign*}
-    \cos(\omega_i k_1)\sin(\omega_i k_2) + \sin(\omega_i k_1)\cos(\omega_i k_2) = \sin(\omega_i (k_1+k_2)) &&
-\end{flalign*}
-با محاسبه مشابه دو درایه دیگر، نتیجه می‌شود:
-\begin{flalign*}
-    A_i(k_1)A_i(k_2) = 
-    \begin{bmatrix}
-        \cos(\omega_i (k_1+k_2)) & \sin(\omega_i (k_1+k_2)) \\
-        -\sin(\omega_i (k_1+k_2)) & \cos(\omega_i (k_1+k_2))
-    \end{bmatrix}
-    = A_i(k_1+k_2) &&
-\end{flalign*}
-این رابطه نشان می‌دهد که جابه‌جایی‌ها در \lr{sinuosoidal positional encoding} ساختار یک گروه را دارند: اثر یک جابه‌جایی به اندازه $k$ صرفاً یک دوران در صفحه دوبعدی $p_i$ است، و ترکیب دو جابه‌جایی متوالی معادل دوران به اندازه مجموع آن‌هاست. به بیان دیگر، نگاشت $k \mapsto A_i(k)$ یک همریختی از گروه جمعی $(\mathbb{R},+)$ به گروه دوران‌هاست؛ همین خاصیت است که اطلاعات نسبی موقعیت را به‌صورت خطی قابل بازیابی می‌کند.
 
 \subsection*{ب}
-برای دو موقعیت $m$ و $n$، ضرب داخلی بردارهای دوبعدی را محاسبه می‌کنیم:
+
+چون $\operatorname{rank}(BA) \leq r \ll \min(d,k)$، فضای تغییرات کم‌بعد است. اگر \lr{adaptation} ذاتاً کم‌رتبه باشد، $BA$ آن را به‌خوبی تقریب می‌زند.
+
 \begin{flalign*}
-    p_i(m)^\top p_i(n) &= \sin(\omega_i m)\sin(\omega_i n) + \cos(\omega_i m)\cos(\omega_i n) &&
+    \text{(I)}\; y = Wx + BAx &\quad\to\quad \text{دو ضرب، سربار تأخیر، حافظهٔ جداگانه، تعویض آنی } adapter &&\\
+    \text{(II)}\; y = (W{+}BA)x &\quad\to\quad \text{یک ضرب، بدون سربار، چند } adapter \text{ نیاز به بازسازی دارد} &&
 \end{flalign*}
-این دقیقاً بسط $\cos$ تفاضل زوایاست، پس:
+
+\subsection*{ج}
+
 \begin{flalign*}
-    p_i(m)^\top p_i(n) = \cos(\omega_i (m-n)) &&
+    P_N &= r\bigl(1-(1-p)^N\bigr), \quad p=0.35,\; r=0.8 &&\\
+    P_1 &= 0.280,\quad P_2 = 0.462,\quad P_4 = 0.657,\quad P_8 = 0.774 &&\\
+    P_N - P_{N-1} &= rp(1-p)^{N-1} \;\searrow\; 0 \quad (N\uparrow) &&
 \end{flalign*}
-حال بردار کامل $PE(t)$ از الحاق همه جفت‌های دوبعدی $p_i(t)$ ساخته شده است. چون ضرب داخلی دو بردار الحاق‌شده برابر مجموع ضرب‌های داخلی بلوک‌های متناظر است:
+
+\subsection*{د}
+
 \begin{flalign*}
-    PE(m)^\top PE(n) = \sum_i p_i(m)^\top p_i(n) = \sum_i \cos(\omega_i (m-n)) &&
+    C_A &= 200k+600 \leq 6000 \;\Rightarrow\; k \leq 27,\text{ با قید } k\leq 5 \;\Rightarrow\; k^*=5 &&\\
+    p_A^* &= 0.35 + 0.08\times5 = 0.75 &&\\
+    C_B &= 600N \leq 6000 \;\Rightarrow\; N^*=10 &&\\
+    P_{10} &= 0.8\bigl(1-0.55^{10}\bigr) \approx 0.798 &&\\
+    0.798 &> 0.75 \;\Rightarrow\; \text{راهبرد دوم بهتر است.} &&
 \end{flalign*}
-نتیجه می‌گیریم که شباهت (ضرب داخلی) دو بردار مکانی تنها تابعی از فاصله نسبی $m-n$ است و به مقادیر مطلق $m$ و $n$ به‌صورت جداگانه بستگی ندارد. بنابراین گرچه \lr{sinusoidal positional encoding} از موقعیت‌های مطلق ساخته می‌شود، ساختار درونی آن به‌گونه‌ای است که در محاسبه شباهت، اطلاعات نسبی موقعیت به‌طور طبیعی ظاهر می‌شود.
+
+\lr{LoRA} برای وظایف تکراری با آموزش یک‌بارهٔ مقرون‌به‌صرفه مناسب است؛ \lr{inference-time scaling} برای وظایف متنوع و غیرتکراری که \lr{verifier} دارند. ترکیب هر دو نیز ممکن است.

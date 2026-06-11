@@ -1,58 +1,28 @@
 \subsection*{الف}
-چون همهٔ هدها projectionهای یکسان دارند، تمام هدها خروجی یکسانی تولید می‌کنند:
+چون $\forall i: W_i^Q=W^Q, W_i^K=W^K, W_i^V=W^V$، همهٔ head‌ها خروجی یکسان $H$ دارند:
 \begin{flalign*}
-    W_i^Q = W^Q,\; W_i^K = W^K,\; W_i^V = W^V \;\;\forall i &&\\
-    \implies \text{head}_i = \text{Attention}(QW^Q, KW^K, VW^V) =: H \quad \forall i &&
+    \text{MHA} &= \text{Concat}(H,\ldots,H)\,W^O = H\underbrace{\sum_{b=1}^{h}W^O_b}_{=:\,\widetilde{W}^O}
+    = \text{Attention}(QW^Q,KW^K,VW^V)\,\widetilde{W}^O &&
 \end{flalign*}
-پس هر $h$ هد دقیقاً همان attention را $h$ بار محاسبه می‌کنند. خروجی لایه:
-\begin{flalign*}
-    \text{MHA}(Q,K,V) &= \text{Concat}(H, H, \dots, H)\, W^O &&\\
-    &= \underbrace{[\,H\,|\,H\,|\,\cdots\,|\,H\,]}_{h \text{ copies}}\, W^O &&
-\end{flalign*}
-با افراز سطری $W^O \in \mathbb{R}^{(h\,d_k)\times d_{\text{model}}}$ به $h$ بلوک $W^O = \begin{bmatrix} W^O_{(1)} \\ \vdots \\ W^O_{(h)} \end{bmatrix}$، خاصیت Concat–ضرب بلوکی می‌دهد:
-\begin{flalign*}
-    \text{MHA}(Q,K,V) &= \sum_{i=1}^{h} H\, W^O_{(i)} = H\Big(\sum_{i=1}^{h} W^O_{(i)}\Big) = H\, \widetilde{W}^O &&
-\end{flalign*}
-که در آن $\widetilde{W}^O := \sum_{i=1}^h W^O_{(i)} \in \mathbb{R}^{d_k \times d_{\text{model}}}$. پس خروجی همان یک single-head attention است که با یک projection مؤثر $\widetilde{W}^O$ ترکیب شده.
-
-توجه کنید این لزوماً مضرب اسکالر $H$ نیست؛ $\widetilde{W}^O$ یک ماتریس دلخواه است و می‌تواند ساختار غیربدیهی داشته باشد. تنها در حالت خاصِ $\widetilde{W}^O = c\,I$ به مقیاس ساده تقلیل می‌یابد.
-
-نتیجه: قدرت بیانی Multi-Head نه از تعدد هدها، بلکه از \lr{diversity} بین آن‌ها می‌آید. هدهای یکسان \lr{rank} ترکیب را افزایش نمی‌دهند و کل لایه تا یک projection خطی به یک هد فرومی‌پاشد؛ پس تنوع subspaceها شرط لازمِ بهره‌بردن از چندهد بودن است.
+این معادل یک \lr{single-head attention} با \lr{projection} خروجی $\widetilde{W}^O$ است. نتیجه: ارزش \lr{MHA} از تنوع زیرفضاهای head‌هاست، نه از تعداد آن‌ها.
 
 \subsection*{ب}
-معیار اهمیت تک‌هدی را از طریق حساسیت task loss به حذف هد تعریف می‌کنیم (به سبک \lr{Michel et al. 2019})، با gate $\xi_i \in \{0,1\}$ روی هد $i$:
+اهمیت هر هد را با گرادیان و افزونگی را با شباهت کسینوسی ماتریس attention می‌سنجیم:
 \begin{flalign*}
-    I_i &= \mathbb{E}_{x}\left| \mathcal{L}(x \mid \xi_i = 1) - \mathcal{L}(x \mid \xi_i = 0) \right| &&\\
-    &\approx \mathbb{E}_{x}\left| \frac{\partial \mathcal{L}}{\partial \xi_i} \right|
-    = \mathbb{E}_{x}\left| H_i^{\top} \frac{\partial \mathcal{L}}{\partial H_i} \right| &&
+    I_i &= \left|\mathbb{E}\!\left[H_i^\top \tfrac{\partial\mathcal{L}}{\partial H_i}\right]\right|, \qquad
+    \rho_i = \max_{j\neq i}\cos\!\big(\text{vec}(A_i),\text{vec}(A_j)\big) &&\\
+    s_i &= I_i - \lambda\,\rho_i \implies \mathcal{K} = \operatorname*{top\text{-}k}_i\; s_i &&
 \end{flalign*}
-که از بسط مرتبهٔ اول $\mathcal{L}$ حول $\xi_i = 1$ به دست می‌آید و در یک پاس \lr{backward} برای همهٔ هدها قابل محاسبه است.
-
-برای جنبهٔ افزونگی، شباهت زوجی هدها را با $R(i,j) = \cos(\text{vec}(A_i), \text{vec}(A_j))$ می‌سنجیم. هدی که هم اهمیت پایین دارد و هم با هدی دیگر به‌شدت همبسته است، نامزد حذف است. معیار ترکیبی اولویتِ حذف:
-\begin{flalign*}
-    \text{score}(i) = \underbrace{I_i}_{\text{اهمیت}} - \lambda \underbrace{\max_{j \neq i,\, j \notin \text{pruned}} R(i,j)}_{\text{افزونگی}} &&
-\end{flalign*}
-هدها را بر حسب $\text{score}$ صعودی مرتب کرده و $h-k$ هد با کمترین مقدار را حذف می‌کنیم. عبارت دوم تضمین می‌کند از هر خوشهٔ هدهای مشابه فقط یک نماینده باقی بماند (نه آنکه چند نسخهٔ مهمِ مشابه همگی نگه‌داشته شوند).
+حذف تکراری (بازمحاسبهٔ $\rho_i$ پس از هر حذف) از نگه‌داشتن head‌های پراهمیت ولی هم‌رفتار جلوگیری می‌کند.
 
 \subsection*{ج}
-متغیر دروازه‌ای $z_i \in [0,1]$ را با تابع هزینه‌ای سه‌بخشی آموزش می‌دهیم:
 \begin{flalign*}
-    \mathcal{J} = \underbrace{\mathcal{L}_{\text{task}}(z)}_{\text{(۱) عملکرد}}
-    \;+\; \alpha \underbrace{\sum_{i=1}^{h} z_i}_{\text{(۲) تنکی}}
-    \;+\; \beta \underbrace{\sum_{i<j} z_i\, z_j\, R(i,j)}_{\text{(۳) افزونگی}} &&
+    \mathcal{L} = \mathcal{L}_{\text{task}} + \alpha\sum_i z_i + \beta\sum_{i<j} z_i z_j R(i,j) &&
 \end{flalign*}
-نقش هر جمله:
-\begin{flalign*}
-    &\bullet\;\; \mathcal{L}_{\text{task}}(z): \text{ افتِ عملکرد را جریمه می‌کند} \Rightarrow z_i \text{ روی هدهای مفید را بالا نگه می‌دارد.} &&\\
-    &\bullet\;\; \alpha \textstyle\sum_i z_i \;(\ell_1): \text{ فشارِ تنکی} \Rightarrow z_i \text{ها را به سمت صفر می‌راند (حذف هدهای کم‌اهمیت).} &&\\
-    &\bullet\;\; \beta \textstyle\sum_{i<j} z_i z_j R(i,j): \text{ جریمهٔ زوجی} \Rightarrow \text{نگه‌داشتن همزمان دو هدِ مشابه را گران می‌کند.} &&
-\end{flalign*}
-از آنجا که هدف بردارِ تنک می‌خواهد، $\ell_1$ مناسب‌تر از $\ell_2$ است؛ و برای آنکه gate واقعاً به صفر/یک نزدیک شود می‌توان $z_i$ را با \lr{Hard-Concrete} پارامتری کرد تا $\sum_i z_i$ تخمینی از $\|z\|_0$ شود.
+جملهٔ دوم تنکی می‌سازد؛ جملهٔ سوم جریمهٔ افزونگی است. پس از آموزش، $k$ مقدار بزرگ‌تر $z_i$ انتخاب می‌شوند.
 
-انتخاب $k$ پس از آموزش: هدها را بر حسب $z_i$ نزولی مرتب می‌کنیم. مقادیر $z_i$ معمولاً قطبیده می‌شوند (نزدیک ۰ یا ۱)؛ شکافِ طبیعی در طیف مرتب‌شدهٔ $z_i$ مرز را مشخص می‌کند و $k$ را برابر تعداد هدهای بالای آستانه (مثلاً $z_i > 0.5$) می‌گیریم — یعنی $k$ به‌جای آنکه از پیش ثابت شود، از خودِ داده استخراج می‌گردد.
-
-تحلیل دو هدِ کاملاً یکسان ($R(i,j) = 1$، رفتار همسان): جملهٔ افزونگی روی این زوج برابر $\beta\, z_i z_j$ است که با نگه‌داشتن همزمانِ هر دو ($z_i = z_j = 1$) بیشینه و برابر $\beta$ می‌شود. اما چون رفتارشان یکسان است، خروجی $z_i H_i + z_j H_j = (z_i + z_j) H$ تنها به مجموع $z_i + z_j$ وابسته است؛ پس همان عملکرد با $(z_i, z_j) = (1, 0)$ نیز حاصل می‌شود بی‌آنکه $\mathcal{L}_{\text{task}}$ تغییر کند، حال‌آنکه هم جریمهٔ تنکی ($-\alpha$) و هم جریمهٔ افزونگی ($-\beta$) کاهش می‌یابند:
+اگر $A_a=A_b$، آنگاه $R(a,b)=1$ و $\mathcal{L}_{\text{task}}$ تنها به $z_a+z_b=c$ وابسته است:
 \begin{flalign*}
-    \mathcal{J}(1,1) - \mathcal{J}(1,0) = \alpha + \beta > 0 &&
+    \min_{z_a+z_b=c} z_a z_b \implies (z_a,z_b)\in\{(c,0),(0,c)\} &&
 \end{flalign*}
-بنابراین جریمهٔ افزونگی $\mathcal{J}$ را در حالتِ «نگه‌داشتن هر دو» اکیداً بزرگ‌تر می‌کند بی‌آنکه نفعی در task بدهد؛ پس راه‌حل بهینه یکی از این دو هدِ تکراری را خاموش می‌کند و نگه‌داشتن همزمان هر دو نامطلوب است.
+پس جریمهٔ افزونگی یکی از دو هدِ هم‌رفتار را به صفر می‌راند و نگه‌داشتن هر دو را نامطلوب می‌کند.
