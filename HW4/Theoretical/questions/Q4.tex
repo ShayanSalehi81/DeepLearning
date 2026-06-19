@@ -1,0 +1,43 @@
+\subsection*{الف}
+چون $hd_k=d$، چهار مرحله:
+\begin{flalign*}
+    \text{QKV} &= 3bnd^2, \quad QK^\top = bn^2d, \quad AV = bn^2d, \quad \text{Out} = bnd^2 \\
+    \text{MAC}_{\text{full}} &= 4bnd^2 + 2bn^2d \\
+    &= 4(4)(4096)(1024)^2 + 2(4)(4096)^2(1024) \approx 2.07\times10^{14} &&
+\end{flalign*}
+
+\subsection*{ب}
+پنجرهٔ $w$ جایگزین $n$ در جملات توجه می‌شود:
+\begin{flalign*}
+    \text{MAC}_{\text{local}} &= 4bnd^2 + 2bnwd \\
+    &\approx 7.04\times10^{13} + 4.29\times10^{12} \approx 7.47\times10^{13} &&
+\end{flalign*}
+جملهٔ دوم از $O(n^2)$ به $O(nw)$ خطی کاهش یافت.
+
+\subsection*{ج}
+هر جمله ضرب ماتریس $d\times d$، پس:
+\begin{flalign*}
+    \text{MAC}_{\text{conv}} &= bnwd^2 = 4(4096)(128)(1024)^2 \approx 2.20\times10^{15} &&
+\end{flalign*}
+از هر دو حالت بیشتر است؛ چون کرنل $C_r\in\mathbb{R}^{d\times d}$ در هر گام
+\lr{channel mixing}
+کامل انجام می‌دهد ($d^2$ به ازای هر جفت)، حال‌آنکه در \lr{attention} آمیختن کانالی فقط در $W^{Q,K,V,O}$ رخ می‌دهد و تعامل توکن‌ها روی $d_k\ll d^2$ است.
+
+\subsection*{د}
+با $a_r=\mathrm{softmax}_r(\beta_r)$ که مستقل از $t$ است:
+\begin{flalign*}
+    H_t &= \sum_{r=0}^{w-1} a_r\,Z_{t-r}W^V = \sum_{r=0}^{w-1} Z_{t-r}(a_r W^V) &&
+\end{flalign*}
+یک
+\lr{causal convolution}
+با $C_r=a_r W^V$ است. پس از ادغام $h$ هد:
+\begin{flalign*}
+    \mathrm{MHA}(Z)_t &= \sum_{r=0}^{w-1} Z_{t-r}\,C_r, \qquad C_r = \sum_{i=1}^{h} a_r^{(i)} W^V_i W^O_i \in \mathbb{R}^{d\times d} &&
+\end{flalign*}
+
+\subsection*{ه}
+در حالت کلی $\alpha_{t,j}(Z)$ به محتوای $z_t,z_j$ وابسته است نه فقط به $t-j$؛ پس کرنل مؤثر $C_{t,j}=\alpha_{t,j}(Z)W^V$ برای هر ورودی تغییر می‌کند.
+این رفتار یک
+\lr{dynamic/input-dependent convolution}
+است، نه کانولوشن ثابت.
+تنها در حالت تباهیدهٔ بند د که $\alpha$ از $Z$ مستقل می‌شود، به کانولوشن ثابت فرو می‌کاهد.
