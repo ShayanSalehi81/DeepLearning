@@ -1,10 +1,10 @@
-This is XeTeX, Version 3.141592653-2.6-0.999997 (MiKTeX 25.4) (preloaded format=xelatex 2025.11.7)  11 JUN 2026 22:22
+This is XeTeX, Version 3.141592653-2.6-0.999997 (MiKTeX 25.4) (preloaded format=xelatex 2025.11.7)  30 JUN 2026 10:54
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
-**"d:/Term 02/DeepLearning/HW3/Theoretical/HW/HW.tex"
-(d:/Term 02/DeepLearning/HW3/Theoretical/HW/HW.tex
+**"d:/Term 02/DeepLearning/HW4/Theoretical/HW/HW.tex"
+(d:/Term 02/DeepLearning/HW4/Theoretical/HW/HW.tex
 LaTeX2e <2025-06-01> patch level 1
 L3 programming layer <2025-09-02>
 (C:\Program Files\MiKTeX\tex/latex/base\article.cls
@@ -833,6 +833,8 @@ File: md-frame-0.mdf 2013/07/01\ 1.9b: md-frame-0
 \c@mdf@env@ii=\count392
 \c@mdf@zref@counter=\count393
 Package zref Info: New property: mdf@pagevalue on input line 895.
+) (C:\Program Files\MiKTeX\tex/latex/physics\physics.sty
+Package: physics 
 ) (C:\Program Files\MiKTeX\tex/latex/algorithmicx\algpseudocode.sty
 Package: algpseudocode 
 
@@ -1125,7 +1127,7 @@ Package fontspec Info:
 (fontspec)             NiloofarBdIt.ttf]/OT:script=latn;language=dflt;script=arab;mapping=persian-tex-text;"
 
 LaTeX Font Info:    Font shape `TU/XBNiloofar(0)/m/n' will be
-(Font)              scaled to size 10.95pt on input line 31.
+(Font)              scaled to size 10.95pt on input line 32.
 
 Package fontspec Info: 
 (fontspec)             XB Niloofar scale = 0.9.
@@ -1204,7 +1206,7 @@ Package fontspec Info:
 (fontspec)             - 'bold italic' (b/it) with NFSS spec.: <->s*[0.9]"[XB
 (fontspec)             NiloofarBdIt.ttf]/OT:script=latn;language=dflt;"
 
-Package unicode-persianmath Info: DefiningthedefaultPersianmathdigitsfontas'XB Niloofar' on input line 37.
+Package unicode-persianmath Info: DefiningthedefaultPersianmathdigitsfontas'XB Niloofar' on input line 38.
 \sympersianoperators=\mathgroup6
 \sympersianoperatorsbf=\mathgroup7
 \sympersianoperatorsit=\mathgroup8
@@ -1274,7 +1276,7 @@ Package fontspec Info:
 (fontspec)             <->s*[1.1]"Times New
 (fontspec)             Roman/BI/OT:script=latn;language=dflt;+smcp;mapping=tex-text;"
 
-LaTeX Info: Redefining \latinfont on input line 39.
+LaTeX Info: Redefining \latinfont on input line 40.
 
 Package fontspec Info: 
 (fontspec)             XB KayhanPook scale = 1.2.
@@ -1431,74 +1433,82 @@ LaTeX Font Info:    Font shape `TU/XBNiloofar(2)/m/it' will be
 LaTeX Font Info:    Font shape `TU/XBNiloofar(2)/m/it' will be
 (Font)              scaled to size 5.39996pt on input line 14.
  (../questions/Q1.tex
-LaTeX Font Info:    Font shape `TU/XBNiloofar(2)/m/n' will be
-(Font)              scaled to size 8.99994pt on input line 2.
-LaTeX Font Info:    Font shape `TU/XBNiloofar(2)/m/n' will be
-(Font)              scaled to size 6.29996pt on input line 2.
-LaTeX Font Info:    Font shape `TU/XBNiloofar(2)/m/n' will be
-(Font)              scaled to size 4.49997pt on input line 2.
-LaTeX Font Info:    Font shape `TU/XBNiloofar(2)/bx/n' in size <10> not available
-(Font)              Font shape `TU/XBNiloofar(2)/b/n' tried instead on input line 2.
-LaTeX Font Info:    Font shape `TU/XBNiloofar(2)/b/n' will be
-(Font)              scaled to size 8.99994pt on input line 2.
-LaTeX Font Info:    Font shape `TU/XBNiloofar(2)/bx/n' in size <7> not available
-(Font)              Font shape `TU/XBNiloofar(2)/b/n' tried instead on input line 2.
-LaTeX Font Info:    Font shape `TU/XBNiloofar(2)/b/n' will be
-(Font)              scaled to size 6.29996pt on input line 2.
-LaTeX Font Info:    Font shape `TU/XBNiloofar(2)/bx/n' in size <5> not available
-(Font)              Font shape `TU/XBNiloofar(2)/b/n' tried instead on input line 2.
-LaTeX Font Info:    Font shape `TU/XBNiloofar(2)/b/n' will be
-(Font)              scaled to size 4.49997pt on input line 2.
-LaTeX Font Info:    Font shape `TU/XBNiloofar(2)/m/it' will be
-(Font)              scaled to size 8.99994pt on input line 2.
-LaTeX Font Info:    Font shape `TU/XBNiloofar(2)/m/it' will be
-(Font)              scaled to size 6.29996pt on input line 2.
-LaTeX Font Info:    Font shape `TU/XBNiloofar(2)/m/it' will be
-(Font)              scaled to size 4.49997pt on input line 2.
-LaTeX Font Info:    Font shape `TU/XBNiloofar(0)/m/n' will be
-(Font)              scaled to size 7.0pt on input line 6.
-LaTeX Font Info:    Font shape `TU/XBNiloofar(0)/m/n' will be
-(Font)              scaled to size 5.0pt on input line 6.
 LaTeX Font Info:    Font shape `TU/TimesNewRoman(0)/m/n' will be
-(Font)              scaled to size 11.00006pt on input line 7.
-)
+(Font)              scaled to size 11.00006pt on input line 3.
+LaTeX Font Info:    Font shape `TU/XBNiloofar(2)/m/n' will be
+(Font)              scaled to size 8.99994pt on input line 9.
+LaTeX Font Info:    Font shape `TU/XBNiloofar(2)/m/n' will be
+(Font)              scaled to size 6.29996pt on input line 9.
+LaTeX Font Info:    Font shape `TU/XBNiloofar(2)/m/n' will be
+(Font)              scaled to size 4.49997pt on input line 9.
+LaTeX Font Info:    Font shape `TU/XBNiloofar(2)/bx/n' in size <10> not available
+(Font)              Font shape `TU/XBNiloofar(2)/b/n' tried instead on input line 9.
+LaTeX Font Info:    Font shape `TU/XBNiloofar(2)/b/n' will be
+(Font)              scaled to size 8.99994pt on input line 9.
+LaTeX Font Info:    Font shape `TU/XBNiloofar(2)/bx/n' in size <7> not available
+(Font)              Font shape `TU/XBNiloofar(2)/b/n' tried instead on input line 9.
+LaTeX Font Info:    Font shape `TU/XBNiloofar(2)/b/n' will be
+(Font)              scaled to size 6.29996pt on input line 9.
+LaTeX Font Info:    Font shape `TU/XBNiloofar(2)/bx/n' in size <5> not available
+(Font)              Font shape `TU/XBNiloofar(2)/b/n' tried instead on input line 9.
+LaTeX Font Info:    Font shape `TU/XBNiloofar(2)/b/n' will be
+(Font)              scaled to size 4.49997pt on input line 9.
+LaTeX Font Info:    Font shape `TU/XBNiloofar(2)/m/it' will be
+(Font)              scaled to size 8.99994pt on input line 9.
+LaTeX Font Info:    Font shape `TU/XBNiloofar(2)/m/it' will be
+(Font)              scaled to size 6.29996pt on input line 9.
+LaTeX Font Info:    Font shape `TU/XBNiloofar(2)/m/it' will be
+(Font)              scaled to size 4.49997pt on input line 9.
+LaTeX Font Info:    Font shape `TU/XBNiloofar(0)/m/n' will be
+(Font)              scaled to size 7.0pt on input line 16.
+LaTeX Font Info:    Font shape `TU/XBNiloofar(0)/m/n' will be
+(Font)              scaled to size 5.0pt on input line 16.
+
 
 LaTeX Font Info:    Font shape `TU/XBNiloofar(1)/m/n' will be
-(Font)              scaled to size 9.85492pt on input line 17.
+(Font)              scaled to size 9.85492pt on input line 48.
 [1
 
 ]
 
-[2] (../questions/Q2.tex)
+[2])
 
-[3] (../questions/Q3.tex)
+[3] (../questions/Q2.tex
 
 [4]
 
-[5] (../questions/Q4.tex)
+[5]
 
-[6]
+[6])
 
-[7] (../questions/Q5.tex
-LaTeX Font Info:    Font shape `TU/XBNiloofar(0)/m/it' will be
-(Font)              scaled to size 10.0pt on input line 29.
+[7] (../questions/Q3.tex
 
+[8]
 
-[8])
+[9])
 
-[9] (../questions/Q6.tex
-LaTeX Font Info:    Trying to load font information for U+euf on input line 43.
- (C:\Program Files\MiKTeX\tex/latex/amsfonts\ueuf.fd
-File: ueuf.fd 2013/01/14 v3.01 Euler Fraktur
-)
+[10] (../questions/Q4.tex
 
-[10]) (../questions/Q7.tex
+[11]
+LaTeX Font Info:    Font shape `TU/TimesNewRoman(0)/b/n' will be
+(Font)              scaled to size 13.20007pt on input line 59.
 
-[11])
 
 [12]
+LaTeX Font Info:    Font shape `TU/XBNiloofar(0)/b/n' will be
+(Font)              scaled to size 10.0pt on input line 72.
+)
 
-[13] (HW.aux)
+[13] (../questions/Q5.tex
+LaTeX Font Info:    Font shape `TU/TimesNewRoman(0)/b/n' will be
+(Font)              scaled to size 15.84007pt on input line 1.
+
+
+[14]
+
+[15])
+
+[16] (HW.aux)
  ***********
 LaTeX2e <2025-06-01> patch level 1
 L3 programming layer <2025-09-02>
@@ -1507,12 +1517,12 @@ Package rerunfilecheck Info: File `HW.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 30043 strings out of 403246
- 607463 string characters out of 5465128
- 1069868 words of memory out of 5000000
- 57825 multiletter control sequences out of 15000+600000
- 637352 words of font info for 148 fonts, out of 8000000 for 9000
+ 30500 strings out of 403246
+ 612075 string characters out of 5465128
+ 1086087 words of memory out of 5000000
+ 58293 multiletter control sequences out of 15000+600000
+ 634113 words of font info for 140 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
- 86i,21n,97p,2302b,360s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 86i,19n,97p,2302b,360s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on HW.xdv (13 pages, 94876 bytes).
+Output written on HW.xdv (16 pages, 154676 bytes).

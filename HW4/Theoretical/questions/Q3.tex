@@ -1,0 +1,92 @@
+\section*{بخش اول}
+
+\subsection*{الف}
+فرآیند معکوس $q(x_{t-1}\mid x_t)$ گوسی نیست زیرا طبق قاعدهٔ بِیز
+\begin{flalign*}
+    q(x_{t-1}\mid x_t) &= \frac{q(x_t\mid x_{t-1})\, q(x_{t-1})}{q(x_t)} &&
+\end{flalign*}
+و $q(x_{t-1})$ مارجینال داده‌هاست که توزیعی دلخواه و پیچیده است؛ ضرب آن در یک گوسی، گوسی نمی‌دهد. اما اگر $\beta_t = 1-\alpha_t$ به‌اندازهٔ کافی کوچک باشد (گام‌های نویز ریز)، $q(x_{t-1})$ روی همسایگی کوچک $x_t$ تقریباً ثابت/هموار است و در آن بازه با یک گوسی تقریب می‌خورد؛ پس برای $\beta_t \to 0$ می‌توان فرض کرد فرآیند معکوس نیز گوسی است.
+
+\subsection*{ب}
+ضرب در $q(x_{t-1})$ مشکل‌ساز است:
+\begin{flalign*}
+    q(x_{t-1}\mid x_t) &= \frac{q(x_t\mid x_{t-1})\, q(x_{t-1})}{q(x_t)} &&\\
+    q(x_{t-1}) &= \int q(x_{t-1}\mid x_0)\, q(x_0)\, \dd x_0 &&\\
+    q(x_t) &= \int q(x_t\mid x_0)\, q(x_0)\, \dd x_0 &&
+\end{flalign*}
+هر دو مارجینال به انتگرال روی توزیع نامعلوم دادهٔ $q(x_0)$ وابسته‌اند که فاقد فرم بسته است؛ پس $q(x_{t-1}\mid x_t)$ به‌تنهایی \lr{Intractable} است و نمونه‌برداری از آن ممکن نیست.
+
+\subsection*{ج}
+با شرطی‌کردن نسبت به $x_0$، وابستگی به مارجینال نامعلوم حذف می‌شود و همهٔ جملات گوسی با فرم بسته می‌گردند:
+\begin{flalign*}
+    q(x_{t-1}\mid x_t, x_0) &= \frac{q(x_t\mid x_{t-1}, x_0)\, q(x_{t-1}\mid x_0)}{q(x_t\mid x_0)} = \frac{q(x_t\mid x_{t-1})\, q(x_{t-1}\mid x_0)}{q(x_t\mid x_0)} &&
+\end{flalign*}
+که نیازمند روابط زیر است (با $\bar\alpha_t = \prod_{s=1}^{t}\alpha_s$):
+\begin{flalign*}
+    q(x_t\mid x_{t-1}) &= \mathcal{N}\!\left(x_t;\sqrt{\alpha_t}\,x_{t-1},(1-\alpha_t)I\right) &&\\
+    q(x_t\mid x_0) &= \mathcal{N}\!\left(x_t;\sqrt{\bar\alpha_t}\,x_0,(1-\bar\alpha_t)I\right) &&\\
+    q(x_{t-1}\mid x_0) &= \mathcal{N}\!\left(x_{t-1};\sqrt{\bar\alpha_{t-1}}\,x_0,(1-\bar\alpha_{t-1})I\right) &&
+\end{flalign*}
+هر سه \lr{tractable} و گوسی‌اند، پس حاصل نیز گوسی و قابل نمونه‌برداری است.
+
+\section*{بخش دوم}
+
+\subsection*{الف}
+با ضرب سه گوسی و جمع‌بستن نمایی‌ها بر حسب $x_{t-1}$:
+\begin{flalign*}
+    q(x_{t-1}\mid x_t,x_0) &\propto \exp\!\left(-\tfrac{1}{2}\left[\frac{(x_t-\sqrt{\alpha_t}x_{t-1})^2}{1-\alpha_t} + \frac{(x_{t-1}-\sqrt{\bar\alpha_{t-1}}x_0)^2}{1-\bar\alpha_{t-1}}\right]\right) &&\\
+    &\propto \exp\!\left(-\tfrac{1}{2}\left[\left(\frac{\alpha_t}{1-\alpha_t}+\frac{1}{1-\bar\alpha_{t-1}}\right)x_{t-1}^2 - 2\left(\frac{\sqrt{\alpha_t}}{1-\alpha_t}x_t+\frac{\sqrt{\bar\alpha_{t-1}}}{1-\bar\alpha_{t-1}}x_0\right)x_{t-1}\right]\right) &&
+\end{flalign*}
+این فرم درجه‌دوم در $x_{t-1}$ یک گوسی است. واریانس از معکوس ضریب $x_{t-1}^2$:
+\begin{flalign*}
+    \tilde\beta_t^{-1} &= \frac{\alpha_t}{1-\alpha_t}+\frac{1}{1-\bar\alpha_{t-1}} = \frac{\alpha_t(1-\bar\alpha_{t-1})+(1-\alpha_t)}{(1-\alpha_t)(1-\bar\alpha_{t-1})} = \frac{1-\bar\alpha_t}{(1-\alpha_t)(1-\bar\alpha_{t-1})} &&\\
+    \tilde\beta_t &= \frac{1-\bar\alpha_{t-1}}{1-\bar\alpha_t}(1-\alpha_t) = \frac{1-\bar\alpha_{t-1}}{1-\bar\alpha_t}\beta_t &&
+\end{flalign*}
+میانگین از ضریب جملهٔ خطی، در واریانس:
+\begin{flalign*}
+    \tilde\mu_t(x_t,x_0) &= \tilde\beta_t\left(\frac{\sqrt{\alpha_t}}{1-\alpha_t}x_t+\frac{\sqrt{\bar\alpha_{t-1}}}{1-\bar\alpha_{t-1}}x_0\right) &&\\
+    &= \frac{\sqrt{\alpha_t}(1-\bar\alpha_{t-1})}{1-\bar\alpha_t}x_t + \frac{\sqrt{\bar\alpha_{t-1}}\,\beta_t}{1-\bar\alpha_t}x_0 &&
+\end{flalign*}
+
+\subsection*{ب}
+ELBO با اعمال زنجیرهٔ مارکوف و قاعدهٔ بِیز روی جملات:
+\begin{flalign*}
+    \log p_\theta(x_0) &\geq \mathbb{E}_q\!\left[\log\frac{p_\theta(x_{0:T})}{q(x_{1:T}\mid x_0)}\right] &&\\
+    &= \mathbb{E}_q\Bigg[\underbrace{\log p_\theta(x_0\mid x_1)}_{L_0} - \underbrace{D_{KL}\!\big(q(x_T\mid x_0)\,\|\,p(x_T)\big)}_{L_T} &&\\
+    &\qquad - \sum_{t=2}^{T}\underbrace{D_{KL}\!\big(q(x_{t-1}\mid x_t,x_0)\,\|\,p_\theta(x_{t-1}\mid x_t)\big)}_{L_{t-1}}\Bigg] &&
+\end{flalign*}
+$L_T$ ثابت است (بدون پارامتر، چون $p(x_T)$ پیشین ثابت و $q(x_T\mid x_0)$ معلوم)؛ $L_0$ جملهٔ بازسازی گام آخر؛ $L_{t-1}$ جملات اصلی آموزش‌اند که توزیع معکوس آموخته را به $q(x_{t-1}\mid x_t,x_0)$ نزدیک می‌کنند.
+
+اگر $p_\theta(x_{t-1}\mid x_t)=\mathcal{N}(x_{t-1};\mu_\theta(x_t,t),\tilde\beta_t I)$ با همان واریانس فرض شود، $KL$ بین دو گوسی هم‌واریانس تنها به فاصلهٔ میانگین‌ها بستگی دارد:
+\begin{flalign*}
+    L_{t-1} &= \mathbb{E}_q\!\left[\frac{1}{2\tilde\beta_t}\big\|\tilde\mu_t(x_t,x_0)-\mu_\theta(x_t,t)\big\|^2\right] + C &&
+\end{flalign*}
+پس کمینه‌کردن $KL$ معادل کمینه‌کردن خطای مجذور وزنی میان میانگین واقعی و پیش‌بینی است.
+
+\subsection*{ج}
+از $x_t=\sqrt{\bar\alpha_t}x_0+\sqrt{1-\bar\alpha_t}\,\varepsilon$ داریم $x_0=\frac{1}{\sqrt{\bar\alpha_t}}(x_t-\sqrt{1-\bar\alpha_t}\,\varepsilon)$. جای‌گذاری در $\tilde\mu_t$:
+\begin{flalign*}
+    \tilde\mu_t &= \frac{\sqrt{\alpha_t}(1-\bar\alpha_{t-1})}{1-\bar\alpha_t}x_t + \frac{\sqrt{\bar\alpha_{t-1}}\,\beta_t}{1-\bar\alpha_t}\cdot\frac{x_t-\sqrt{1-\bar\alpha_t}\,\varepsilon}{\sqrt{\bar\alpha_t}} &&\\
+    &= \frac{1}{\sqrt{\alpha_t}}\left(x_t - \frac{\beta_t}{\sqrt{1-\bar\alpha_t}}\,\varepsilon\right) &&
+\end{flalign*}
+که دقیقاً فرم $\mu_\theta$ را با $\varepsilon\to\varepsilon_\theta(x_t,t)$ توجیه می‌کند. اختلاف میانگین‌ها:
+\begin{flalign*}
+    \tilde\mu_t-\mu_\theta &= \frac{1}{\sqrt{\alpha_t}}\cdot\frac{\beta_t}{\sqrt{1-\bar\alpha_t}}\big(\varepsilon_\theta(x_t,t)-\varepsilon\big) &&
+\end{flalign*}
+جای‌گذاری در $L_{t-1}$:
+\begin{flalign*}
+    L_{t-1} &= \mathbb{E}\!\left[\frac{1}{2\tilde\beta_t}\cdot\frac{\beta_t^2}{\alpha_t(1-\bar\alpha_t)}\,\|\varepsilon-\varepsilon_\theta(x_t,t)\|^2\right] = \mathbb{E}_{x_0,\varepsilon,t}\!\left[\lambda_t\,\|\varepsilon-\varepsilon_\theta(x_t,t)\|^2\right] &&\\
+    \lambda_t &= \frac{\beta_t^2}{2\tilde\beta_t\,\alpha_t(1-\bar\alpha_t)} = \frac{\beta_t^2}{2\alpha_t(1-\bar\alpha_t)}\cdot\frac{1-\bar\alpha_t}{(1-\bar\alpha_{t-1})\beta_t} = \frac{\beta_t}{2\alpha_t(1-\bar\alpha_{t-1})} &&
+\end{flalign*}
+
+\subsection*{د}
+
+\paragraph{۱.}
+چون
+\begin{flalign*}
+    \lambda_t &= \frac{\beta_t}{2\alpha_t(1-\bar\alpha_{t-1})} &&
+\end{flalign*}
+در گام‌های کوچک $t$ (نویز کم، $\bar\alpha_{t-1}\to 1$) مخرج $1-\bar\alpha_{t-1}\to 0$ است، پس $\lambda_t$ بزرگ می‌شود و ELBO اصلی وزن زیادی به این گام‌ها می‌دهد؛ در گام‌های بزرگ $t$ (نویز زیاد) مخرج به $1$ نزدیک و $\lambda_t$ کوچک است. قراردادن $\lambda_t=1$ این وزن‌دهی را یکنواخت می‌کند و تمرکز را از گام‌های کم‌نویز برداشته و به‌طور نسبی به گام‌های پرنویز منتقل می‌کند.
+
+\paragraph{۲.}
+در گام‌های کم‌نویز شبکه فقط جزئیات ریز با اطلاعات کم را بازسازی می‌کند؛ وزن بزرگ $\lambda_t$ در ELBO اصلی، ظرفیت مدل را صرف این جملات کم‌اهمیت می‌کند. گام‌های پرنویز ساختار کلان و محتوای ادراکی تصویر را شکل می‌دهند که برای کیفیت نمونهٔ نهایی تعیین‌کننده‌ترند. با $\lambda_t=1$ توجه شبکه از جزئیات ریز به این گام‌های پرنویزِ ساختارساز معطوف می‌شود؛ افزون بر این، حذف ضریب بزرگ، واریانس گرادیان را کاهش داده و آموزش را پایدارتر می‌کند — نتیجه نمونه‌هایی با کیفیت ادراکی بالاتر است.

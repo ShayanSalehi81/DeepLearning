@@ -1,0 +1,145 @@
+\subsection*{الف}
+با
+\lr{factorisation}
+داده‌شده و ساختار
+\lr{Markov}
+مدل مولد، از نامساوی
+\lr{Jensen}
+شروع می‌کنیم:
+\begin{flalign*}
+    \log p_\theta(x) &\geq \mathbb{E}_{q_\phi(z|x)}\!\left[\log \frac{p_\theta(x,z)}{q_\phi(z|x)}\right] = \mathcal{L}(\theta,\phi;x) && \\
+    &= \mathbb{E}_{q_\phi(z|x)}\!\left[\log p_\theta(x\mid z_1) + \log p_\theta(z_L) + \sum_{i=1}^{L-1}\log p_\theta(z_i\mid z_{i+1}) - \sum_{i=1}^{L}\log q_\phi(z_i\mid z_{i+1},x)\right] &&
+\end{flalign*}
+با گروه‌بندی جملات هم‌لایه و استفاده از $z_{L+1}\equiv\emptyset$ (پس $p_\theta(z_L\mid z_{L+1})=p_\theta(z_L)$):
+\begin{flalign*}
+    \mathcal{L}(\theta,\phi;x) = \underbrace{\mathbb{E}_{q_\phi(z_1|x)}\!\left[\log p_\theta(x\mid z_1)\right]}_{\text{\lr{reconstruction}}} - \sum_{i=1}^{L}\underbrace{\mathbb{E}_{q_\phi(z_{i+1}|x)}\!\Big[\mathrm{KL}\big(q_\phi(z_i\mid z_{i+1},x)\,\|\,p_\theta(z_i\mid z_{i+1})\big)\Big]}_{\text{\lr{regularisation}}} &&
+\end{flalign*}
+هر جملهٔ
+\lr{KL}
+برای لایهٔ $i$، با
+\lr{Gaussian}
+بودن $q$ و $p$، چنین است:
+\begin{flalign*}
+    \mathrm{KL}_i = \frac{1}{2}\sum_{d}\left(\frac{\sigma_{q,i,d}^2 + (\mu_{q,i,d}-\mu_{p,i,d})^2}{\sigma_{p,i,d}^2} - 1 + \log\frac{\sigma_{p,i,d}^2}{\sigma_{q,i,d}^2}\right) &&
+\end{flalign*}
+سازوکار
+\lr{ARD}:
+وقتی واحد نهان $d$ از لایهٔ $i$ اطلاعاتی دربارهٔ $x$ حمل نکند، بهینه‌سازی $\mathrm{KL}_i$ را با راندن $q$ به سمت $p$ کمینه می‌کند:
+\begin{flalign*}
+    \mu_{q,i,d}\to\mu_{p,i,d}, \quad \sigma_{q,i,d}^2\to\sigma_{p,i,d}^2 \;\Longrightarrow\; \mathrm{KL}_{i,d}\to 0 &&
+\end{flalign*}
+آنگاه $q_\phi(z_{i,d}\mid\cdot)=p_\theta(z_{i,d}\mid\cdot)$ و آن واحد عملاً خاموش («\lr{pruned}») می‌شود؛ پس عبارت منظم‌سازی به‌طور خودکار واحدهای بی‌استفاده را حذف می‌کند.
+
+\subsection*{ب}
+با ضرب دو
+\lr{Gaussian}،
+posterior متناسب با حاصل‌ضرب
+\lr{likelihood}
+و
+\lr{prior}
+است:
+\begin{flalign*}
+    q(z_i) &\propto \mathcal{N}(z_i\mid\hat\mu_{q,i},\hat\sigma_{q,i}^2)\,\mathcal{N}(z_i\mid\mu_{p,i},\sigma_{p,i}^2) && \\
+    &\propto \exp\!\left(-\frac{(z_i-\hat\mu_{q,i})^2}{2\hat\sigma_{q,i}^2} - \frac{(z_i-\mu_{p,i})^2}{2\sigma_{p,i}^2}\right) &&
+\end{flalign*}
+نمایِ توان را برحسب $z_i$ مرتب و مربع کامل می‌کنیم:
+\begin{flalign*}
+    -\frac{1}{2}\left[\left(\hat\sigma_{q,i}^{-2}+\sigma_{p,i}^{-2}\right)z_i^2 - 2\left(\hat\mu_{q,i}\hat\sigma_{q,i}^{-2}+\mu_{p,i}\sigma_{p,i}^{-2}\right)z_i\right] + \text{const} &&
+\end{flalign*}
+مقایسه با فرم استاندارد $-\frac{1}{2\sigma_{q,i}^2}(z_i-\mu_{q,i})^2$ ضرایب را می‌دهد:
+\begin{flalign*}
+    \sigma_{q,i}^{-2} &= \hat\sigma_{q,i}^{-2}+\sigma_{p,i}^{-2} \;\Longrightarrow\; \sigma_{q,i}^2 = \frac{1}{\hat\sigma_{q,i}^{-2}+\sigma_{p,i}^{-2}} && \\
+    \frac{\mu_{q,i}}{\sigma_{q,i}^2} &= \hat\mu_{q,i}\hat\sigma_{q,i}^{-2}+\mu_{p,i}\sigma_{p,i}^{-2} \;\Longrightarrow\; \mu_{q,i} = \frac{\hat\mu_{q,i}\hat\sigma_{q,i}^{-2}+\mu_{p,i}\sigma_{p,i}^{-2}}{\hat\sigma_{q,i}^{-2}+\sigma_{p,i}^{-2}} &&
+\end{flalign*}
+که همان $(19)$ است. تفسیر: $\hat\mu_{q,i},\hat\sigma_{q,i}^2$ دقیقاً نقش پارامترهای یک
+\lr{Gaussian likelihood}
+وابسته به داده را بازی می‌کنند؛ شبکهٔ
+\lr{bottom-up}
+به‌جای تولید مستقیم posterior، یک
+\lr{likelihood}
+گاوسی روی $z_i$ می‌سازد که با
+\lr{precision-weighted}
+ترکیب‌شدن با prior مولد، posterior را پدید می‌آورد.
+
+\subsection*{ج}
+در مسیر
+\lr{top-down}،
+prior هر لایه از همان شبکهٔ مولد می‌آید:
+\begin{flalign*}
+    p_\theta(z_i\mid z_{i+1}) = \mathcal{N}\!\left(z_i \,\middle|\, \mu_{p,i}(z_{i+1}),\,\sigma_{p,i}^2(z_{i+1})\right) &&
+\end{flalign*}
+استنتاج
+\lr{LVAE}
+همین $\mu_{p,i},\sigma_{p,i}^2$ را در $(19)$ به‌کار می‌برد؛ یعنی پارامترهای
+\lr{generative path}
+مستقیماً وارد محاسبهٔ posterior تقریبی می‌شوند. مزیت این اشتراک پارامتر در
+\lr{KL}
+آشکار است:
+\begin{flalign*}
+    \mathrm{KL}\big(q_\phi(z_i\mid z_{i+1},x)\,\|\,p_\theta(z_i\mid z_{i+1})\big) &&
+\end{flalign*}
+هر دو توزیع از $\mu_{p,i},\sigma_{p,i}^2$ یکسان استفاده می‌کنند، پس $q$ و $p$ ذاتاً هم‌تراز («\lr{aligned}») هستند و
+\lr{KL}
+نزدیک صفر آغاز می‌شود. در مقابل، یک
+\lr{inference network purely bottom-up}
+باید $q$ را بدون هیچ دانشی از $p_\theta$ بسازد؛ آنگاه $q$ و $p$ در فضای پارامتر دور از هم قرار می‌گیرند و سطح بهینه‌سازی پرشیب‌تر و ناهموارتر می‌شود. اشتراک مسیر
+\lr{top-down}
+این بدتنظیمی را حذف می‌کند و همگرایی را آسان‌تر می‌سازد.
+
+\subsection*{د}
+
+\subsubsection*{(i)}
+با $\beta=0$ در $(20)$:
+\begin{flalign*}
+    \mathcal{L}_T(\theta,\phi;x)\big|_{\beta=0} = \mathbb{E}_{q_\phi(z|x)}\!\left[\log p_\theta(x\mid z)\right] &&
+\end{flalign*}
+عبارت
+\lr{KL}
+حذف می‌شود؛ هیچ فشاری $q_\phi(z\mid x)$ را به سمت prior نمی‌راند، پس بهینه‌سازی آزاد است $q$ را تا حد ممکن متمرکز (واریانس $\to 0$) کند:
+\begin{flalign*}
+    q_\phi(z\mid x)\to\delta\big(z-f_\phi(x)\big) \;\Longrightarrow\; \mathcal{L}_T \to \log p_\theta\big(x\mid f_\phi(x)\big) &&
+\end{flalign*}
+که دقیقاً هدف یک
+\lr{deterministic autoencoder}
+با
+\lr{encoder}
+نگاشت $f_\phi$ و خطای بازسازی است.
+
+\subsubsection*{(ii)}
+\lr{Collapse}
+وقتی رخ می‌دهد که عبارت
+\lr{KL}
+زودتر از آنکه
+\lr{decoder}
+یاد بگیرد از $z$ استفاده کند، آن را به صفر براند؛ آنگاه واحد نهان به prior فرومی‌پاشد و بی‌اطلاع می‌ماند. با $\beta=0$ در ابتدا:
+\begin{flalign*}
+    \beta\approx 0 \;\Longrightarrow\; \text{فشار \lr{KL}}\approx 0 \;\Longrightarrow\; q_\phi(z\mid x)\not\to p_\theta(z) &&
+\end{flalign*}
+در این مرحله شبکه آزادانه اطلاعات معناداری در $z$ رمزگذاری می‌کند و
+\lr{decoder}
+به آن وابسته می‌شود؛ سپس با افزایش تدریجی $\beta$ تا $1$، عبارت
+\lr{KL}
+فعال می‌شود اما واحدهای نهان دیگر «استفاده‌شده» و در برابر
+\lr{collapse}
+مقاوم‌اند.
+
+\subsubsection*{(iii)}
+با $\beta=1$ از ابتدا، هدف از همان آغاز
+\lr{ELBO}
+کامل است:
+\begin{flalign*}
+    \mathcal{L}_T = -\mathrm{KL}\big(q_\phi(z\mid x)\,\|\,p_\theta(z)\big) + \mathbb{E}_{q_\phi}\!\left[\log p_\theta(x\mid z)\right] &&
+\end{flalign*}
+در گام‌های نخست
+\lr{decoder}
+هنوز ضعیف است و جملهٔ بازسازی سهم اندکی دارد؛ پس کمینه‌سازی با راندن
+\lr{KL}
+به صفر آسان‌تر است:
+\begin{flalign*}
+    q_\phi(z\mid x)\to p_\theta(z) \;\Longrightarrow\; \mathrm{KL}\to 0,\quad z \perp x &&
+\end{flalign*}
+نتیجه
+\lr{posterior collapse}:
+واحدهای نهان بی‌اطلاع می‌شوند، $z$ از $x$ مستقل می‌گردد و مدل به یک
+\lr{decoder}
+بی‌توجه به $z$ تنزل می‌یابد.

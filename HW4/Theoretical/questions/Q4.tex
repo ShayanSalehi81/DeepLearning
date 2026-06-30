@@ -1,43 +1,84 @@
-\subsection*{الف}
-چون $hd_k=d$، چهار مرحله:
+\section*{بخش الف}
+
+\subsection*{آ}
 \begin{flalign*}
-    \text{QKV} &= 3bnd^2, \quad QK^\top = bn^2d, \quad AV = bn^2d, \quad \text{Out} = bnd^2 \\
-    \text{MAC}_{\text{full}} &= 4bnd^2 + 2bn^2d \\
-    &= 4(4)(4096)(1024)^2 + 2(4)(4096)^2(1024) \approx 2.07\times10^{14} &&
+    s^*(x) &= \nabla\log p(x) = \frac{[x_0\mid x]-x}{\sigma^2},\qquad D^*(x)=\arg\min_D\mathbb E\|D(x)-x_0\|^2=[x_0\mid x] &&
 \end{flalign*}
+پس $s^*(x)=\dfrac{D^*(x)-x}{\sigma^2}$ — تفاضل و مقیاس‌دهی ساده از بازساز بهینه.
 
 \subsection*{ب}
-پنجرهٔ $w$ جایگزین $n$ در جملات توجه می‌شود:
+گرادیان رگرسیون $\propto (D_\theta(x)-x_0)\nabla_\theta D_\theta$ تا $D_\theta=\mathbb E[x_0\mid x]$ صفر نمی‌شود؛ اما در \lr{GAN}، $D^*\to1$ یعنی
 \begin{flalign*}
-    \text{MAC}_{\text{local}} &= 4bnd^2 + 2bnwd \\
-    &\approx 7.04\times10^{13} + 4.29\times10^{12} \approx 7.47\times10^{13} &&
+    \nabla_x\log D^*(x)\big|_{D^*\to1}\to 0, &&
 \end{flalign*}
-جملهٔ دوم از $O(n^2)$ به $O(nw)$ خطی کاهش یافت.
+گرادیان مولد محو می‌شود (\lr{vanishing gradient}). رگرسیون به مقدار هدف وابسته است نه به اطمینان تفکیک‌گر، پس در نقطهٔ زینی اشباع نمی‌شود.
 
 \subsection*{ج}
-هر جمله ضرب ماتریس $d\times d$، پس:
+$s^*(x)=\frac{1}{\sigma^2}(\mathbb E[x_0\mid x]-x)$ روی کل فضای هموارشده تعریف و غیرصفر است (جهت به سمت دادهٔ نزدیک). در مقابل با تکیه‌گاه‌های جدا:
 \begin{flalign*}
-    \text{MAC}_{\text{conv}} &= bnwd^2 = 4(4096)(128)(1024)^2 \approx 2.20\times10^{15} &&
+    \mathrm{JS}(P\|Q)=\log 2=\text{const}\implies \nabla_\theta\,\mathrm{JS}=0. &&
 \end{flalign*}
-از هر دو حالت بیشتر است؛ چون کرنل $C_r\in\mathbb{R}^{d\times d}$ در هر گام
-\lr{channel mixing}
-کامل انجام می‌دهد ($d^2$ به ازای هر جفت)، حال‌آنکه در \lr{attention} آمیختن کانالی فقط در $W^{Q,K,V,O}$ رخ می‌دهد و تعامل توکن‌ها روی $d_k\ll d^2$ است.
+امتیاز همه‌جا گرادیان هموار دارد؛ تفکیک‌گر \lr{GAN} در نواحی خالی هیچ سیگنالی نمی‌دهد.
 
-\subsection*{د}
-با $a_r=\mathrm{softmax}_r(\beta_r)$ که مستقل از $t$ است:
-\begin{flalign*}
-    H_t &= \sum_{r=0}^{w-1} a_r\,Z_{t-r}W^V = \sum_{r=0}^{w-1} Z_{t-r}(a_r W^V) &&
-\end{flalign*}
-یک
-\lr{causal convolution}
-با $C_r=a_r W^V$ است. پس از ادغام $h$ هد:
-\begin{flalign*}
-    \mathrm{MHA}(Z)_t &= \sum_{r=0}^{w-1} Z_{t-r}\,C_r, \qquad C_r = \sum_{i=1}^{h} a_r^{(i)} W^V_i W^O_i \in \mathbb{R}^{d\times d} &&
-\end{flalign*}
+\section*{بخش ب}
 
-\subsection*{ه}
-در حالت کلی $\alpha_{t,j}(Z)$ به محتوای $z_t,z_j$ وابسته است نه فقط به $t-j$؛ پس کرنل مؤثر $C_{t,j}=\alpha_{t,j}(Z)W^V$ برای هر ورودی تغییر می‌کند.
-این رفتار یک
-\lr{dynamic/input-dependent convolution}
-است، نه کانولوشن ثابت.
-تنها در حالت تباهیدهٔ بند د که $\alpha$ از $Z$ مستقل می‌شود، به کانولوشن ثابت فرو می‌کاهد.
+\subsection*{آ}
+\begin{flalign*}
+    x_t &= \sqrt{\alpha_t\alpha_{t-1}}x_{t-2}+\sqrt{\alpha_t(1-\alpha_{t-1})}\epsilon_{t-2}+\sqrt{1-\alpha_t}\epsilon_{t-1} \\
+    &= \sqrt{\alpha_t\alpha_{t-1}}x_{t-2}+\sqrt{1-\alpha_t\alpha_{t-1}}\,\bar\epsilon \quad(\text{ادغام دو گاوسی مستقل}) &&
+\end{flalign*}
+با استقرا تا $x_0$: $q(x_t\mid x_0)=(x_t;\sqrt{\bar\alpha_t}x_0,(1-\bar\alpha_t)I)$.
+
+\subsection*{ب}
+حاصل‌ضرب دو گاوسی در $x_{t-1}$:
+\begin{flalign*}
+    \tilde\beta_t^{-1}=\frac{\alpha_t}{\beta_t}+\frac{1}{1-\bar\alpha_{t-1}} &\implies \tilde\beta_t=\frac{1-\bar\alpha_{t-1}}{1-\bar\alpha_t}\beta_t \\
+    \tilde\mu_t &= \frac{\sqrt{\bar\alpha_{t-1}}\beta_t}{1-\bar\alpha_t}x_0+\frac{\sqrt{\alpha_t}(1-\bar\alpha_{t-1})}{1-\bar\alpha_t}x_t &&
+\end{flalign*}
+چون هر دو توزیع گاوسی با کوواریانس مشترک $\sigma_t^2I$اند، \lr{KL} به $\frac{1}{2\sigma_t^2}\|\tilde\mu_t-\mu_\theta\|^2$ فرو می‌کاهد که همان $\mathcal L_{t-1}$ است.
+
+\subsection*{ج}
+با $x_0=\frac{1}{\sqrt{\bar\alpha_t}}(x_t-\sqrt{1-\bar\alpha_t}\epsilon)$ در $\tilde\mu_t$:
+\begin{flalign*}
+    \tilde\mu_t = \frac{1}{\sqrt{\alpha_t}}\Big(x_t-\frac{\beta_t}{\sqrt{1-\bar\alpha_t}}\epsilon\Big) \implies \tilde\mu_t-\mu_\theta\propto \epsilon_\theta(x_t,t)-\epsilon &&
+\end{flalign*}
+با حذف وزن $\Rightarrow \mathcal L_{\text{simple}}=\mathbb E\|\epsilon-\epsilon_\theta(\sqrt{\bar\alpha_t}x_0+\sqrt{1-\bar\alpha_t}\epsilon,t)\|^2$. هدف $\epsilon$ همواره گاوسی استاندارد با مقیاس ثابت است؛ هدف $\tilde\mu_t$ یا $x_0$ با $t$ بدمقیاس می‌شود (نزدیک $t\to T$، $1/\sqrt{\bar\alpha_t}$ نویز را تشدید می‌کند) — پیش‌بینی $\epsilon$ گرادیانی پایدارتر می‌دهد.
+
+\section*{بخش ج}
+
+\subsection*{آ}
+با $\sigma_t=0$، $x_{t-1}=\sqrt{\bar\alpha_{t-1}}\hat x_0(x_t)+\sqrt{1-\bar\alpha_{t-1}}\epsilon_\theta(x_t,t)$ تابعی قطعی از $x_t$ است؛ با تثبیت $x_T$ کل مسیر یکتاست.
+
+\subsection*{ب}
+$\mathbb E[x_{t-1}\mid x_0]=\sqrt{\bar\alpha_{t-1}}x_0$ با واریانس $(1-\bar\alpha_{t-1})I$ — مستقل از $\sigma_t$، یعنی حاشیه‌های $q(x_t\mid x_0)$ حفظ می‌شوند. چون
+\begin{flalign*}
+    \mathcal L_{\text{simple}}=\mathbb E_{x_0,\epsilon,t}\|\epsilon-\epsilon_\theta(\sqrt{\bar\alpha_t}x_0+\sqrt{1-\bar\alpha_t}\epsilon,t)\|^2 &&
+\end{flalign*}
+فقط به حاشیه‌ها وابسته است نه به $q(x_{1:T}\mid x_0)$ کامل، شبکهٔ آموزش‌دیده بدون بازآموزی برای هر عضو خانوادهٔ \lr{DDIM} معتبر است.
+
+\subsection*{ب (\lr{SDE})}
+\begin{flalign*}
+    dx=\Big[f(x,t)-\tfrac12 g(t)^2\nabla_x\log p_t(x)\Big]dt &&
+\end{flalign*}
+نیمی از جملهٔ امتیاز جذب \lr{drift} می‌شود و $\{p_t\}$ حفظ می‌شود؛ نگاشت قطعی و \lr{invertible} است، پس \lr{change-of-variables} درست‌نمایی دقیق می‌دهد — کاری که \lr{SDE} تصادفی اجازه نمی‌دهد. در مقابل، نویز \lr{SDE} خطاهای \lr{score} را تصحیح و تنوع نمونه می‌افزاید.
+
+\section*{بخش د}
+
+\subsection*{آ}
+\begin{flalign*}
+\textbf{(آ)}&\ D^*=\frac{p}{p+q}\ \text{یک نسبت چگالی است؛ در}\ q\to0\ \text{اشباع می‌شود — طبقه‌بندی.} \\
+\textbf{(ب)}&\ s_\theta\approx\nabla\log p_t\ \text{یک رگرسیون است که جهت رشد چگالی را همه‌جا یاد می‌گیرد.} \\
+\textbf{(ج)}&\ \text{روی مد ازدست‌رفته}\ p_t>0\Rightarrow\nabla\log p_t\ \text{به سمت آن هل می‌دهد؛ گرادیان \lr{GAN} آنجا صفر است.} &&
+\end{flalign*}
+مثال: $P=\frac12\mathcal N(-\mu,\sigma^2)+\frac12\mathcal N(\mu,\sigma^2)$، $Q_\theta=\mathcal N(\theta,\sigma^2)$ با $\theta\approx\mu$. برای $x\ll-\mu$:
+\begin{flalign*}
+    \nabla\log P(x)\to -\frac{x+\mu}{\sigma^2}\neq0,\qquad D^*(x)\to1\Rightarrow\nabla_\theta\,\mathrm{JS}\to0. &&
+\end{flalign*}
+امتیاز مد چپ را بازمی‌یابد؛ \lr{GAN} در آن «می‌میرد».
+
+\subsection*{ب}
+\begin{flalign*}
+\textbf{(آ)}&\ \text{تنوع بالا:}\ \text{\lr{DDPM}}\ \text{تصادفی،}\ T\approx1000\ \text{— پوشش کامل مدها مهم‌تر از کیفیت تک‌نمونه.} \\
+\textbf{(ب)}&\ \text{کیفیت بالا، زمان آزاد:}\ \text{\lr{DDPM}}\ \text{تصادفی،}\ T=1000\ \text{— کمینهٔ خطای گسسته‌سازی و تصحیح \lr{score} در مسیر.} \\
+\textbf{(ج)}&\ \text{تعادل تعاملی:}\ \text{\lr{DDIM}}\ \text{قطعی،}\ T\approx20\text{–}50\ \text{— گام بزرگ بدون انباشت نویز، نتیجهٔ تکرارپذیر.} &&
+\end{flalign*}

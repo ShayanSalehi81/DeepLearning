@@ -1,6 +1,6 @@
-PWD d:\Term 02\DeepLearning\HW3\Theoretical\HW
+PWD d:\Term 02\DeepLearning\HW4\Theoretical\HW
 INPUT C:\Users\ROG\AppData\Local\MiKTeX\miktex\data\le\xetex\xelatex.fmt
-INPUT d:\Term 02\DeepLearning\HW3\Theoretical\HW\HW.tex
+INPUT d:\Term 02\DeepLearning\HW4\Theoretical\HW\HW.tex
 OUTPUT HW.log
 INPUT C:\Program Files\MiKTeX\tex\latex\base\article.cls
 INPUT C:\Program Files\MiKTeX\tex\latex\base\article.cls
@@ -328,6 +328,8 @@ INPUT C:\Program Files\MiKTeX\tex\latex\graphics\color.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\mdframed\md-frame-0.mdf
 INPUT C:\Program Files\MiKTeX\tex\latex\mdframed\md-frame-0.mdf
 INPUT C:\Program Files\MiKTeX\tex\latex\mdframed\md-frame-0.mdf
+INPUT C:\Program Files\MiKTeX\tex\latex\physics\physics.sty
+INPUT C:\Program Files\MiKTeX\tex\latex\physics\physics.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\algorithmicx\algpseudocode.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\algorithmicx\algpseudocode.sty
 INPUT ..\commons\alg-fa.tex
@@ -493,12 +495,6 @@ OUTPUT HW.xdv
 INPUT ..\questions\Q2.tex
 INPUT ..\questions\Q2.tex
 INPUT ..\questions\Q2.tex
-INPUT C:\Program Files\MiKTeX\fonts\tfm\public\cm\cmbx10.tfm
-INPUT C:\Program Files\MiKTeX\fonts\tfm\public\cm\cmbx7.tfm
-INPUT C:\Program Files\MiKTeX\fonts\tfm\public\cm\cmbx5.tfm
-INPUT C:\Program Files\MiKTeX\fonts\tfm\public\cm\cmbx12.tfm
-INPUT C:\Program Files\MiKTeX\fonts\tfm\public\cm\cmbx8.tfm
-INPUT C:\Program Files\MiKTeX\fonts\tfm\public\cm\cmbx6.tfm
 INPUT ..\questions\Q3.tex
 INPUT ..\questions\Q3.tex
 INPUT ..\questions\Q3.tex
@@ -508,21 +504,6 @@ INPUT ..\questions\Q4.tex
 INPUT ..\questions\Q5.tex
 INPUT ..\questions\Q5.tex
 INPUT ..\questions\Q5.tex
-INPUT ..\questions\Q6.tex
-INPUT ..\questions\Q6.tex
-INPUT ..\questions\Q6.tex
-INPUT C:\Program Files\MiKTeX\tex\latex\amsfonts\ueuf.fd
-INPUT C:\Program Files\MiKTeX\tex\latex\amsfonts\ueuf.fd
-INPUT C:\Program Files\MiKTeX\tex\latex\amsfonts\ueuf.fd
-INPUT C:\Program Files\MiKTeX\fonts\tfm\public\amsfonts\euler\eufm10.tfm
-INPUT C:\Program Files\MiKTeX\fonts\tfm\public\amsfonts\euler\eufm7.tfm
-INPUT C:\Program Files\MiKTeX\fonts\tfm\public\amsfonts\euler\eufm5.tfm
-INPUT C:\Program Files\MiKTeX\fonts\tfm\public\amsfonts\euler\eufm10.tfm
-INPUT C:\Program Files\MiKTeX\fonts\tfm\public\amsfonts\euler\eufm10.tfm
-INPUT C:\Program Files\MiKTeX\fonts\tfm\public\amsfonts\euler\eufm7.tfm
-INPUT ..\questions\Q7.tex
-INPUT ..\questions\Q7.tex
-INPUT ..\questions\Q7.tex
 INPUT HW.aux
 INPUT .\HW.out
 INPUT .\HW.out

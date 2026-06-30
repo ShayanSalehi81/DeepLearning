@@ -1,0 +1,82 @@
+\section*{الف) \lr{Langevin} و میانگین متحرک نویز}
+
+\subsection*{آ}
+معادلهٔ \lr{Fokker--Planck} متناظر با \lr{SDE} پیوستهٔ این دینامیک:
+\begin{flalign*}
+    \partial_t \rho = -\nabla\!\cdot\!\big(\rho\nabla\log p - \nabla\rho\big) &&
+\end{flalign*}
+در حالت ایستا ($\partial_t\rho=0$) جریان احتمال صفر می‌شود:
+\begin{flalign*}
+    \nabla\log\rho_\infty = \nabla\log p \;\Longrightarrow\; \rho_\infty \propto p(x) &&
+\end{flalign*}
+با $\eta\to 0$ خطای گسسته‌سازی \lr{Euler--Maruyama} ($O(\eta)$) حذف و $x_k$ به این توزیع ایستا همگرا می‌شود.
+
+\subsection*{ب}
+از رابطهٔ \lr{Tweedie}، $\mathbb{E}[x_0\mid x_\sigma]=x_\sigma+\sigma^2\nabla_{x_\sigma}\log p_\sigma$، و تخمین شبکه $\mathbb{E}[x_0\mid x_\sigma]\approx x_\sigma-\sigma\epsilon_\theta$:
+\begin{flalign*}
+    \boxed{\nabla_{x_\sigma}\log p_\sigma(x_\sigma)\approx -\frac{\epsilon_\theta(x_\sigma)}{\sigma}} &&
+\end{flalign*}
+با $\sigma$ بزرگ، $p_\sigma$ (کانولوشن $p_0$ با هستهٔ گاوسی) پشتیبان وسیع‌تری دارد، پس \lr{score} در حجم بزرگ‌تری از فضا غیرصفر است.
+
+\subsection*{ج}
+با نویز کوچک، $p_\sigma$ تقریباً فقط نزدیک \lr{manifold} داده غیرصفر است؛ \lr{score} در نقاط دور نامعتبر/صفر است و عبور بین \lr{mode}ها (\lr{poor mixing}) رخ نمی‌دهد. شروع با $\sigma$ بزرگ چگالی را هموار و یک‌مُده می‌کند تا \lr{walker} سریع به ناحیهٔ پرجرم برسد؛ کاهش تدریجی $\sigma$ سپس آن را به جزئیات $p_0$ می‌رساند (\lr{annealing/continuation}). عکس آن چون از نقطهٔ دور با گرادیان صفر آغاز می‌شود، هرگز به داده نمی‌رسد.
+
+\section*{ب) هدایت با دسته‌بند}
+
+\subsection*{آ}
+از \lr{Bayes}، $\log p(x\mid c)=\log p(x)+\log p(c\mid x)-\log p(c)$، پس:
+\begin{flalign*}
+    \nabla_x\log p(x\mid c)=\nabla_x\log p(x)+\nabla_x\log p(c\mid x) &&
+\end{flalign*}
+جملهٔ اول واقعی‌بودن را تضمین می‌کند، جملهٔ دوم به سمت کلاس $c$ می‌برد.
+
+\subsection*{ب}
+امتیاز هدایت‌شده معادل نمونه‌برداری از $\tilde p(x_t\mid c)\propto p(x_t)\,p(c\mid x_t)^w$ است:
+\begin{flalign*}
+    w\to\infty \;\Longrightarrow\; \tilde p \to \delta\big(x-\arg\max_x p(c\mid x)\big) &&
+\end{flalign*}
+یعنی \lr{mode collapse}: کیفیت/وفاداری بالا، تنوع به صفر.
+
+\subsection*{ج}
+دسته‌بند روی تصاویر تمیز آموزش دیده ولی ورودی $x_t$ نویزی و \lr{off-distribution} است؛ گرادیانش بی‌اعتبار/گمراه‌کننده بوده و حرکت در جهت آن دقیقاً ساختن \lr{adversarial example} است.
+
+\section*{ج) \lr{CFG}}
+
+\subsection*{آ}
+از \lr{Bayes}: $\nabla\log p(c\mid x_t)=\nabla\log p(x_t\mid c)-\nabla\log p(x_t)$. با جایگذاری $\nabla\log p\approx-\epsilon/\sigma$ و ساده‌سازی $\hat\nabla\log p(x_t\mid c)=\nabla\log p(x_t)+w\nabla\log p(c\mid x_t)$ در فضای نویز:
+\begin{flalign*}
+    \boxed{\hat\epsilon(x_t,t,c)=\epsilon_\theta(x_t,t,\emptyset)+w\big(\epsilon_\theta(x_t,t,c)-\epsilon_\theta(x_t,t,\emptyset)\big)} &&
+\end{flalign*}
+
+\subsection*{ب}
+همان توزیع $\tilde p\propto p(x_t)p(c\mid x_t)^w$ حاکم است؛ $w\to\infty$ آن را روی $\arg\max p(c\mid x_t)$ متمرکز می‌کند — نمونهٔ دترمینیستیک و نوعی، نه تصادفی از $p(x_t\mid c)$؛ همان \lr{overcooked}.
+
+\subsection*{آ}
+\lr{dropout} تصادفی شرط $c$، یک شبکه را وادار می‌کند هم $\epsilon_\theta(\cdot,c)$ و هم $\epsilon_\theta(\cdot,\emptyset)$ را یاد بگیرد؛ تفاضلشان \lr{implicit classifier} است — این همان «هک هوشمندانه».
+
+\subsection*{ب}
+(۱) نیازی به دسته‌بند جداگانه نیست. (۲) جهت هدایت از مدلی می‌آید که خودش روی $x_t$ نویزی آموزش دیده، پس \lr{off-distribution} نبوده و گرادیان \lr{adversarial} تولید نمی‌کند.
+
+\section*{د) مقایسه و طراحی}
+
+\subsection*{آ}
+\begin{center}
+\begin{tabular}{|p{4cm}|c|c|}
+\hline
+ویژگی & \lr{Classifier Guidance} & \lr{CFG} \\
+\hline
+دسته‌بند جداگانه؟ & بله & خیر \\
+\hline
+آموزش روی تصاویر نویزی؟ & بله، لازم است & موضوعیت ندارد \\
+\hline
+تعداد مدل‌ها & دو & یک \\
+\hline
+خطر گرادیان خصمانه؟ & بالا & کم \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection*{ب}
+\paragraph*{آ} $w$ بزرگ: $\tilde p\propto p\,p(c\mid x)^w$ روی \lr{mode} کلاس تیز می‌شود — کیفیت بالا، تنوع پایین، دقیقاً مطلوب.
+\paragraph*{ب} $w\approx 1$: توان نزدیک یک، $\tilde p$ نزدیک به $p(x\mid c)$ واقعی می‌ماند و تنوع حفظ می‌شود.
+\paragraph*{ج} ترکیب مرحله‌ای: \lr{DDPM} تصادفی در گام‌های اولیه (نویز بالا) برای تنوع، \lr{DDIM} دترمینیستیک در گام‌های پایانی (نویز کم) برای پرداخت کیفیت؛ همراه با $w$ کوچک در ابتدا و بزرگ‌تر در انتها.

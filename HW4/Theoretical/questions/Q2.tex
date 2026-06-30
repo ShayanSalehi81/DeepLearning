@@ -1,0 +1,96 @@
+\section*{الف}
+
+\subsection*{(آ)}
+\begin{flalign*}
+    f^*(v) &= \sup_u (uv-u\log u) \implies u^*=e^{v-1} \implies f^*(v)=e^{v-1} &&
+\end{flalign*}
+\begin{flalign*}
+    D_{\mathrm{KL}}(P\|Q) &= \frac{1}{2}\Big[\tfrac{|\Sigma_2|}{|\Sigma_1|}\big|_{\log}-d+\operatorname{tr}(\Sigma_2^{-1}\Sigma_1)+(\mu_1-\mu_2)^\top\Sigma_2^{-1}(\mu_1-\mu_2)\Big] = \frac{\|\mu_1-\mu_2\|^2}{2\sigma^2} &&
+\end{flalign*}
+
+\subsection*{(ب)}
+$D_{\mathrm{KL}}(P\|Q)$ میانگین‌گرا (\lr{mean-seeking}) است:
+\begin{flalign*}
+    \mu^\star=\arg\min_\mu \mathbb{E}_{x\sim P}\|x-\mu\|^2=\bar\mu &&
+\end{flalign*}
+$D_{\mathrm{KL}}(Q\|P)$ مدگرا (\lr{mode-seeking}) است؛ امید نسبت به $Q$ هر جا $p$ کوچک باشد جریمهٔ نامتناهی می‌دهد، پس $Q$ به یک مد می‌چسبد — ریشهٔ \lr{mode collapse}. چون جملهٔ دوم $D_{\mathrm{JS}}$ همین ساختار را دارد، GAN استاندارد به این رفتار متمایل است.
+
+\subsection*{(ج)}
+\paragraph{الف.} برای $f(u)=u\log u-(u+1)\log(u+1)$:
+\begin{flalign*}
+    T^*(x)=f'(p/q)=\log\frac{p}{p+q}<0 \implies \operatorname{dom}(f^*)=\{t<0\} &&
+\end{flalign*}
+پیامد: وقتی تفکیک‌گر مطمئن شود ($p/q\to0,\infty$)، $T^*\to-\infty,0^-$ و گرادیان مولد محو می‌شود (اشباع).
+
+\paragraph{ب.} برای معکوس KL، $f(u)=-\log u \implies T^*=f'(p/q)=-q/p<0$، که با $\operatorname{dom}(f^*)=\mathbb{R}^-$ سازگار است؛ کلاً $\operatorname{dom}(f^*)$ همان برد $f'$ روی $u>0$ است.
+
+\section*{ب}
+
+\subsection*{(آ)}
+\begin{flalign*}
+    \frac{\partial}{\partial D}[p\log D+q\log(1-D)]=0 \implies D^*=\frac{p}{p+q} &&
+\end{flalign*}
+\begin{flalign*}
+    L_D^*&=\mathbb{E}_P\log\tfrac{p}{(p+q)/2}+\mathbb{E}_Q\log\tfrac{q}{(p+q)/2}-2\log2 \\
+    &=2D_{\mathrm{JS}}(P\|Q)-\log4 &&
+\end{flalign*}
+در تعادل $P=Q$، $D^*\equiv\frac12$ و $L_D^*=-\log4$ ثابت می‌ماند؛ این کفِ تخت یعنی نزدیک تعادل گرادیان مولد محو می‌شود — اشباع.
+
+\subsection*{(ب)}
+\begin{flalign*}
+    \text{آ)}\quad D_{\mathrm{JS}}(\delta_{x_1}\|\delta_{x_2})&=\tfrac12\log\tfrac{1}{1/2}+\tfrac12\log\tfrac{1}{1/2}=\log2 \quad(\text{مستقل از }\|x_1-x_2\|) \\
+    \text{ب)}\quad W_1(\delta_{x_1},\delta_{x_2})&=\|x_1-x_2\| &&
+\end{flalign*}
+
+\subsection*{(ج)}
+چون پشتیبان‌ها مجزا، $D_{\mathrm{JS}}=\log2$ همواره ثابت است، پس $\nabla_\theta D_{\mathrm{JS}}=0$ (اشباع کامل)، در حالی که $W_1$ متناسب با فاصلهٔ هندسی پیوسته تغییر می‌کند و گرادیان غیرصفر می‌دهد.
+
+برای $P=\mathcal N(\mu_P,I),Q=\mathcal N(\mu_Q,I)$، نگاشت بهینه $T(x)=x+(\mu_P-\mu_Q)$ و تابع دوگان بهینه $f^*(x)=\langle x,\tfrac{\mu_P-\mu_Q}{\|\mu_P-\mu_Q\|}\rangle$:
+\begin{flalign*}
+    \nabla_x f^*(x)=\frac{\mu_P-\mu_Q}{\|\mu_P-\mu_Q\|}=\text{const}\neq0 \quad \forall x &&
+\end{flalign*}
+گرادیان در همهٔ نقاط یکسان و غیرصفر است؛ برخلاف $D_{\mathrm{JS}}$ که در نواحی مجزا اشباع می‌شود، WGAN همیشه سیگنال سالم می‌دهد.
+
+\section*{ج}
+
+\subsection*{(آ)}
+\paragraph{الف.} GAN عملاً $D_{\mathrm{JS}}$ کمینه می‌کند که جملهٔ مدگرای معکوس KL در آن وزن دارد $\implies$ تمرکز روی زیرمجموعهٔ مدها (precision بالا) و نادیده‌گرفتن بقیه (recall پایین).
+
+\paragraph{ب.} هدف \lr{score matching} با $D_{\mathrm{KL}}(P\|Q_\theta)$ پیشرو هم‌خانواده است که zero-avoiding است:
+\begin{flalign*}
+    D_{\mathrm{KL}}(P\|Q_\theta)\to\infty \ \text{اگر}\ q_\theta\to0\ \text{در پشتیبان }P &&
+\end{flalign*}
+پس هیچ مدی حذف نمی‌شود (recall بالا) و precision نیز حفظ می‌شود.
+
+\paragraph{ج.} ذاتیِ خودِ $D_{\mathrm{JS}}$ است، نه صرفاً مشکل بهینه‌سازی؛ حتی با تفکیک‌گر کاملاً بهینه، جملهٔ مدگرا پوشش ناقص را پاداش می‌دهد.
+
+\subsection*{(ب)}
+\begin{flalign*}
+    \text{آ)}\quad &\text{GAN}\implies \text{تخمین } p(x)/q(x) \implies \text{در نواحی کم‌چگالی }D^*\to0,1\implies \text{گرادیان محو} \\
+    \text{ب)}\quad &\text{Diffusion}\implies \nabla_x\log p_t(x)\ \text{در سرتاسر فضا تعریف‌شده و غیرصفر} \\
+    \text{ج)}\quad &\text{اگر مدی نادیده گرفته شود}\implies \nabla_x\log p_t(x)\ \text{همچنان نمونه را به سمت آن مد هل می‌دهد} &&
+\end{flalign*}
+
+\section*{د}
+
+\subsection*{(آ)}
+\paragraph{الف.}
+\begin{flalign*}
+    D_{\mathrm{KL}}(P\|Q_\theta)=\frac{\|\theta\|^2}{2\sigma^2}, \qquad W_2^2(P,Q_\theta)=\|\theta\|^2+\operatorname{tr}(\cdots)=\|\theta\|^2 &&
+\end{flalign*}
+هر دو $\propto\|\theta\|^2$ و گرادیان غیرصفر در $\theta\neq0$؛ وقتی پشتیبان‌ها هم‌پوشانند هر دو معیار خوش‌رفتارند.
+
+\paragraph{ب.} از قبل: $D_{\mathrm{JS}}=\log2$ (ثابت) ولی $W_1=\|x_1-x_2\|$ (خطی). چون داده روی منیفلد کم‌بعد است، پشتیبان مولد و داده تقریباً همیشه مجزاست؛ پس $D_{\mathrm{JS}}$ گرادیان محو می‌دهد ولی WGAN حل می‌کند.
+
+\paragraph{ج.} در نواحی دور از بهینه (پشتیبان مجزا)، $D_{\mathrm{JS}}\to\log2$ ثابت $\implies$ چشم‌انداز تخت (\lr{flat}). $W_1$ متناسب با فاصله رشد می‌کند $\implies$ چشم‌انداز شیب‌دار باقی می‌ماند.
+
+\subsection*{(ب)}
+\paragraph{آ.} هدف را با جملهٔ پیشروِ زیرو-avoiding ترکیب می‌کنیم:
+\begin{flalign*}
+    \mathcal{L}=D_{\mathrm{JS}}(P\|Q)+\lambda D_{\mathrm{KL}}(P\|Q), \quad \lambda>0 &&
+\end{flalign*}
+که مدهای ناپوشانده را جریمه و فروپاشی مد را مهار می‌کند.
+
+\paragraph{ب.} انتشار، چون هدفش zero-avoiding است و میدان امتیاز همه‌جا گرادیان سالم می‌دهد، پوشش کامل بدون تنظیم ظریفِ تعادل مین‌ماکس تضمین می‌کند.
+
+\paragraph{ج.} FID یک عدد مجتمع از فاصلهٔ دو گاوسی برازش‌شده است و کیفیت را از تنوع تفکیک نمی‌کند؛ Precision/Recall این دو محور را جدا می‌سازند و دقیقاً همان \lr{trade-off} کیفیت-پوشش را آشکار می‌کنند.
