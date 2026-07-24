@@ -1,0 +1,151 @@
+\subsection*{بخش اول}
+
+\subsubsection*{آ}
+\begin{flalign*}
+    \text{\lr{Generative}}:\quad 
+    \max_\theta \log p_\theta(x)
+    \;\Rightarrow\;
+    z \text{ باید برای بازسازی/نمونه‌سازی کل } x \text{ کافی باشد}
+    &&
+\end{flalign*}
+\begin{flalign*}
+    \text{\lr{SSL}}:\quad
+    \max_\theta I\!\left(f_\theta(t_1(x));f_\theta(t_2(x))\right)
+    \;\text{یا}\;
+    \min_\theta \mathcal L_{\text{\lr{pretext}}}
+    \;\Rightarrow\;
+    z \text{ فقط نسبت به تبدیل‌های تعریف‌شده پایدار و تمایزبخش است}
+    &&
+\end{flalign*}
+پس هدف \lr{SSL} مدل‌کردن کامل $p(x)$ نیست، بلکه حذف جزئیات nuisance و حفظ عوامل قابل‌انتقال است.
+
+\subsubsection*{ب}
+\begin{flalign*}
+    y_{\text{\lr{rot}}} &= r \in \{0^\circ,90^\circ,180^\circ,270^\circ\} \\
+    \min_\theta \mathbb E\,\ell(q(f_\theta(R_r x)),r)
+    &\Rightarrow
+    f_\theta(x) \text{ حساس به سرنخ‌های جهت، بافت، مرز و هندسهٔ محلی می‌شود}
+    &&
+\end{flalign*}
+اما:
+\begin{flalign*}
+    y_{\text{\lr{downstream}}} &= \text{\lr{semantic class}}, \qquad
+    r \not\equiv y_{\text{\lr{downstream}}}
+    &&
+\end{flalign*}
+بنابراین اطلاعات بهینه برای \lr{pretext} الزاماً همان اطلاعات معنایی نیست و نمایش دچار \lr{task-specific bias} می‌شود.
+
+\subsubsection*{ج}
+\begin{flalign*}
+    \text{\lr{Acc}}_{\text{\lr{Jigsaw}}}=99\%
+    &\Rightarrow
+    I(z;y_{\text{\lr{jigsaw}}}) \text{ زیاد است} \\
+    \text{\lr{Acc}}_{\text{\lr{ImageNet}}}=40\%
+    &\Rightarrow
+    I(z;y_{\text{\lr{semantic}}}) \text{ و/یا خطی‌بودن جداسازی معنایی کم است}
+    &&
+\end{flalign*}
+پس مدل مسئلهٔ \lr{pretext} را با سرنخ‌های سطحی حل کرده، نه با ساختن نمایش معنایی قابل‌انتقال.
+
+\subsection*{بخش دوم}
+
+\subsubsection*{آ}
+\begin{flalign*}
+    \frac{s_+}{\tau} &= \frac{0.9}{0.1}=9,
+    &
+    \frac{s_1}{\tau}=2,\quad
+    \frac{s_2}{\tau}=4,\quad
+    \frac{s_3}{\tau}=5
+    &&
+\end{flalign*}
+\begin{flalign*}
+    L
+    &= -\log
+    \frac{e^9}{e^9+e^2+e^4+e^5} \\
+    &= \log\frac{8103+7+55+148}{8103} \\
+    &= \log\frac{8313}{8103}
+    \approx \log(1.0259)
+    \approx 0.0256
+    &&
+\end{flalign*}
+
+\subsubsection*{ب}
+اگر همهٔ امتیازها برابر باشند:
+\begin{flalign*}
+    s_+=s_1=\cdots=s_{N-1}=c
+    \quad &\Rightarrow \quad
+    \frac{\exp(c/\tau)}
+    {\exp(c/\tau)+\sum_{j=1}^{N-1}\exp(c/\tau)}
+    =
+    \frac{e^{c/\tau}}{N e^{c/\tau}}
+    =
+    \frac1N
+    \\
+    L &= -\log\frac1N=\log N
+    &&
+\end{flalign*}
+
+\subsubsection*{ج}
+\begin{flalign*}
+    MI(f(x),f(x^+)) &\ge \log N - L
+    &&
+\end{flalign*}
+پس با ثابت ماندن $L$:
+\begin{flalign*}
+    N \uparrow
+    \quad &\Rightarrow \quad
+    \log N \uparrow
+    \quad \Rightarrow \quad
+    \text{کران پایین } MI \text{ بزرگ‌تر می‌شود}
+    &&
+\end{flalign*}
+ولی:
+\begin{flalign*}
+    L \not\downarrow \text{ متناسب با } \log N
+    \quad &\Rightarrow \quad
+    \log N-L \text{ شل می‌شود}
+    &&
+\end{flalign*}
+افزایش $N$ نمونه‌های منفی سخت‌تر می‌دهد و فشار تمایزبخشی را زیاد می‌کند، اما کیفیت نتیجه به \lr{tightness} همین کران وابسته است.
+
+\subsection*{بخش سوم}
+
+\subsubsection*{آ}
+\begin{flalign*}
+    h &= f(x), \qquad z=g(h)
+    &&
+\end{flalign*}
+\begin{flalign*}
+    \mathcal L_{\text{\lr{InfoNCE}}}(z)
+    \quad &\Rightarrow \quad
+    z \text{ باید نسبت به augmentations بسیار invariant باشد}
+    &&
+\end{flalign*}
+اگر loss مستقیم روی $h$ اعمال شود:
+\begin{flalign*}
+    h \to \text{ حذف اطلاعاتی که برای contrastive loss مزاحم‌اند}
+    &&
+\end{flalign*}
+ولی با \lr{projection head}:
+\begin{flalign*}
+    h \to \text{ نمایش عمومی‌تر و معنایی‌تر}, \qquad
+    z \to \text{ فضای مخصوص \lr{contrastive}}
+    &&
+\end{flalign*}
+بنابراین در \lr{downstream}، $g$ حذف می‌شود و از $h$ استفاده می‌کنیم.
+
+\subsubsection*{ب}
+\begin{flalign*}
+    2N &= 2\times 8192 = 16384
+    &&
+\end{flalign*}
+\begin{flalign*}
+    \text{\lr{Memory}}
+    &= (2N)^2 \times 4 \\
+    &= 16384^2 \times 4 \\
+    &= 268435456 \times 4 \\
+    &= 1073741824 \text{ bytes}
+    =
+    1 \text{ GiB}
+    &&
+\end{flalign*}

@@ -1,0 +1,200 @@
+\subsection*{بخش اول}
+
+\subsubsection*{آ-۱}
+\begin{flalign*}
+    \theta_k^{(t)}
+    &= m^t\theta_k^{(0)}+(1-m)\sum_{i=1}^{t}m^{t-i}\theta_q^{(i)} &&\\
+    m=0.999
+    &\Rightarrow
+    \tau_{\mathrm{EMA}}\simeq \frac{1}{1-m}=1000,\qquad
+    t_{1/2}=\frac{\log(1/2)}{\log m}\simeq 693 &&\\
+    \|\theta_k^{(t)}-\theta_k^{(t-1)}\|
+    &=(1-m)\|\theta_q^{(t)}-\theta_k^{(t-1)}\|
+    =10^{-3}\|\theta_q^{(t)}-\theta_k^{(t-1)}\| &&
+\end{flalign*}
+پس کلیدهای ذخیره‌شده در \lr{Queue}، با وجود تولیدشدن در زمان‌های متفاوت، در یک دستگاه نمایش تقریباً ایستا باقی می‌مانند؛ وگرنه نمونه‌های منفی کهنه، نمایش‌های ناسازگار با پرس‌وجوی فعلی می‌شدند.
+
+\subsubsection*{آ-۲}
+اگر تغییر $\delta$ در $\theta_q$ پایدار بماند:
+\begin{flalign*}
+    \Delta\theta_k^{(T)}
+    &=(1-m)\sum_{i=0}^{T-1}m^i\delta
+    =(1-m^T)\delta &&\\
+    m=0.999
+    &\Rightarrow
+    1-m^T\simeq 1-e^{-T/1000}\simeq \frac{T}{1000}
+    \qquad (T\ll 1000) &&
+\end{flalign*}
+اگر تغییر فقط یک شوک یک‌گامی باشد:
+\begin{flalign*}
+    \Delta\theta_k^{(T)}
+    &=(1-m)m^{T-1}\delta &&
+\end{flalign*}
+بنابراین نوسان ناگهانی ابتدا با ضریب $10^{-3}$ وارد شاخهٔ کلید می‌شود و سپس با ضریب $m^{T-1}$ مستهلک می‌گردد؛ برای $m\simeq 1$، شاخهٔ کلید یک فیلتر پایین‌گذر با ثابت زمانی بزرگ است.
+
+\subsection*{بخش دوم}
+
+\subsubsection*{آ-۱}
+بگذارید $E=PW-W'$. آنگاه:
+\begin{flalign*}
+    L
+    &=\operatorname{tr}(E\Sigma E^\top) &&\\
+    \nabla_P L
+    &=2E\Sigma W^\top &&\\
+    \nabla_W L
+    &=2P^\top E\Sigma &&\\
+    W=W'=0
+    &\Rightarrow
+    E=0
+    \Rightarrow
+    \nabla_P L=0,\quad
+    \nabla_W L=0,\quad
+    \dot W'=\eta(W-W')=0 &&
+\end{flalign*}
+پس نمایش ثابت صفر یک نقطهٔ بحرانی و تعادل دینامیکی است.
+
+\subsubsection*{آ-۲}
+در رژیم هم‌ترازی $W'\simeq W$:
+\begin{flalign*}
+    \nabla_P L
+    &=2(PW-W)\Sigma W^\top &&\\
+    &=2(P-I)W\Sigma W^\top &&\\
+    &=2(P-I)F,\qquad F=W\Sigma W^\top &&\\
+    \dot P
+    &=-\nabla_P L=-2(P-I)F &&
+\end{flalign*}
+در پایهٔ قطری مشترک:
+\begin{flalign*}
+    F
+    &=\operatorname{diag}(w_j^2\lambda_j)
+    =\operatorname{diag}(\sigma_j) &&\\
+    \dot p_j
+    &=-2\sigma_j(p_j-1) &&\\
+    p_j(t)-1
+    &=(p_j(0)-1)e^{-2\sigma_j t} &&\\
+    \sigma_j>0
+    &\Rightarrow p_j(t)\to 1,\qquad
+    \sigma_j=0\Rightarrow p_j(t)=p_j(0) &&
+\end{flalign*}
+
+\subsubsection*{آ-۳}
+\begin{flalign*}
+    \nabla_W L
+    &=2P(PW-W)\Sigma &&\\
+    &=2P(P-I)W\Sigma &&\\
+    \dot W
+    &=-2P(P-I)W\Sigma &&
+\end{flalign*}
+پس برای مؤلفهٔ $j$:
+\begin{flalign*}
+    \dot w_j
+    &=-2\lambda_j p_j(p_j-1)w_j &&\\
+    w_j(t)
+    &=w_j(0)e^{r_jt},\qquad
+    r_j=-2\lambda_j p_j(p_j-1) &&\\
+    0<p_j<1
+    &\Rightarrow
+    p_j(p_j-1)<0
+    \Rightarrow
+    r_j>0 &&
+\end{flalign*}
+بنابراین فروپاشی با وجود \lr{Predictor} نقطهٔ زینی ناپایدار است، نه جاذب. اگر \lr{Predictor} حذف شود و $P=I$ ثابت بماند:
+\begin{flalign*}
+    r_j
+    &=-2\lambda_j\cdot 1\cdot 0=0 &&
+\end{flalign*}
+و سازوکار دافعه از فروپاشی از بین می‌رود. \lr{Stop-gradient} هدف را از دنبال‌کردن همان گرادیان بازمی‌دارد و \lr{EMA} هم‌ترازی کند $W'\simeq W$ را پایدار می‌کند.
+
+\subsubsection*{ب}
+در \lr{DINO}:
+\begin{flalign*}
+    p_t(y|x)
+    &=\operatorname{softmax}\!\left(\frac{g_t(x)-c}{\tau_t}\right),
+    \qquad
+    c\leftarrow \mu c+(1-\mu)\frac{1}{B}\sum_{b=1}^{B}g_t(x_b) &&\\
+    p_s(y|x)
+    &=\operatorname{softmax}\!\left(\frac{g_s(x)}{\tau_s}\right) &&\\
+    L
+    &=-\sum_y p_t(y|x)\log p_s(y|x) &&
+\end{flalign*}
+\lr{Centering} مانع تسلط یک prototype ثابت می‌شود:
+\begin{flalign*}
+    g_t(x_b)=a
+    \quad \forall b
+    &\Rightarrow
+    g_t(x_b)-c\simeq 0
+    \Rightarrow
+    p_t(y|x_b)\simeq \frac{1}{K} &&
+\end{flalign*}
+\lr{Sharpening} با $\tau_t\ll 1$ آنتروپی شرطی را کم می‌کند:
+\begin{flalign*}
+    \tau_t\downarrow
+    &\Rightarrow
+    H(Y|X)\downarrow &&
+\end{flalign*}
+پس تعادل مطلوب:
+\begin{flalign*}
+    \text{\lr{Centering}}
+    &: \quad H(Y)\uparrow &&\\
+    \text{\lr{Sharpening}}
+    &: \quad H(Y|X)\downarrow &&\\
+    I(X;Y)
+    &=H(Y)-H(Y|X)\uparrow &&
+\end{flalign*}
+نمونه‌های منفی صریح حذف شده‌اند؛ رقابت prototypeها در \lr{Softmax} و آمار batch همان نقش دافعهٔ توزیعی را ایفا می‌کند.
+
+\subsection*{بخش سوم}
+
+\subsubsection*{آ-۱}
+در تصویر، همبستگی مکانی وصله‌ها زیاد است:
+\begin{flalign*}
+    r_{\mathrm{mask}}=0.15
+    &\Rightarrow
+    \Pr(\text{همسایه‌های مرئی زیاد برای هر وصلهٔ مخفی})\approx 1 &&\\
+    \hat x_i
+    &\approx
+    \operatorname{Interp}\{x_j:j\in \mathcal N(i),\, j\notin M\} &&
+\end{flalign*}
+پس مدل می‌تواند با ادامه‌دادن بافت و لبه‌های محلی، بدون فهم معنایی، loss بازسازی را کم کند. در \lr{MAE}:
+\begin{flalign*}
+    r_{\mathrm{mask}}=0.75
+    &\Rightarrow
+    |\text{visible}|=0.25N &&
+\end{flalign*}
+و بازسازی ناچار به استفاده از ساختار سراسری شیء و صحنه می‌شود.
+
+\subsubsection*{آ-۲}
+\begin{flalign*}
+    N&=256,\qquad r_{\mathrm{mask}}=0.75 &&\\
+    N_{\mathrm{vis}}
+    &=(1-r_{\mathrm{mask}})N=0.25\times 256=64 &&\\
+    \frac{C_{\mathrm{MAE}}}{C_{\mathrm{full}}}
+    &=\frac{N_{\mathrm{vis}}^2}{N^2}
+    =\left(\frac{64}{256}\right)^2
+    =\frac{1}{16}
+    =6.25\% &&\\
+    \text{صرفه‌جویی}
+    &=1-6.25\%=93.75\% &&
+\end{flalign*}
+
+\subsubsection*{آ-۳}
+برای روش‌های مقابله‌ای:
+\begin{flalign*}
+    L_{\mathrm{CL}}
+    &=-\log
+    \frac{\exp(s(q,k^+)/\tau)}
+    {\sum_{i=1}^{K}\exp(s(q,k_i)/\tau)} &&\\
+    \text{چگالی سیگنال}
+    &\sim O(1)\quad \text{هدف سراسری برای هر تصویر} &&
+\end{flalign*}
+برای \lr{MIM}:
+\begin{flalign*}
+    L_{\mathrm{MIM}}
+    &=\sum_{j\in M}\ell(\hat x_j,x_j) &&\\
+    |M|
+    &=r_{\mathrm{mask}}N &&\\
+    r_{\mathrm{mask}}=0.75,\; N=256
+    &\Rightarrow
+    |M|=192 &&
+\end{flalign*}
+پس هر تصویر صدها قید بازسازی محلی-معنایی تولید می‌کند. در \lr{ViT-Huge} ظرفیت مدل زیاد است و objective کم‌چگال مقابله‌ای زود اشباع می‌شود، اما \lr{MIM} با سیگنال متراکم وصله‌ای، گرادیان غنی‌تر، regularization قوی‌تر، و انطباق مستقیم با معماری توکنی \lr{ViT} بهتر مقیاس می‌گیرد.

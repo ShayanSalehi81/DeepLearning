@@ -1,0 +1,245 @@
+\subsection*{الف}
+در \lr{projector} ساده:
+\begin{flalign*}
+    P(V) &= \mathrm{MLP}(V), \qquad P(V)\in \mathbb{R}^{K\times d_L} &&
+\end{flalign*}
+
+ولی در \lr{Q-Former}:
+\begin{flalign*}
+    H &= \mathrm{CrossAttn}(Q,V) \\
+      &= \mathrm{softmax}\!\left(\frac{QW_Q(VW_K)^\top}{\sqrt d}\right)VW_V,
+      \qquad H\in \mathbb{R}^{M\times d_L}, \quad M\ll K &&
+\end{flalign*}
+
+پس:
+\begin{flalign*}
+    \mathrm{MLP}(V) &: \text{نگاشت مستقیم، بدون انتخاب تطبیقی ویژگی‌ها} \\
+    \mathrm{Q\mbox{-}Former} &: \text{فشرده‌سازی آموختنی، انتخاب معنایی، حذف نویز، هم‌ترازسازی با فضای } \mathrm{LLM} &&
+\end{flalign*}
+
+برای \lr{VQA} و \lr{captioning}، خروجی باید شیء، رابطه، صفت و ناحیهٔ مهم تصویر را خلاصه کند؛ بنابراین:
+\begin{flalign*}
+    M\ll K,\qquad
+    H=\sum_{j=1}^{K}\alpha_{ij}v_j,
+    \qquad
+    \alpha_{ij}=\mathrm{Attn}(q_i,v_j) &&
+\end{flalign*}
+یعنی \lr{Q-Former} یک bottleneck معنایی می‌سازد، در حالی که \lr{projector} فقط embedding خام patchها را منتقل می‌کند.
+
+\subsection*{ب}
+\begin{flalign*}
+    \mathrm{Perf}(M) &= a(1-e^{-bM})-cM \\
+    \mathrm{Perf}'(M) &= ab e^{-bM}-c \\
+    \mathrm{Perf}''(M) &= -ab^2e^{-bM}<0 &&
+\end{flalign*}
+
+اگر $ab>c$:
+\begin{flalign*}
+    \mathrm{Perf}'(M^\star)=0
+    \quad &\Longrightarrow \quad
+    ab e^{-bM^\star}=c \\
+    M^\star &= \frac{1}{b}\log\frac{ab}{c} &&
+\end{flalign*}
+
+اگر $ab\le c$، افزایش query token از ابتدا به‌صرفه نیست. بنابراین:
+\begin{flalign*}
+    M<M^\star &: \text{اطلاعات تصویری مفید غالب است} \\
+    M>M^\star &: \text{هزینه، نویز و بار محاسباتی غالب است} &&
+\end{flalign*}
+
+\subsection*{ج}
+\begin{flalign*}
+    \text{retrieval / zero-shot classification}
+    &\Rightarrow \mathrm{CLIP} &&
+\end{flalign*}
+\begin{flalign*}
+    z_I=f_I(I),\qquad z_T=f_T(T),\qquad
+    s(I,T)=\frac{z_I^\top z_T}{\|z_I\|\|z_T\|} &&
+\end{flalign*}
+هدف آموزشی:
+\begin{flalign*}
+    \mathcal{L}_{\mathrm{contrastive}}
+    &=
+    -\log
+    \frac{\exp(s(I_i,T_i)/\tau)}
+    {\sum_j \exp(s(I_i,T_j)/\tau)} &&
+\end{flalign*}
+دادهٔ مناسب: image-text pair بزرگ؛ اتصال بینایی و زبان: فضای embedding مشترک.
+
+\begin{flalign*}
+    \text{VQA با دادهٔ محدود}
+    &\Rightarrow \mathrm{BLIP\mbox{-}2} &&
+\end{flalign*}
+\begin{flalign*}
+    V=f_I(I),\qquad
+    H=\mathrm{CrossAttn}(Q,V),\qquad
+    p(a|I,q)=\mathrm{LLM}(q,H) &&
+\end{flalign*}
+هدف آموزشی:
+\begin{flalign*}
+    \mathcal{L}
+    =
+    \lambda_2\mathcal{L}_{\mathrm{caption}}
+    +
+    \lambda_3\mathcal{L}_{\mathrm{VQA}} &&
+\end{flalign*}
+دادهٔ مناسب: caption و question-answer؛ اتصال: query tokenهای کم، با image encoder و LLM عمدتاً frozen.
+
+\begin{flalign*}
+    \text{assistant چندرسانه‌ای instruction-following}
+    &\Rightarrow \mathrm{LLaVA} &&
+\end{flalign*}
+\begin{flalign*}
+    X_v=P(f_I(I)),\qquad
+    p(y|I,u)=\prod_t p(y_t|y_{<t},u,X_v) &&
+\end{flalign*}
+هدف آموزشی:
+\begin{flalign*}
+    \mathcal{L}_{\mathrm{instruction}}
+    =
+    -\sum_t \log p(y_t|y_{<t},u,I) &&
+\end{flalign*}
+دادهٔ مناسب: multimodal instruction/dialogue؛ اتصال: projection به فضای tokenهای LLM و fine-tuning دستورمحور.
+
+\subsection*{د}
+برای retrieval:
+\begin{flalign*}
+    \mathrm{LLaVA}
+    &\not\approx \text{بهینه}:
+    \quad
+    \text{مدل generative است، embedding متقارن تصویر-متن ندارد، scoring آن autoregressive و پرهزینه است.} &&
+\end{flalign*}
+
+برای VQA با دادهٔ محدود:
+\begin{flalign*}
+    \mathrm{CLIP}
+    &\not\approx \text{کافی}:
+    \quad
+    p(a|I,q)\ \text{ندارد، فقط شباهت image-text را می‌آموزد.} \\
+    \mathrm{LLaVA}
+    &\not\approx \text{بهینه}:
+    \quad
+    \text{به دادهٔ instruction و fine-tuning سنگین‌تر نیاز دارد.} &&
+\end{flalign*}
+
+برای assistant:
+\begin{flalign*}
+    \mathrm{CLIP}
+    &\not\approx \text{کافی}:
+    \quad
+    \text{decoder زبانی، حافظهٔ مکالمه و instruction-following ندارد.} \\
+    \mathrm{BLIP\mbox{-}2}
+    &\not\approx \text{کافی اگر instruction-tuned نباشد}:
+    \quad
+    \text{برای گفت‌وگوی چندنوبتی و تبعیت دقیق از دستور ضعیف‌تر است.} &&
+\end{flalign*}
+
+\subsection*{ه}
+\begin{flalign*}
+    \text{memory/compute محدود}
+    &\Rightarrow
+    \begin{cases}
+        \mathrm{CLIP} & \text{برای retrieval/zero-shot} \\
+        \mathrm{BLIP\mbox{-}2},\ M\ \text{کوچک} & \text{برای VQA/caption}
+    \end{cases} \\
+    &\Rightarrow \text{اجتناب از fine-tuning کامل LLaVA} &&
+\end{flalign*}
+
+\begin{flalign*}
+    \text{کمبود instruction data}
+    &\Rightarrow
+    \mathrm{BLIP\mbox{-}2}
+    \quad
+    \text{با image encoder و LLM frozen} &&
+\end{flalign*}
+
+\begin{flalign*}
+    \text{نیاز شدید به conversation/reasoning/instruction-following}
+    &\Rightarrow
+    \mathrm{LLaVA}
+    \quad
+    \text{یا BLIP-2 همراه instruction tuning} &&
+\end{flalign*}
+
+\subsection*{و}
+\begin{flalign*}
+    \mathcal{L}_{total}
+    &=
+    \lambda_1\mathcal{L}_{contrastive}
+    +
+    \lambda_2\mathcal{L}_{caption}
+    +
+    \lambda_3\mathcal{L}_{VQA}
+    +
+    \lambda_4\mathcal{L}_{instruction},
+    \qquad
+    \lambda_i\ge 0 &&
+\end{flalign*}
+
+\begin{flalign*}
+    \lambda_1 &: \text{هم‌ترازی image-text، retrieval، zero-shot} \\
+    \lambda_2 &: \text{توصیف عمومی تصویر و grounding زبانی} \\
+    \lambda_3 &: \text{پاسخ‌گویی سؤال‌محور و انتخاب ناحیهٔ مرتبط} \\
+    \lambda_4 &: \text{تبعیت از دستور، مکالمه، پاسخ ساختاریافته} &&
+\end{flalign*}
+
+اگر یکی از ضرایب غالب شود:
+\begin{flalign*}
+    \lambda_1\gg &: \text{مدل retrievalمحور و generative ضعیف} \\
+    \lambda_2\gg &: \text{caption خوب ولی reasoning/VQA محدود} \\
+    \lambda_3\gg &: \text{تخصص روی VQA و افت generalization} \\
+    \lambda_4\gg &: \text{وابستگی به سبک instruction data و احتمال overfitting رفتاری} &&
+\end{flalign*}
+
+\subsection*{ز}
+انتخاب مناسب:
+\begin{flalign*}
+    \boxed{
+    \mathrm{BLIP\mbox{-}2\ style}
+    :
+    \text{frozen image encoder}
+    +
+    \text{trainable Q-Former}
+    +
+    \text{frozen / LoRA LLM}
+    }
+    &&
+\end{flalign*}
+
+\begin{flalign*}
+    V &= f_I(I),\qquad f_I \ \text{frozen} \\
+    H &= \mathrm{CrossAttn}(Q,V),\qquad Q,\mathrm{Q\mbox{-}Former}\ \text{trainable} \\
+    p(a|I,q) &= \mathrm{LLM}(q,H),\qquad \mathrm{LLM}\ \text{frozen یا LoRA سبک} &&
+\end{flalign*}
+
+هدف آموزشی:
+\begin{flalign*}
+    \mathcal{L}
+    =
+    \lambda_1\mathcal{L}_{contrastive}
+    +
+    \lambda_2\mathcal{L}_{caption}
+    +
+    \lambda_3\mathcal{L}_{VQA},
+    \qquad
+    \lambda_3>\lambda_2>\lambda_1,\quad
+    \lambda_4\approx 0 &&
+\end{flalign*}
+
+دلیل:
+\begin{flalign*}
+    \text{داده محدود}
+    &\Rightarrow
+    \text{پارامتر trainable کم} \\
+    \text{نیاز به پاسخ سؤال}
+    &\Rightarrow
+    \text{LLM + Q-Former} \\
+    \text{نیاز به zero-shot نسبی}
+    &\Rightarrow
+    \mathcal{L}_{contrastive}
+    \text{ و image encoder از پیش‌آموزش‌دیده} \\
+    \text{هزینه}
+    &\approx
+    O(MKd)+O((T+M)^2),
+    \qquad M\ll K &&
+\end{flalign*}

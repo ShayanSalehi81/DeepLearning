@@ -1,0 +1,264 @@
+\subsection*{الف}
+برای \lr{retrieval} و \lr{zero-shot classification} کافی است هم‌ترازی سراسری تصویر-متن خوب باشد:
+\begin{flalign*}
+    p_{ij}^{I \to T}
+    &= \frac{\exp(s_{ij})}{\sum_{k=1}^{N}\exp(s_{ik})}, \qquad
+    \hat{T}(I_i)=\arg\max_j s_{ij} &&
+\\
+    \hat{y}(I)
+    &= \arg\max_c \ \tau z_I^\top z_T(c) &&
+\end{flalign*}
+
+اما تابع هزینه فقط زوج درست را از کل منفی‌ها جدا می‌کند، نه الزاماً ساختار رابطه‌ای جمله را:
+\begin{flalign*}
+    T_1 &= \text{\lr{blue sphere above red cube}}, \qquad
+    T_2 = \text{\lr{red cube above blue sphere}} &&
+\\
+    \{ \text{اشیا و رنگ‌ها در } T_1 \}
+    &= \{ \text{اشیا و رنگ‌ها در } T_2 \} &&
+\\
+    z_T(T_1) \approx z_T(T_2)
+    &\implies
+    s(I_1,T_1) \approx s(I_1,T_2) &&
+\end{flalign*}
+
+پس اگر \lr{hard negatives} رابطهٔ فضایی را عوض نکنند یا کم باشند، فضای \lr{embedding} می‌تواند بیشتر بر هم‌وقوعی اشیا، رنگ و کلاس تکیه کند تا جهت رابطه‌هایی مثل \lr{above}/\lr{below}.
+
+\subsection*{ب}
+برای یک تصویر:
+\begin{flalign*}
+    \ell_i
+    &= -\log \frac{\exp(s_{ii})}{\sum_j \exp(s_{ij})} &&
+\\
+    p_{ij}
+    &= \frac{\exp(s_{ij})}{\sum_k \exp(s_{ik})} &&
+\\
+    \frac{\partial \ell_i}{\partial s_{ij}}
+    &= p_{ij} - \mathbb{1}[j=i] &&
+\\
+    \frac{\partial \ell_i}{\partial z_i^I}
+    &= \tau \left(\sum_j p_{ij} z_j^T - z_i^T\right) &&
+\end{flalign*}
+
+اگر منفی‌های آسان زیاد باشند:
+\begin{flalign*}
+    D
+    &= \exp(s^+) + N_e\exp(a) + N_h\exp(b) &&
+\\
+    M_e
+    &= \sum_{j \in E} p_{ij}
+     = \frac{N_e\exp(a)}{D}, \qquad
+    M_h
+     = \frac{N_h\exp(b)}{D} &&
+\\
+    N_e\exp(a) \gg N_h\exp(b)
+    &\implies
+    M_e \gg M_h &&
+\\
+    \frac{\partial \ell_i}{\partial z_i^I}
+    &\approx
+    \tau \left(M_e \mu_E - z_i^T\right) &&
+\end{flalign*}
+
+در این حالت جهت گرادیان را مرکز جرم منفی‌های آسان تعیین می‌کند. اگر $\mu_E$ عمدتاً بر شباهت‌های سطحی مثل رنگ یا هویت شیء بنا شده باشد، سیگنال رابطه‌ای حاصل از \lr{hard negatives} در گرادیان ضعیف می‌شود.
+
+\subsection*{ج}
+\lr{Compositionality} یعنی:
+\begin{flalign*}
+    \text{معنا}(o_1,r,o_2)
+    &= F\big(\text{معنا}(o_1),\text{معنا}(r),\text{معنا}(o_2),\text{ترتیب}\big) &&
+\\
+    z_T(o_1,r,o_2)
+    &\neq z_T(o_2,r,o_1), \qquad
+    z_T(o_1,r,o_2) \neq z_T(o_1,r',o_2) &&
+\end{flalign*}
+
+دو تغییر کافی:
+\begin{flalign*}
+    \ell_i^{\text{\lr{hard}}}
+    &=
+    -\log
+    \frac{\exp(s(I_i,T_i^+))}
+    {\exp(s(I_i,T_i^+))+\sum_{T^- \in H_i}\exp(s(I_i,T^-))} &&
+\\
+    H_i
+    &=
+    \{T^-:\text{اشیا و رنگ‌ها ثابت، رابطه یا ترتیب عوض شده است}\} &&
+\end{flalign*}
+
+یا با \lr{margin} رابطه‌ای:
+\begin{flalign*}
+    \ell_i^{\text{\lr{rel}}}
+    &=
+    \sum_{T^- \in H_i}
+    \max\big(0,\gamma - s(I_i,T_i^+) + s(I_i,T^-)\big) &&
+\end{flalign*}
+
+همچنین دادهٔ پادواقعی می‌سازیم:
+\begin{flalign*}
+    (I,T^+)
+    &: \text{\lr{blue sphere above red cube}} &&
+\\
+    (I,T^-)
+    &: \text{\lr{blue sphere below red cube}} &&
+\\
+    \text{تفاوت}
+    &= \text{فقط در رابطهٔ فضایی، نه در اشیا و رنگ‌ها} &&
+\end{flalign*}
+
+\subsection*{د}
+در \lr{prompt learning}:
+\begin{flalign*}
+    T_c(C)
+    &= [C_1,\ldots,C_m,c] &&
+\\
+    C^\star
+    &= \arg\min_C
+    \sum_{(I,y)}
+    -\log
+    \frac{\exp(\tau z_I^\top z_T(T_y(C)))}
+    {\sum_c \exp(\tau z_I^\top z_T(T_c(C)))} &&
+\end{flalign*}
+
+پس $C_1,\ldots,C_m$ در فضای پیوستهٔ \lr{text encoder} بهترین قالب را برای دادهٔ \lr{few-shot} پیدا می‌کنند؛ بنابراین از \lr{prompt} دستی که گسسته، زبانی و شکننده است بهترند.
+
+اما:
+\begin{flalign*}
+    \#\text{پارامترها}
+    &= md \quad \text{یا در حالت کلاسی } |\mathcal{Y}|md &&
+\\
+    K \ll md
+    &\implies
+    C^\star \text{ می‌تواند بایاس کلاس‌های آموزشی را حفظ کند} &&
+\\
+    c' \notin \mathcal{Y}_{\text{train}}
+    &\implies
+    z_T([C^\star,c'])
+    \text{ الزاماً روی منیفولد زبانی مناسب نیست} &&
+\end{flalign*}
+
+پس روی کلاس یا دامنهٔ ندیده امکان \lr{overfitting} وجود دارد.
+
+\subsection*{ه}
+تعریف دو حالت:
+\begin{flalign*}
+    \text{\lr{unified context}}:
+    \qquad
+    T_c &= [C_1,\ldots,C_m,c],
+    \qquad
+    \#\theta = md &&
+\\
+    \text{\lr{class-specific context}}:
+    \qquad
+    T_c &= [C_{c,1},\ldots,C_{c,m},c],
+    \qquad
+    \#\theta = |\mathcal{Y}|md &&
+\end{flalign*}
+
+مقایسهٔ \lr{bias-variance}:
+\begin{flalign*}
+    \text{\lr{unified}}
+    &: \text{ظرفیت کمتر، bias بیشتر، variance کمتر، پایدارتر، انتقال بهتر به کلاس ندیده} &&
+\\
+    \text{\lr{class-specific}}
+    &: \text{ظرفیت بیشتر، bias کمتر، variance بیشتر، خطر overfitting بیشتر} &&
+\end{flalign*}
+
+پس:
+\begin{flalign*}
+    K \text{ کم یا کلاس ندیده مهم}
+    &\implies
+    \text{\lr{unified context}} &&
+\\
+    K \text{ زیاد و کلاس‌ها ناهمگن}
+    &\implies
+    \text{\lr{class-specific context}} &&
+\end{flalign*}
+
+\subsection*{و}
+گرادیان کل:
+\begin{flalign*}
+    \nabla \mathcal{L}
+    &=
+    \lambda_c \nabla \mathcal{L}_{CLIP}
+    +
+    \lambda_g \nabla \mathcal{L}_{gen} &&
+\end{flalign*}
+
+اثر وزن‌ها:
+\begin{flalign*}
+    \lambda_c \uparrow
+    &\implies
+    \text{\lr{zero-shot classification}} \uparrow,\quad
+    \text{\lr{image-text retrieval}} \uparrow &&
+\\
+    \lambda_c \downarrow
+    &\implies
+    \text{هم‌ترازی تصویر-متن و جداسازی کلاسی ضعیف‌تر} &&
+\\
+    \lambda_g \uparrow
+    &\implies
+    \text{\lr{caption generation}} \uparrow,\quad
+    \text{جزئیات زبانی و توصیفی بیشتر} &&
+\\
+    \lambda_g \gg \lambda_c
+    &\implies
+    \text{کاهش خاصیت تمایزی embedding برای retrieval/classification} &&
+\\
+    \lambda_g \downarrow
+    &\implies
+    \text{کاهش کیفیت و روانی caption} &&
+\end{flalign*}
+
+برای دادهٔ برچسب‌دار محدود:
+\begin{flalign*}
+    \lambda_g > 0
+    &\implies
+    \text{نظارت dense در سطح token و regularization} &&
+\\
+    \lambda_c > 0
+    &\implies
+    \text{حفظ فضای مشترک تصویر-متن برای retrieval و zero-shot} &&
+\\
+    \lambda_g \gg \lambda_c
+    &\implies
+    \text{یادگیری توزیع caption به‌جای مرز تصمیم کلاسی} &&
+\end{flalign*}
+
+\subsection*{ز}
+ترکیب دو هدف زمانی مفید است که گرادیان‌ها هم‌جهت باشند:
+\begin{flalign*}
+    \left\langle
+    \nabla \mathcal{L}_{CLIP},
+    \nabla \mathcal{L}_{gen}
+    \right\rangle > 0
+    &\implies
+    \text{انتقال مثبت، grounding بهتر، regularization} &&
+\end{flalign*}
+
+اما در صورت تعارض:
+\begin{flalign*}
+    \left\langle
+    \nabla \mathcal{L}_{CLIP},
+    \nabla \mathcal{L}_{gen}
+    \right\rangle < 0
+    &\implies
+    \text{\lr{negative transfer}} &&
+\\
+    \theta^\star(\lambda_c,\lambda_g)
+    &=
+    \arg\min_\theta
+    \lambda_c \mathcal{L}_{CLIP}
+    +
+    \lambda_g \mathcal{L}_{gen} &&
+\\
+    \theta^\star
+    &\neq
+    \arg\min_\theta \mathcal{L}_{CLIP},
+    \qquad
+    \theta^\star
+    \neq
+    \arg\min_\theta \mathcal{L}_{gen} &&
+\end{flalign*}
+
+زیرا هدف کنتراستی \lr{embedding} تمایزی و فشرده می‌خواهد، ولی هدف تولیدی مدل را به پیش‌بینی توکن‌های پرتکرار، نحو و جزئیات زبانی سوق می‌دهد. بنابراین برای مدل عمومی چندوظیفه‌ای مفید است، اما برای \lr{pure retrieval}، \lr{pure zero-shot classification} یا \lr{pure captioning} با ظرفیت محدود می‌تواند \lr{specialization} را کاهش دهد.
