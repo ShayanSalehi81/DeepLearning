@@ -1,0 +1,399 @@
+\subsection*{پرسش ۱: یادگیری مدل انرژی با \lr{Score Matching} (۲۰ نمره)}
+
+فرض کنید از چگالی ناشناختهٔ $p_{\mathrm{data}}(x)>0$ روی $\mathbb{R}^{d}$ نمونه داریم و می‌خواهیم مدل زیر را آموزش دهیم:
+\begin{flalign*}
+p_{\theta}(x)
+&=\frac{\exp(-E_{\theta}(x))}{Z(\theta)},
+\qquad
+Z(\theta)=\int_{\mathbb{R}^{d}}\exp(-E_{\theta}(u))\,du,
+&&\\
+s_{\theta}(x)
+&=\nabla_x\log p_{\theta}(x).
+&&
+\end{flalign*}
+محاسبهٔ $Z(\theta)$ ممکن است دشوار باشد. هدف اولیهٔ \lr{Score Matching} را به صورت زیر تعریف می‌کنیم:
+\begin{flalign*}
+\mathcal{L}(\theta)
+&=\frac{1}{2}\,
+\mathbb{E}_{x\sim p_{\mathrm{data}}}
+\left[
+\left\|s_{\theta}(x)-\nabla_x\log p_{\mathrm{data}}(x)\right\|_2^2
+\right].
+&&
+\end{flalign*}
+فرض کنید توابع به اندازهٔ کافی هموارند، تمام امیدهای مورد استفاده متناهی‌اند و جمله‌های مرزی در انتگرال‌گیری جزءبه‌جزء صفر می‌شوند.
+
+\begin{enumerate}
+\item[الف)] (۴ نمره)
+$s_{\theta}(x)$ را برحسب $E_{\theta}(x)$ به دست آورید.
+چرا وابستگی $Z$ به $\theta$ در این محاسبه مشکل‌ساز نیست؟
+آیا هنگام محاسبهٔ $\nabla_{\theta}\log p_{\theta}(x)$ نیز می‌توان جملهٔ مربوط به $Z(\theta)$ را حذف کرد؟
+
+\item[ب)] (۸ نمره)
+هدف اولیه هنوز به $\nabla_x\log p_{\mathrm{data}}(x)$ وابسته است که در اختیار نداریم.
+ابتدا مربع را بسط دهید؛ سپس با انتگرال‌گیری جزءبه‌جزء نشان دهید که می‌توان هزینه‌ای با همان کمینه‌سازها به دست آورد که فقط شامل
+$s_{\theta}(x)$ و $\operatorname{div}s_{\theta}(x)$ باشد.
+این هزینه را برحسب $E_{\theta}$ نیز بنویسید و نسخهٔ تجربی آن را برای نمونه‌های
+$x^{(1)},\ldots,x^{(n)}$ مشخص کنید.
+
+راهنمایی: جملهٔ مختلط را به مجموع عبارت‌های
+$\int s_{\theta,i}(x)\,\partial_{x_i}p_{\mathrm{data}}(x)\,dx$
+تبدیل کنید. از تعاریف زیر استفاده کنید:
+\begin{flalign*}
+\operatorname{div}s_{\theta}(x)
+&=\sum_{i=1}^{d}\frac{\partial s_{\theta,i}(x)}{\partial x_i},
+\qquad
+\Delta E_{\theta}(x)
+=\sum_{i=1}^{d}\frac{\partial^2 E_{\theta}(x)}{\partial x_i^2}.
+&&
+\end{flalign*}
+
+\item[ج)] (۸ نمره)
+اکنون $d=1$ و مدل انرژی زیر را در نظر بگیرید:
+\begin{flalign*}
+E_{\theta}(x)
+&=\frac{\theta}{2}x^2+\frac{\lambda}{4}x^4,
+\qquad \theta\in\mathbb{R},\quad \lambda>0,
+&&\\
+m_k
+&=\frac{1}{n}\sum_{j=1}^{n}\bigl(x^{(j)}\bigr)^k,
+\qquad k\in\{2,4,6\},\quad m_2>0.
+&&
+\end{flalign*}
+$\lambda$ معلوم است و فقط $\theta$ آموزش داده می‌شود.
+با استفاده از بخش قبل، هزینهٔ تجربی و کمینه‌ساز یکتای
+$\widehat{\theta}(\lambda)$ را به دست آورید.
+
+سپس داده‌ها را ثابت نگه دارید و فرض کنید برای هر مقدار $\lambda$، مدل دوباره برازش می‌شود.
+آستانهٔ تغییر چگالی برازش‌شده از تک‌قله‌ای به دوقله‌ای و مکان قله‌ها را مشخص کنید.
+آیا منفی‌شدن $\widehat{\theta}$ باعث غیرقابل‌نرمال‌سازی‌شدن مدل می‌شود؟
+\end{enumerate}
+
+\subsection*{پاسخ‌نامهٔ پرسش ۱}
+
+\subsubsection*{الف)}
+\begin{flalign*}
+s_{\theta}(x)
+&=\nabla_x\bigl[-E_{\theta}(x)-\log Z(\theta)\bigr]
+=-\nabla_x E_{\theta}(x),
+&&\\
+\nabla_x\log Z(\theta)
+&=0,
+&&\\
+\nabla_{\theta}\log p_{\theta}(x)
+&=-\nabla_{\theta}E_{\theta}(x)
+-\nabla_{\theta}\log Z(\theta).
+&&
+\end{flalign*}
+$Z$ نسبت به $x$ ثابت است؛ اما مشتق آن نسبت به $\theta$ عموماً صفر نیست.
+
+\subsubsection*{ب)}
+با انتگرال‌گیری جزءبه‌جزء:
+\begin{flalign*}
+\mathbb{E}_{p_{\mathrm{data}}}
+\left[s_{\theta}^{\top}\nabla_x\log p_{\mathrm{data}}\right]
+&=\sum_{i=1}^{d}
+\int_{\mathbb{R}^{d}}
+s_{\theta,i}(x)\,\partial_{x_i}p_{\mathrm{data}}(x)\,dx
+&&\\
+&=-\sum_{i=1}^{d}
+\int_{\mathbb{R}^{d}}
+p_{\mathrm{data}}(x)\,\partial_{x_i}s_{\theta,i}(x)\,dx
+&&\\
+&=-\mathbb{E}_{p_{\mathrm{data}}}
+\left[\operatorname{div}s_{\theta}(x)\right].
+&&
+\end{flalign*}
+بنابراین:
+\begin{flalign*}
+\mathcal{L}(\theta)
+&=
+\mathbb{E}_{p_{\mathrm{data}}}
+\left[
+\frac{1}{2}\|s_{\theta}(x)\|_2^2
++\operatorname{div}s_{\theta}(x)
+\right]+C,
+&&\\
+C
+&=\frac{1}{2}\mathbb{E}_{p_{\mathrm{data}}}
+\left[\|\nabla_x\log p_{\mathrm{data}}(x)\|_2^2\right],
+\qquad \nabla_{\theta}C=0,
+&&\\
+\mathcal{J}(\theta)
+&=
+\mathbb{E}_{p_{\mathrm{data}}}
+\left[
+\frac{1}{2}\|\nabla_x E_{\theta}(x)\|_2^2
+-\Delta E_{\theta}(x)
+\right],
+&&\\
+\widehat{\mathcal{J}}(\theta)
+&=\frac{1}{n}\sum_{j=1}^{n}
+\left[
+\frac{1}{2}\|\nabla_x E_{\theta}(x^{(j)})\|_2^2
+-\Delta E_{\theta}(x^{(j)})
+\right].
+&&
+\end{flalign*}
+$\mathcal{J}$ با $\mathcal{L}$ کمینه‌سازهای یکسان دارد؛
+$\widehat{\mathcal{J}}$ تقریب نمونه‌ای آن است.
+
+\subsubsection*{ج)}
+\begin{flalign*}
+s_{\theta}(x)
+&=-\theta x-\lambda x^3,
+\qquad
+s_{\theta}'(x)=-\theta-3\lambda x^2,
+&&\\
+\widehat{\mathcal{J}}(\theta)
+&=\frac{\theta^2}{2}m_2
++\theta\lambda m_4
++\frac{\lambda^2}{2}m_6
+-\theta-3\lambda m_2,
+&&\\
+\frac{d\widehat{\mathcal{J}}}{d\theta}
+&=\theta m_2+\lambda m_4-1,
+\qquad
+\frac{d^2\widehat{\mathcal{J}}}{d\theta^2}=m_2>0,
+&&\\
+\boxed{\widehat{\theta}(\lambda)}
+&=\boxed{\frac{1-\lambda m_4}{m_2}}.
+&&
+\end{flalign*}
+
+قله‌های چگالی، کمینه‌های انرژی‌اند:
+\begin{flalign*}
+E_{\widehat{\theta}}'(x)
+&=x\bigl(\widehat{\theta}+\lambda x^2\bigr),
+&&\\
+\lambda_{\mathrm{c}}
+&=\frac{1}{m_4},
+&&\\
+\operatorname*{arg\,max}_{x}p_{\widehat{\theta}}(x)
+&=
+\begin{cases}
+\{0\}, & 0<\lambda\leq\lambda_{\mathrm{c}},\\[2mm]
+\displaystyle
+\left\{
+-\sqrt{\frac{\lambda m_4-1}{\lambda m_2}},
+\sqrt{\frac{\lambda m_4-1}{\lambda m_2}}
+\right\},
+& \lambda>\lambda_{\mathrm{c}}.
+\end{cases}
+&&\\
+\frac{d\widehat{\theta}}{d\lambda}
+&=-\frac{m_4}{m_2}<0.
+&&
+\end{flalign*}
+در آستانه، انرژی برابر $\lambda x^4/4$ است و همچنان فقط یک کمینه در صفر دارد.
+منفی‌شدن $\widehat{\theta}$ مانع نرمال‌سازی نیست:
+\begin{flalign*}
+\lim_{|x|\to\infty}\frac{E_{\theta}(x)}{x^4}
+&=\frac{\lambda}{4}>0
+\quad\Longrightarrow\quad
+0<Z(\theta)<\infty
+\qquad(\theta\in\mathbb{R}).
+&&
+\end{flalign*}
+
+% منبع رابطهٔ پایهٔ پرسش ۲: [Vincent, 2011](https://gwern.net/doc/ai/nn/diffusion/2011-vincent.pdf).
+% اقتباس آموزشی: هم‌ارزی DSM و Score Matching به کمک امید شرطی صورت‌بندی شده؛ رابطه با پیش‌بینی نویز و تحلیل یک توزیع دو‌نقطه‌ای برای بررسی اثر شدت نویز به آن افزوده شده است.
+
+\subsection*{پرسش ۲: \lr{Denoising Score Matching} چه چیزی را یاد می‌گیرد؟ (۲۰ نمره)}
+
+برای آموزش شبکهٔ امتیاز، به دادهٔ پاک $X\in\mathbb{R}^{d}$ نویز اضافه می‌کنیم:
+\begin{flalign*}
+Y&=X+\sigma\varepsilon,
+\qquad
+\varepsilon\sim\mathcal{N}(0,I_d),
+\qquad \varepsilon\perp X,\quad \sigma>0,
+&&\\
+q_{\sigma}(y\mid x)
+&=\frac{1}{(2\pi\sigma^2)^{d/2}}
+\exp\left(-\frac{\|y-x\|_2^2}{2\sigma^2}\right),
+&&\\
+q_{\sigma}(y)
+&=\mathbb{E}_{X}\left[q_{\sigma}(y\mid X)\right],
+\qquad
+s_{\sigma}(y)=\nabla_y\log q_{\sigma}(y).
+&&
+\end{flalign*}
+در این پرسش $\sigma$ ثابت است. فرض کنید مشتق‌گیری زیر امید مجاز است، امیدهای مورد استفاده متناهی‌اند و شبکه ظرفیت کافی برای نمایش تابع بهینه دارد.
+
+\begin{enumerate}
+\item[الف)] (۶ نمره)
+ابتدا
+$h_{\sigma}(y,x)=\nabla_y\log q_{\sigma}(y\mid x)$
+را محاسبه کنید. سپس نشان دهید:
+\begin{flalign*}
+s_{\sigma}(y)
+&=\mathbb{E}\left[h_{\sigma}(Y,X)\mid Y=y\right]
+=\frac{\mathbb{E}[X\mid Y=y]-y}{\sigma^2}.
+&&
+\end{flalign*}
+راهنمایی: از
+$\nabla_y q_{\sigma}(y)
+=\mathbb{E}_X[\nabla_y q_{\sigma}(y\mid X)]$
+شروع کنید و وزن‌های حاصل را به صورت توزیع شرطی $X\mid Y=y$ تفسیر کنید.
+
+\item[ب)] (۸ نمره)
+شبکهٔ $s_{\theta}(y,\sigma)$ را با هزینهٔ زیر آموزش می‌دهیم:
+\begin{flalign*}
+\mathcal{L}_{D}(\theta)
+&=\frac{1}{2}\mathbb{E}_{X,Y}
+\left[
+\|s_{\theta}(Y,\sigma)-h_{\sigma}(Y,X)\|_2^2
+\right].
+&&
+\end{flalign*}
+با استفاده از بخش قبل نشان دهید:
+\begin{flalign*}
+\mathcal{L}_{D}(\theta)
+&=\frac{1}{2}\mathbb{E}_{Y}
+\left[
+\|s_{\theta}(Y,\sigma)-s_{\sigma}(Y)\|_2^2
+\right]+C_{\sigma},
+&&
+\end{flalign*}
+که $C_{\sigma}$ مستقل از $\theta$ است. در نتیجه، تابع بهینهٔ شبکه چیست؟
+
+اکنون پارامترسازی
+$s_{\theta}(y,\sigma)=-\varepsilon_{\theta}(y,\sigma)/\sigma$
+را در نظر بگیرید.
+هزینه را برحسب خطای پیش‌بینی نویز بنویسید و
+$\varepsilon^{*}(y,\sigma)$ را مشخص کنید.
+آیا برای هر زوج آموزشی $(x,y)$ می‌توان
+$s_{\sigma}(y)=-\varepsilon/\sigma$
+را یک تساوی دقیق دانست؟
+
+راهنمایی: اختلاف شبکه و هدف را به دو جمله، با واسطهٔ
+$s_{\sigma}(Y)$، بشکنید و امید شرطی جملهٔ مختلط را بررسی کنید.
+
+\item[ج)] (۶ نمره)
+برای تحلیل اثر شدت نویز، فرض کنید $d=1$ و دادهٔ پاک فقط دو مقدار دارد:
+\begin{flalign*}
+\mathbb{P}(X=a)
+&=\mathbb{P}(X=-a)=\frac{1}{2},
+\qquad a>0,
+&&\\
+q_{\sigma}(y)
+&=\frac{1}{2\sqrt{2\pi}\sigma}
+\left[
+\exp\left(-\frac{(y-a)^2}{2\sigma^2}\right)
++
+\exp\left(-\frac{(y+a)^2}{2\sigma^2}\right)
+\right].
+&&
+\end{flalign*}
+$s_{\sigma}(y)$ و $s_{\sigma}'(0)$ را به دست آورید.
+برای دو حالت $\sigma<a$ و $\sigma>a$، مشخص کنید صفر کمینهٔ محلی چگالی است یا بیشینهٔ محلی، و میدان امتیاز در نزدیکی صفر به کدام جهت اشاره می‌کند.
+آیا صفرشدن امتیاز الزاماً به معنای قرارداشتن در قلهٔ چگالی است؟
+
+راهنمایی: از
+$e^{u}+e^{-u}=2\cosh u$
+و
+$\frac{d}{du}\log\cosh u=\tanh u$
+استفاده کنید.
+\end{enumerate}
+
+\subsection*{پاسخ‌نامهٔ پرسش ۲}
+
+\subsubsection*{الف)}
+\begin{flalign*}
+h_{\sigma}(y,x)
+&=-\frac{y-x}{\sigma^2},
+&&\\
+s_{\sigma}(y)
+&=\frac{\mathbb{E}_{X}
+\left[q_{\sigma}(y\mid X)h_{\sigma}(y,X)\right]}
+{q_{\sigma}(y)}
+&&\\
+&=\mathbb{E}\left[h_{\sigma}(y,X)\mid Y=y\right]
+&&\\
+&=\boxed{\frac{\mathbb{E}[X\mid Y=y]-y}{\sigma^2}}.
+&&
+\end{flalign*}
+
+\subsubsection*{ب)}
+\begin{flalign*}
+\mathbb{E}\left[h_{\sigma}(Y,X)-s_{\sigma}(Y)\mid Y\right]
+&=0,
+&&\\
+\mathbb{E}\left[
+\bigl(s_{\theta}(Y,\sigma)-s_{\sigma}(Y)\bigr)^{\top}
+\bigl(s_{\sigma}(Y)-h_{\sigma}(Y,X)\bigr)
+\right]
+&=0,
+&&\\
+\mathcal{L}_{D}(\theta)
+&=\frac{1}{2}\mathbb{E}
+\left[\|s_{\theta}(Y,\sigma)-s_{\sigma}(Y)\|_2^2\right]
++C_{\sigma},
+&&\\
+C_{\sigma}
+&=\frac{1}{2}\mathbb{E}
+\left[\|h_{\sigma}(Y,X)-s_{\sigma}(Y)\|_2^2\right],
+&&\\
+s^{*}(y,\sigma)
+&=s_{\sigma}(y)
+=\nabla_y\log q_{\sigma}(y).
+&&
+\end{flalign*}
+این برابری برای تابع بهینه، تقریباً همه‌جا نسبت به $q_{\sigma}$ برقرار است.
+
+با پارامترسازی پیش‌بینی نویز:
+\begin{flalign*}
+h_{\sigma}(Y,X)
+&=-\frac{\varepsilon}{\sigma},
+&&\\
+\mathcal{L}_{D}(\theta)
+&=\frac{1}{2\sigma^2}
+\mathbb{E}_{X,\varepsilon}
+\left[
+\|\varepsilon_{\theta}(X+\sigma\varepsilon,\sigma)-\varepsilon\|_2^2
+\right],
+&&\\
+\varepsilon^{*}(y,\sigma)
+&=\mathbb{E}[\varepsilon\mid Y=y]
+=-\sigma s_{\sigma}(y).
+&&
+\end{flalign*}
+$-\varepsilon/\sigma$ هدف یک زوج آموزشی است؛
+$s_{\sigma}(y)$ میانگین شرطی این هدف است.
+این دو عموماً برای یک زوج منفرد برابر نیستند.
+
+\subsubsection*{ج)}
+\begin{flalign*}
+q_{\sigma}(y)
+&=\frac{1}{\sqrt{2\pi}\sigma}
+\exp\left(-\frac{y^2+a^2}{2\sigma^2}\right)
+\cosh\left(\frac{ay}{\sigma^2}\right),
+&&\\
+\boxed{s_{\sigma}(y)}
+&=\boxed{
+-\frac{y}{\sigma^2}
++\frac{a}{\sigma^2}\tanh\left(\frac{ay}{\sigma^2}\right)
+},
+&&\\
+s_{\sigma}'(y)
+&=-\frac{1}{\sigma^2}
++\frac{a^2}{\sigma^4}
+\left[
+1-\tanh^2\left(\frac{ay}{\sigma^2}\right)
+\right],
+&&\\
+s_{\sigma}(0)
+&=0,
+\qquad
+s_{\sigma}'(0)=\frac{a^2-\sigma^2}{\sigma^4},
+&&\\
+\frac{q_{\sigma}''(0)}{q_{\sigma}(0)}
+&=s_{\sigma}'(0)+s_{\sigma}(0)^2
+=\frac{a^2-\sigma^2}{\sigma^4}.
+&&
+\end{flalign*}
+
+برای $\sigma<a$، صفر کمینهٔ محلی چگالی است و میدان امتیاز در نزدیکی آن از صفر دور می‌شود.
+برای $\sigma>a$، صفر بیشینهٔ محلی است و میدان به سمت صفر اشاره می‌کند.
+پس افزایش نویز می‌تواند مرکزِ میان دو خوشه را به یک قله تبدیل کند؛
+$s_{\sigma}(0)=0$ به‌تنهایی میان قله و دره تمایز نمی‌گذارد.
